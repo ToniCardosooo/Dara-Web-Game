@@ -2,7 +2,6 @@ var playerRed = 1;
 var playerYellow = 2;
 var currPlayer = playerRed;
 var putPhase = true
-var pieceCount = 12;
 var gameOver = false;
 var board;
 var selected = false;
@@ -10,6 +9,8 @@ var rselected;
 var cselected;
 var remove=false;
 var lastmove=[-1,-1,-1,-1,-1,-1,-1,-1];
+var playerPieces = [0,0];
+var winner = 0
 
 var rows = 6;
 var columns = 5;
@@ -50,10 +51,10 @@ function updateBoard(){
 }
 
 function onClick() {
-    //if (gameOver) {
-    //    return;
-    //}
-
+    if (winner!=0) {
+        return;
+    }
+    
     //get coords of that tile clicked
     let coords = this.id.split("-");
     let r = parseInt(coords[0]);
@@ -64,10 +65,10 @@ function onClick() {
     if (putPhase){
        if (CanPut(r,c,currPlayer)){
         board[r][c]=currPlayer;
+        playerPieces[currPlayer-1]++;
         currPlayer=3-currPlayer;
         updateBoard();
-        pieceCount--
-        if (pieceCount<=0){putPhase=false;}
+        if (playerPieces[0]+playerPieces[1]==24){putPhase=false;}
     } 
     }
     
@@ -86,6 +87,7 @@ function onClick() {
             if (remove && board[r][c]==3-currPlayer){
                 board[r][c]=0;
                 currPlayer=3-currPlayer;
+                playerPieces[currPlayer-1]--;
                 selected=false;
                 remove=false;
                 updateBoard(); 
@@ -111,7 +113,8 @@ function onClick() {
         
     }
     
-    //checkWinner();
+    checkWinner();
+    
 }
 
 function CanPut(r,c,currPlayer){
@@ -186,16 +189,41 @@ function Repeat(lastmove,r,c,rselected,cselected,currPlayer){
     return lastmove[(currPlayer-1)*4]==rselected && lastmove[(currPlayer-1)*4+1]==cselected && lastmove[(currPlayer-1)*4+2]==r && lastmove[(currPlayer-1)*4+3]==c;
 }
 
-function checkWinner() {
-
+function hasMoves(currPlayer,lastmove,rows,columns){
+    for (let i=0;i<rows;i++){
+        for (let j=0;j<columns;j++){
+            if (board[i][j]==currPlayer){
+                if (i>0){
+                    if (board[i-1][j]==0 && !Repeat(lastmove,i-1,j,i,j,currPlayer)){return true;}
+                }
+                if (i<rows-1){
+                    if (board[i+1][j]==0 && !Repeat(lastmove,i+1,j,i,j,currPlayer)){return true;}
+                }
+                if (j>0){
+                    if (board[i][j-1]==0 && !Repeat(lastmove,i,j-1,i,j,currPlayer)){return true;}
+                }
+                if (j<columns-1){
+                    if (board[i][j+1]==0 && !Repeat(lastmove,i,j+1,i,j,currPlayer)){return true;}
+                }
+            }
+        }
+    }
+    return false;
 }
 
-function setWinner(r, c) {
-    let winner = document.getElementById("winner");
-    if (board[r][c] == playerRed) {
-        winner.innerText = "Red Wins";             
+function checkWinner() {
+    if (!putPhase){
+        if (playerPieces[currPlayer-1]<=2 || !hasMoves(currPlayer,lastmove,rows,columns)){winner=3-currPlayer;setWinner(winner);}
+    }
+    return;
+}
+
+function setWinner(winner) {
+    let win = document.getElementById("winner");
+    if (winner==1) {
+        win.innerText = "Red Wins";             
     } else {
-        winner.innerText = "Yellow Wins";
+        win.innerText = "Yellow Wins";
     }
     gameOver = true;
 }
