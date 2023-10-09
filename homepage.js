@@ -1,15 +1,10 @@
+var homepage = document.getElementById("homepage");
+var menu = document.getElementById("menu");
+var showing_homepage = true;
 
-
-window.onload = function() {
-    let toggle = button => {
-        let homepage = document.getElementById("homepage");
-        let game = document.getElementById("game");
-
-        if (game.getAttribute("hidden")) {
-            game.removeAttribute("hidden");
-            homepage.setAttribute("hidden", "hidden");
-        } 
+function switchToMenu(){
+    if (showing_homepage){
+        homepage.style.display = "none";
+        menu.style.display = "block";
     }
-
-    document.getElementById("play-button").onclick = toggle;
 }

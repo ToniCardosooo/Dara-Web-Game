@@ -43,3 +43,36 @@ body {
 .yellow-shallow  {
     background-color: rgba(255,255,0,0.7);
 }
+
+#homepage {
+    display: block;
+}
+
+#menu {
+    display: none;
+}
+
+#game {
+    display: none;
+}
+
+.logotipo{
+    width: 600px;
+    height: 150px;
+    margin: 10px;
+
+    line-height: 150px;
+    text-align: center;
+    font-size: 300%;
+
+    background-color: darkgoldenrod;
+    color: white;
+
+    border-radius: 15px;
+    border-width: 5px;
+    border-color: black;
+}
+
+.config {
+    /* Definir */
+}

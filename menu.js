@@ -1,7 +1,10 @@
+var menu = document.getElementById("menu");
+var game = document.getElementById("game");
+var showing_menu = true;
 
-
-window.onload = function() {
-    if (!document.getElementById("game").getAttribute("hidden")){
-        
+function switchToGame(){
+    if (showing_menu){
+        menu.style.display = "none";
+        game.style.display = "block";
     }
 }

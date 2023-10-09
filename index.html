@@ -9,27 +9,35 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <script src="homepage.js"></script>
-    <script src="menu.js"></script>
     <script src="game.js"></script>
-
+    
 </head>
 <body>
-
+    
     <div id="homepage">
-
+        <div class="logotipo">
+            DARA
+        </div>
+        <button onclick="switchToMenu()">Play!</button>
     </div>
-
+    
     <div id="menu">
+        <div id="board-size" class="config"></div>
+        <div id="game-mode" class="config"></div>
+        <div id="starting-player" class="config"></div>
+        <div id="ai-difficuly" class="config"></div>
 
+        <button onclick="switchToGame()">Start!</button>
     </div>
-
+    
     <div id="game">
         <h1>Dara</h1>
         <h2 id="winner"></h2>
         <h3 id="text"></h3>
         <div id="board"></div>
     </div>
-
+    
+    <script src="menu.js"></script>
+    <script src="homepage.js"></script>
 </body>
 </html>
