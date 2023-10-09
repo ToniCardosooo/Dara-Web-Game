@@ -1,19 +1,17 @@
-var playerRed = 1;
-var playerYellow = 2;
-var currPlayer = playerRed;
 var putPhase = true
-var gameOver = false;
 var board;
 var selected = false;
+var remove=false;
 var rselected;
 var cselected;
-var remove=false;
 var lastmove=[-1,-1,-1,-1,-1,-1,-1,-1];
 var playerPieces = [0,0];
 var winner = 0
 
+//by default
 var rows = 6;
 var columns = 5;
+var currPlayer = 1;
 
 window.onload = function() {
     setGame();
@@ -37,15 +35,22 @@ function setGame() {
         }
         board.push(row);
     }
+    let text = document.getElementById("text");
+    let s = "";
+    if (currPlayer==1){s+="Red ";}
+    else{s+="Yellow ";}
+    s+="Player to put a piece";
+    text.innerText = s; 
+    
 }
 
 function updateBoard(){
     for (let r=0; r<rows; r++){
         for (let c=0; c<columns; c++){
             let tile = document.getElementById(r.toString() + "-" + c.toString());
-            if (board[r][c]==1){tile.classList.remove("yellow-piece");tile.classList.add("red-piece");}
-            if (board[r][c]==2){tile.classList.remove("red-piece");tile.classList.add("yellow-piece");}
-            if (board[r][c]==0) {tile.classList.remove("red-piece");tile.classList.remove("yellow-piece");}
+            if (board[r][c]==1){tile.classList.add("red-piece");}
+            if (board[r][c]==2){tile.classList.add("yellow-piece");}
+            if (board[r][c]==0) {tile.classList.remove("red-shallow");tile.classList.remove("yellow-shallow");tile.classList.remove("red-piece");tile.classList.remove("yellow-piece");}
         }
     }
 }
@@ -60,69 +65,118 @@ function onClick() {
     let r = parseInt(coords[0]);
     let c = parseInt(coords[1]);
 
+    let text = document.getElementById("text");
+    let s = "";
 
     //Put Phase
     if (putPhase){
-       if (CanPut(r,c,currPlayer)){
-        board[r][c]=currPlayer;
-        playerPieces[currPlayer-1]++;
-        currPlayer=3-currPlayer;
-        updateBoard();
-        if (playerPieces[0]+playerPieces[1]==24){putPhase=false;}
+       if (CanPut(r,c,currPlayer,0,0)){
+            board[r][c]=currPlayer;
+            playerPieces[currPlayer-1]++;
+            currPlayer=3-currPlayer;
+            updateBoard();
+            if (playerPieces[0]+playerPieces[1]==24){
+                putPhase=false;
+                if (currPlayer==1){s+="Red ";}
+                else{s+="Yellow ";}
+                s+="Player to select a piece";}
+            else{
+                if (currPlayer==1){s+="Red ";}
+                else{s+="Yellow ";}
+                s+="Player to put a piece";}
+            }
+        else{
+            s+="Cannot put a piece there";
+        }
     } 
-    }
+
     
     //Move Phase
     else{
-        if (!selected){
+        if (!selected){ //select a piece to move
            if (canPick(r,c,currPlayer)){
-            selected=true;
-            rselected=r;
-            cselected=c;
-            board[r][c]=0;
-            updateBoard();
-            } 
-        }
-        else{
-            if (remove && board[r][c]==3-currPlayer){
-                board[r][c]=0;
-                currPlayer=3-currPlayer;
-                playerPieces[currPlayer-1]--;
-                selected=false;
-                remove=false;
-                updateBoard(); 
-            }
-            
+                selected=true;
+                rselected=r;
+                cselected=c;
+                let tile = document.getElementById(r.toString() + "-" + c.toString());
+                if(board[r][c]==1){tile.classList.remove("red-piece");tile.classList.add("red-shallow");}
+                if(board[r][c]==2){tile.classList.remove("yellow-piece");tile.classList.add("yellow-shallow");}
+                if (currPlayer==1){s+="Red ";}
+                else{s+="Yellow ";}
+                s+="Player to move the piece";
+                }
             else{
-                if (r==rselected && c==cselected){selected=false;board[r][c]=currPlayer;updateBoard();}
-                else if (CanPut(r,c,currPlayer) && CanMove(r,c,rselected,cselected) && !Repeat(lastmove,r,c,rselected,cselected,currPlayer)){
-                    board[r][c]=currPlayer;
-                    board[rselected][cselected]=0;
-                    lastmove[(currPlayer-1)*4]=r;
-                    lastmove[(currPlayer-1)*4+1]=c;
-                    lastmove[(currPlayer-1)*4+2]=rselected;
-                    lastmove[(currPlayer-1)*4+3]=cselected;
-                    updateBoard(); 
-                    if (createsLine(r,c,currPlayer)){remove=true}
-                    else{currPlayer=3-currPlayer;selected=false}
-                     
+                s+="Cannot select that piece";
                 }
             }
-            
+        else{
+            if (remove){  //remove a opponent piece
+                if (board[r][c]==3-currPlayer){
+                    board[r][c]=0;
+                    currPlayer=3-currPlayer;
+                    playerPieces[currPlayer-1]--;
+                    selected=false;
+                    remove=false;
+                    updateBoard();
+                    if (currPlayer==1){s+="Red ";}
+                    else{s+="Yellow ";}
+                    s+="Player to select a piece";
+                    checkWinner(); 
+                    }
+                else{
+                    s+="Cannot remove that piece";
+                }
+            }
+            else{  // mover a peça
+                if (r==rselected && c==cselected){  //se clicar na mesma peça, volta a poder selecionar outra
+                    selected=false;
+                    let tile = document.getElementById(r.toString() + "-" + c.toString());
+                    if(board[r][c]==1){tile.classList.remove("red-shallow");tile.classList.add("red-piece");}
+                    if(board[r][c]==2){tile.classList.remove("yellow-shallow");tile.classList.add("yellow-piece");}
+                    if (currPlayer==1){s+="Red ";}
+                    else{s+="Yellow ";}
+                    s+="Player to select a piece";}
+                else {
+                    if (CanPut(r,c,currPlayer,rselected,cselected) && CanMove(r,c,rselected,cselected) && !Repeat(lastmove,r,c,rselected,cselected,currPlayer)){
+                        board[r][c]=currPlayer;
+                        board[rselected][cselected]=0;
+                        lastmove[(currPlayer-1)*4]=r;
+                        lastmove[(currPlayer-1)*4+1]=c;
+                        lastmove[(currPlayer-1)*4+2]=rselected;
+                        lastmove[(currPlayer-1)*4+3]=cselected;
+                        updateBoard(); 
+                        if (createsLine(r,c,currPlayer)){
+                            remove=true;
+                            if (currPlayer==1){s+="Red ";}
+                            else{s+="Yellow ";}
+                            s+="Player to remove a opponent piece";}
+                        else{
+                            currPlayer=3-currPlayer;
+                            selected=false;
+                            checkWinner();
+                            if (currPlayer==1){s+="Red ";}
+                            else{s+="Yellow ";}
+                            s+="Player to select a piece";}
+                    }
+                    else{
+                        s+="Cannot move piece there";
+                    }
+                }
+            }
         }
-        
     }
-    
-    checkWinner();
-    
+    if (winner==0){text.innerText = s;}
+    else{text.innerText = "";}
 }
 
-function CanPut(r,c,currPlayer){
+function CanPut(r,c,currPlayer,rselected,cselected){
 
     //Check is Empty
     if (board[r][c] != 0){
         return false
     }
+
+    if (!putPhase){board[rselected][cselected]=0;}
 
     board[r][c] = currPlayer;
     
@@ -133,6 +187,7 @@ function CanPut(r,c,currPlayer){
     for (let i=min;i<=max;i++){
         if (currPlayer == board[r][i] && board[r][i] == board[r][i+1] && board[r][i+1] == board[r][i+2] && board[r][i+2] == board[r][i+3]){
             board[r][c] = 0;
+            if (!putPhase){board[rselected][cselected]=currPlayer;}
             return false
         }
     }
@@ -144,10 +199,12 @@ function CanPut(r,c,currPlayer){
     for (let i=min;i<=max;i++){
         if (currPlayer == board[i][c] && board[i][c] == board[i+1][c] && board[i+1][c] == board[i+2][c] && board[i+2][c] == board[i+3][c]){
             board[r][c] = 0;
+            if (!putPhase){board[rselected][cselected]=currPlayer;}
             return false
         }
     }
     board[r][c] = 0;
+    if (!putPhase){board[rselected][cselected]=currPlayer;}
     return true
 }
 
@@ -194,16 +251,16 @@ function hasMoves(currPlayer,lastmove,rows,columns){
         for (let j=0;j<columns;j++){
             if (board[i][j]==currPlayer){
                 if (i>0){
-                    if (board[i-1][j]==0 && !Repeat(lastmove,i-1,j,i,j,currPlayer)){return true;}
+                    if (CanPut(i-1,j,currPlayer,i,j) && !Repeat(lastmove,i-1,j,i,j,currPlayer)){return true;}
                 }
                 if (i<rows-1){
-                    if (board[i+1][j]==0 && !Repeat(lastmove,i+1,j,i,j,currPlayer)){return true;}
+                    if (CanPut(i+1,j,currPlayer,i,j) && !Repeat(lastmove,i+1,j,i,j,currPlayer)){return true;}
                 }
                 if (j>0){
-                    if (board[i][j-1]==0 && !Repeat(lastmove,i,j-1,i,j,currPlayer)){return true;}
+                    if (CanPut(i,j-1,currPlayer,i,j) && !Repeat(lastmove,i,j-1,i,j,currPlayer)){return true;}
                 }
                 if (j<columns-1){
-                    if (board[i][j+1]==0 && !Repeat(lastmove,i,j+1,i,j,currPlayer)){return true;}
+                    if (CanPut(i,j+1,currPlayer,i,j) && !Repeat(lastmove,i,j+1,i,j,currPlayer)){return true;}
                 }
             }
         }
@@ -212,9 +269,7 @@ function hasMoves(currPlayer,lastmove,rows,columns){
 }
 
 function checkWinner() {
-    if (!putPhase){
-        if (playerPieces[currPlayer-1]<=2 || !hasMoves(currPlayer,lastmove,rows,columns)){winner=3-currPlayer;setWinner(winner);}
-    }
+    if (playerPieces[currPlayer-1]<=2 || !hasMoves(currPlayer,lastmove,rows,columns)){winner=3-currPlayer;setWinner(winner);}
     return;
 }
 
@@ -225,5 +280,4 @@ function setWinner(winner) {
     } else {
         win.innerText = "Yellow Wins";
     }
-    gameOver = true;
 }

@@ -35,3 +35,11 @@ body {
 .yellow-piece {
     background-color: yellow;
 }
+
+.red-shallow  {
+    background-color: rgba(255,0,0,0.7);
+}
+
+.yellow-shallow  {
+    background-color: rgba(255,255,0,0.7);
+}
