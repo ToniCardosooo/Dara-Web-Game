@@ -6,6 +6,60 @@ body {
     text-align: center;
 }
 
+
+/*  CSS DEFINITION FOR THE HOMEPAGE */
+
+.homepage{
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.logotipo{
+    width: 600px;
+    height: 150px;
+
+    line-height: 150px;
+    text-align: center;
+    font-size: 300%;
+
+    background-color: darkgoldenrod;
+    color: white;
+
+    border-radius: 15px;
+    border-width: 10px;
+    border-color: black;
+}
+
+#game-name, #enter-menu{
+    margin: 2%;
+}
+
+/* CSS DEFINITION FOR THE CONFIGURATION MENU */
+
+#menu {
+    display: none;
+}
+
+.config {
+    /* Definir */
+}
+
+
+/* CSS DEFINITION FOR THE GAME PAGE */
+
+.game {
+    height: auto;
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
 #board {
     height: 540px;
     width: 450px;
@@ -42,37 +96,4 @@ body {
 
 .yellow-shallow  {
     background-color: rgba(255,255,0,0.7);
-}
-
-#homepage {
-    display: block;
-}
-
-#menu {
-    display: none;
-}
-
-#game {
-    display: none;
-}
-
-.logotipo{
-    width: 600px;
-    height: 150px;
-    margin: 10px;
-
-    line-height: 150px;
-    text-align: center;
-    font-size: 300%;
-
-    background-color: darkgoldenrod;
-    color: white;
-
-    border-radius: 15px;
-    border-width: 5px;
-    border-color: black;
-}
-
-.config {
-    /* Definir */
 }

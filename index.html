@@ -7,37 +7,56 @@
     <title> Dara </title>
     <link rel="shortcut icon" href="logo.png">
 
-    <link rel="stylesheet" href="style.css">
-
-    <script src="game.js"></script>
-    
+    <link rel="stylesheet" href="style.css">    
 </head>
 <body>
-    
-    <div id="homepage">
-        <div class="logotipo">
+    <!-- HTML definition for the Homepage -->
+    <div class="homepage" id="homepage">
+        <div class="logotipo" id="game-name">
             DARA
         </div>
-        <button onclick="switchToMenu()">Play!</button>
+        <div id="enter-menu">
+            <button onclick="switchPage('homepage', 'menu')">ENTER</button>
+        </div>
     </div>
-    
-    <div id="menu">
-        <div id="board-size" class="config"></div>
-        <div id="game-mode" class="config"></div>
-        <div id="starting-player" class="config"></div>
-        <div id="ai-difficuly" class="config"></div>
 
-        <button onclick="switchToGame()">Start!</button>
+    <!-- HTML definition for the configuration menu -->    
+    <div id="menu">
+        <div id="board-size" class="config">
+
+        </div>
+        <div id="game-mode" class="config">
+
+        </div>
+        <div id="starting-player" class="config">
+
+        </div>
+        <div id="ai-difficuly" class="config">
+
+        </div>
+
+        <div>
+            <button onclick="switchPage('menu', 'game')">START !!!</button>
+        </div>
+        <div>
+            <button onclick="switchPage('menu', 'homepage')">HOMEPAGE</button>
+        </div>
     </div>
     
-    <div id="game">
+    <!-- HTML definition for the game page -->
+    <div class="game" id="game">
         <h1>Dara</h1>
         <h2 id="winner"></h2>
         <h3 id="text"></h3>
         <div id="board"></div>
+        <div>
+            <button onclick="switchPage('game', 'menu')">GIVE UP</button>
+        </div>
     </div>
-    
+
+    <!-- Importing necessary scripts -->
+    <script src="navigation.js"></script>
     <script src="menu.js"></script>
-    <script src="homepage.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
