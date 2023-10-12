@@ -17,28 +17,54 @@
         </div>
         <div id="enter-menu">
             <button onclick="switchPage('homepage', 'menu')">ENTER</button>
+            <button onclick="switchPage('homepage', 'classifications')">CLASSIFICATIONS</button>
         </div>
     </div>
 
+    <!-- HTML definition for the classifications page -->
+    <div class="classifications" id="classifications">
+
+    </div>
+
     <!-- HTML definition for the configuration menu -->    
-    <div id="menu">
-        <div id="board-size" class="config">
-
+    <div class="menu" id="menu">
+        <div class="menu-top">
+            <div id="board-size" class="config">
+                <span>Board Size</span>
+                <select id="board-size-select">
+                    <option value="0">5 X 6</option>
+                    <option value="1">6 X 6</option>
+                </select>
+            </div>
+    
+            <div id="game-mode" class="config">
+                <span>Game Mode</span>
+                <select id="game-mode-select">
+                    <option value="0">Player X Player</option>
+                    <option value="1">Player X AI</option>
+                </select>
+            </div>
+    
+            <div id="starting-player" class="config">
+                <span>Starting Player</span>
+                <select id="starting-player-select">
+                    <option value="0">Player 1 - Red</option>
+                    <option value="1">Player 2 - Yellow</option>
+                </select>
+            </div>
+    
+            <div id="ai-difficuly" class="config">
+                <span>AI Difficulty</span>
+                <select id="ai-difficulty-select">
+                    <option value="0">Easy</option>
+                    <option value="1">Medium</option>
+                    <option value="2">Hard</option>
+                </select>
+            </div>
         </div>
-        <div id="game-mode" class="config">
 
-        </div>
-        <div id="starting-player" class="config">
-
-        </div>
-        <div id="ai-difficuly" class="config">
-
-        </div>
-
-        <div>
-            <button onclick="switchPage('menu', 'game')">START !!!</button>
-        </div>
-        <div>
+        <div class="menu-bottom">
+            <button class="menu-button" onclick="switchPage('menu', 'game')">START !!!</button>
             <button onclick="switchPage('menu', 'homepage')">HOMEPAGE</button>
         </div>
     </div>

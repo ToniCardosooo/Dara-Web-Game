@@ -38,16 +38,48 @@ body {
     margin: 2%;
 }
 
+/* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
+
+
+
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
 
-#menu {
+.menu {
+    height: auto;
     display: none;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
 }
 
-.config {
-    /* Definir */
+.menu-top, .menu-bottom{
+    display: inherit;
+    flex-direction: row;
+    justify-content: center;
+    margin: 2%;
+    width: 100%;
 }
 
+.config{
+    height: auto;
+    width: auto;
+    display: inherit;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    margin: 1%;
+}
+
+.config-name {
+    width: max-content;
+    background-color: darkgoldenrod;
+}
+
+.menu-button{
+    
+}
 
 /* CSS DEFINITION FOR THE GAME PAGE */
 
