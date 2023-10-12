@@ -1,6 +1,5 @@
 var putPhase = true
 var board;
-//var boardleft;
 var selected = false;
 var remove=false;
 var rselected;
@@ -14,17 +13,17 @@ var rows = 6;
 var columns = 5 ;
 var currPlayer = 1;
 
-window.onload = function() {
-    setGame();
+window.onload = function(){
     setLeft();
     setRigth();
+}
+
+function startGame() {
+    setGame();
     updateSideBoards();
-    console.log("ola");
 }
 
 function switchPage(from_id, to_id){
-    console.log(this.id);
-    if (this.id == "giveup"){clear_board();}
     let from_doc = document.getElementById(from_id);
     let to_doc = document.getElementById(to_id);
 
@@ -40,7 +39,8 @@ function switchPage(from_id, to_id){
 function clearboard(){
     for(let r=0;r<rows;r++){
         for(let c=0;c<columns;c++){
-           board[r][c] = 0;
+            let tile = document.getElementById(r.toString() + "-" + c.toString());
+            tile.remove();
        }
     }
     playerPieces = [0,0];
@@ -49,7 +49,6 @@ function clearboard(){
 }
 
 function setLeft(){
-    //boardleft=[];
     for(let r=0;r<6;r++){
         let row = [];
         for(let c=0;c<2;c++){
@@ -59,7 +58,6 @@ function setLeft(){
             tile.classList.add("tile");
             document.getElementById("esquerda").append(tile);
         }
-        //boardleft.push(row);
     }
 }
 
