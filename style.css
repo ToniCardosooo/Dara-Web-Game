@@ -115,8 +115,13 @@ body {
     align-content: center;
 }
 
+#jogo{
+    display: flex;
+    justify-content: center;
+}
+
 #board {
-    height: 540px;
+    height: 540px; 
     width: 450px;
     background-color: blue;
     border: 10px solid navy;
@@ -125,11 +130,26 @@ body {
     display: flex;
     flex-wrap: wrap;
 }
+#direita {
+    height: 540px;
+    width: 180px;
+    background-color: black;
+    margin-left: 80px;
+    border: 10px solid navy;
+}
+
+#esquerda {
+    height: 540px;
+    width: 180px;
+    background-color: black;
+    margin-right: 80px;
+    border: 10px solid navy;
+}
 
 .tile {
     height: 70px;
     width: 70px;
-    margin: 5px;
+    margin: 90px;
 
     /* Circle */
     background-color: white;

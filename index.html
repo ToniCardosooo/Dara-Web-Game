@@ -81,16 +81,19 @@
         <h1>Dara</h1>
         <h2 id="winner"></h2>
         <h3 id="text"></h3>
-        <div id="board"></div>
+        <div id = "jogo">
+            <div id ="esquerda"></div>
+            <div id="board"></div>
+            <div id = "direita"></div>
+        </div>
+        
         <div>
-            <button onclick="switchPage('game', 'menu')">GIVE UP</button>
+            <button  onclick="switchPage('game', 'menu');clearboard()">GIVE UP</button>
         </div>
     </div>
 
     <!-- Importing necessary scripts -->
-    <script src="navigation.js"></script>
-    <script src="classifications.js"></script>
-    <script src="menu.js"></script>
+
     <script src="game.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 var putPhase = true
 var board;
+var boardleft;
 var selected = false;
 var remove=false;
 var rselected;
@@ -10,22 +11,66 @@ var winner = 0
 
 //by default
 var rows = 6;
-var columns = 5;
+var columns = 5 ;
 var currPlayer = 1;
 
 window.onload = function() {
+    setLeft();
     setGame();
+    console.log("ola");
+}
+
+function switchPage(from_id, to_id){
+    console.log(this.id);
+    if (this.id == "giveup"){clear_board();}
+    let from_doc = document.getElementById(from_id);
+    let to_doc = document.getElementById(to_id);
+
+    from_doc.style.display = "none";
+    to_doc.style.display = "flex"
+
+    /* 
+    Remember to erase the board's content if we're
+    quitting the board with this function 
+    */
+}
+
+function clearboard(){
+    console.log("clear");
+    for(let r=0;r<rows;r++){
+        for(let c=0;c<columns;c++){
+           board[r][c] = 0;
+       }
+    }
+    
+    updateBoard();
+}
+
+function setLeft(){
+    boardleft=[];
+    for(let r=0;r<6;r++){
+        let row = [];
+        for(let c=0;c<2;c++){
+            row.push(0);
+            let tile = document.createElement("div");
+            tile.id = r.toString() + "-" + c.toString();
+            tile.classList.add("tile");
+            document.getElementById("esquerda").append(tile);
+        }
+        boardleft.push(row);
+    }
 }
 
 function setGame() {
     board = [];
+    
 
 
     for (let r = 0; r < rows; r++) {
         let row = [];
         for (let c = 0; c < columns; c++) {
             // JS
-            row.push(' ');
+            row.push(0);
             // HTML
             let tile = document.createElement("div");
             tile.id = r.toString() + "-" + c.toString();
@@ -35,6 +80,7 @@ function setGame() {
         }
         board.push(row);
     }
+
     let text = document.getElementById("text");
     let s = "";
     if (currPlayer==1){s+="Red ";}
