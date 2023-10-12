@@ -15,15 +15,22 @@
         <div class="logotipo" id="game-name">
             DARA
         </div>
-        <div id="enter-menu">
-            <button onclick="switchPage('homepage', 'menu')">ENTER</button>
-            <button onclick="switchPage('homepage', 'classifications')">CLASSIFICATIONS</button>
+        <div class="homepage-buttons">
+            <button class="button-style" onclick="switchPage('homepage', 'menu')">ENTER</button>
+            <button class="button-style" onclick="switchPage('homepage', 'classifications')">CLASSIFICATIONS</button>
         </div>
     </div>
 
     <!-- HTML definition for the classifications page -->
     <div class="classifications" id="classifications">
+        <span class="classifications-table-title">CLASSIFICATIONS TABLE</span>
+        <div class="classifications-table-header">
 
+        </div>
+        <div class="classifications-table-content">
+
+        </div>
+        <button class="button-style" onclick="switchPage('classifications', 'homepage')">HOMEPAGE</button>
     </div>
 
     <!-- HTML definition for the configuration menu -->    
@@ -64,8 +71,8 @@
         </div>
 
         <div class="menu-bottom">
-            <button class="menu-button" onclick="switchPage('menu', 'game')">START !!!</button>
-            <button onclick="switchPage('menu', 'homepage')">HOMEPAGE</button>
+            <button class="button-style" onclick="switchPage('menu', 'game')">START !!!</button>
+            <button class="button-style" onclick="switchPage('menu', 'homepage')">HOMEPAGE</button>
         </div>
     </div>
     
@@ -82,6 +89,7 @@
 
     <!-- Importing necessary scripts -->
     <script src="navigation.js"></script>
+    <script src="classifications.js"></script>
     <script src="menu.js"></script>
     <script src="game.js"></script>
 </body>

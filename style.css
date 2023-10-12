@@ -9,7 +9,7 @@ body {
 
 /*  CSS DEFINITION FOR THE HOMEPAGE */
 
-.homepage{
+.homepage, .homepage-buttons{
     height: auto;
     display: flex;
     flex-wrap: wrap;
@@ -32,15 +32,38 @@ body {
     border-radius: 15px;
     border-width: 10px;
     border-color: black;
-}
 
-#game-name, #enter-menu{
     margin: 2%;
 }
 
+
 /* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
 
+.classifications {
+    height: auto;
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
 
+.classifications-table-title {
+
+}
+
+.classifications-table-row{
+    background-color: darkgoldenrod;
+    border-color: black;
+}
+
+.classifications-table-header {
+    display: inherit;
+}
+
+.classifications-table-content {
+
+}
 
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
 
@@ -77,8 +100,8 @@ body {
     background-color: darkgoldenrod;
 }
 
-.menu-button{
-    
+.button-style{
+    margin: 2%;
 }
 
 /* CSS DEFINITION FOR THE GAME PAGE */
