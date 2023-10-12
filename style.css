@@ -125,31 +125,33 @@ body {
     width: 450px;
     background-color: blue;
     border: 10px solid navy;
-    
-    margin: 0 auto;
+    margin-right: 80px;
+    margin-left: 80px;
     display: flex;
     flex-wrap: wrap;
 }
 #direita {
-    height: 540px;
+    height: 540px; 
     width: 180px;
     background-color: black;
-    margin-left: 80px;
     border: 10px solid navy;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #esquerda {
-    height: 540px;
+    height: 540px; 
     width: 180px;
     background-color: black;
-    margin-right: 80px;
     border: 10px solid navy;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .tile {
     height: 70px;
     width: 70px;
-    margin: 90px;
+    margin: 5px;
 
     /* Circle */
     background-color: white;

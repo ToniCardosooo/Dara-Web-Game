@@ -1,6 +1,6 @@
 var putPhase = true
 var board;
-var boardleft;
+//var boardleft;
 var selected = false;
 var remove=false;
 var rselected;
@@ -15,8 +15,10 @@ var columns = 5 ;
 var currPlayer = 1;
 
 window.onload = function() {
-    setLeft();
     setGame();
+    setLeft();
+    setRigth();
+    updateSideBoards();
     console.log("ola");
 }
 
@@ -36,28 +38,43 @@ function switchPage(from_id, to_id){
 }
 
 function clearboard(){
-    console.log("clear");
     for(let r=0;r<rows;r++){
         for(let c=0;c<columns;c++){
            board[r][c] = 0;
        }
     }
-    
+    playerPieces = [0,0];
     updateBoard();
+    updateSideBoards();
 }
 
 function setLeft(){
-    boardleft=[];
+    //boardleft=[];
     for(let r=0;r<6;r++){
         let row = [];
         for(let c=0;c<2;c++){
             row.push(0);
             let tile = document.createElement("div");
-            tile.id = r.toString() + "-" + c.toString();
+            tile.id = "E"+r.toString() + "-" + c.toString();
             tile.classList.add("tile");
             document.getElementById("esquerda").append(tile);
         }
-        boardleft.push(row);
+        //boardleft.push(row);
+    }
+}
+
+function setRigth(){
+    boardrigth=[];
+    for(let r=0;r<6;r++){
+        let row = [];
+        for(let c=0;c<2;c++){
+            row.push(0);
+            let tile = document.createElement("div");
+            tile.id = "R"+r.toString() + "-" + c.toString();
+            tile.classList.add("tile");
+            document.getElementById("direita").append(tile);
+        }
+        boardrigth.push(row);
     }
 }
 
@@ -101,6 +118,26 @@ function updateBoard(){
     }
 }
 
+function updateSideBoards(){
+    count = 12-playerPieces[0];
+    for (let r=0; r<6; r++){
+        for (let c=0; c<2; c++){
+            let tile = document.getElementById("E"+r.toString() + "-" + c.toString());
+            if (count>0){tile.classList.add("red-piece");count--;}
+            else{tile.classList.remove("red-piece");}
+        }
+    }
+    count = 12-playerPieces[1];
+    for (let r=0; r<6; r++){
+        for (let c=0; c<2; c++){
+            let tile = document.getElementById("R"+r.toString() + "-" + c.toString());
+            if (count>0){tile.classList.add("yellow-piece");count--;}
+            else{tile.classList.remove("yellow-piece");}
+        }
+    }
+}
+
+
 function onClick() {
     if (winner!=0) {
         return;
@@ -121,6 +158,7 @@ function onClick() {
             playerPieces[currPlayer-1]++;
             currPlayer=3-currPlayer;
             updateBoard();
+            updateSideBoards();
             if (playerPieces[0]+playerPieces[1]==24){
                 putPhase=false;
                 if (currPlayer==1){s+="Red ";}
@@ -164,6 +202,7 @@ function onClick() {
                     selected=false;
                     remove=false;
                     updateBoard();
+                    updateSideBoards();
                     if (currPlayer==1){s+="Red ";}
                     else{s+="Yellow ";}
                     s+="Player to select a piece";
@@ -191,6 +230,7 @@ function onClick() {
                         lastmove[(currPlayer-1)*4+2]=rselected;
                         lastmove[(currPlayer-1)*4+3]=cselected;
                         updateBoard(); 
+                        updateSideBoards();
                         if (createsLine(r,c,currPlayer)){
                             remove=true;
                             if (currPlayer==1){s+="Red ";}
