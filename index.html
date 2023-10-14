@@ -16,34 +16,49 @@
             DARA
         </div>
         <div class="homepage-buttons">
-            <button class="button-style" onclick="switchPage('homepage', 'menu')">ENTER</button>
+            <button class="button-style" onclick="switchPage('homepage', 'menu')">PLAY</button>
             <button class="button-style" onclick="switchPage('homepage', 'classifications')">CLASSIFICATIONS</button>
+            <button class="button-style" onclick="switchPage('homepage', 'game-rules')">GAME RULES</button>
         </div>
     </div>
 
     <!-- HTML definition for the classifications page -->
     <div class="classifications" id="classifications">
         <span class="classifications-table-title">CLASSIFICATIONS TABLE</span>
-        <div class="classifications-table-header">
 
-        </div>
-        <div class="classifications-table-content">
-
+        <div>
+            <table class="classifications-table" id="classifications-table">
+                <tr><th>Player</th><th>Moves</th><th>Pieces Removed</th><th>Game Duration</th></tr>
+                <tr><td>1</td><td>12</td><td>7</td><td>1:23</td></tr>
+            </table>
         </div>
         <button class="button-style" onclick="switchPage('classifications', 'homepage')">HOMEPAGE</button>
+    </div>
+
+    <!-- HTML definition for the game rules page -->
+    <div class="game-rules" id="game-rules">
+        <button class="button-style" onclick="switchPage('game-rules', 'homepage')">HOMEPAGE</button>
     </div>
 
     <!-- HTML definition for the configuration menu -->    
     <div class="menu" id="menu">
         <div class="menu-top">
-            <div id="board-size" class="config">
+            <div id="board-size-menu" class="config">
                 <span>Board Size</span>
-                <select id="board-size-select">
-                    <option value="0">5 X 6</option>
-                    <option value="1">6 X 6</option>
+                <select id="board-size-select" onchange="customBoardSize()">
+                    <option value="0">6 X 5</option>
+                    <option value="0">7 X 6</option>
+                    <option value="0">8 X 7</option>
+                    <option value="0">9 X 8</option>
+                    <option value="4">Custom</option>
                 </select>
+                <!-- "Custom" selected -->
+                <div id="custom-board-size" class="custom-size-input">
+                    <div id="custom-num-rows"><span>Rows</span><input id="num-rows" type="text"></div>
+                    <div id="custom-num-cols"><span>Columns</span><input id="num-cols" type="text"></div>
+                </div>
             </div>
-    
+
             <div id="game-mode" class="config">
                 <span>Game Mode</span>
                 <select id="game-mode-select">
@@ -71,7 +86,7 @@
         </div>
 
         <div class="menu-bottom">
-            <button class="button-style" onclick="switchPage('menu', 'game');startGame();">START !!!</button>
+            <button class="button-style" onclick="switchPage('menu', 'game'); startGame();">START !!!</button>
             <button class="button-style" onclick="switchPage('menu', 'homepage')">HOMEPAGE</button>
         </div>
     </div>
@@ -88,12 +103,13 @@
         </div>
         
         <div>
-            <button  onclick="switchPage('game', 'menu');clearboard()">GIVE UP</button>
+            <button class="button-style" onclick="switchPage('game', 'menu');clearboard()">GIVE UP</button>
         </div>
     </div>
 
     <!-- Importing necessary scripts -->
 
     <script src="game.js"></script>
+    <script src="menu.js"></script>
 </body>
 </html>

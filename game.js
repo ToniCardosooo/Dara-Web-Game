@@ -8,9 +8,14 @@ var lastmove=[-1,-1,-1,-1,-1,-1,-1,-1];
 var playerPieces = [0,0];
 var winner = 0
 
+// stats for the classificaiton table
+var stats = [];
+var num_moves = 0;
+var num_pieces_eaten = 0;
+
 //by default
 var rows = 6;
-var columns = 5 ;
+var columns = 5;
 var currPlayer = 1;
 
 window.onload = function(){
@@ -29,11 +34,6 @@ function switchPage(from_id, to_id){
 
     from_doc.style.display = "none";
     to_doc.style.display = "flex"
-
-    /* 
-    Remember to erase the board's content if we're
-    quitting the board with this function 
-    */
 }
 
 function clearboard(){

@@ -48,21 +48,37 @@ body {
     align-content: center;
 }
 
-.classifications-table-title {
-
-}
-
-.classifications-table-row{
+.classifications-table{
+    display: table;
+    margin: 5%;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    border-width: 10px;
     background-color: darkgoldenrod;
-    border-color: black;
+    text-align: center;
 }
 
-.classifications-table-header {
-    display: inherit;
+.classifications-table th, .classifications-table td{
+    padding: 10px;
+    border: 2px solid rgb(46, 18, 0);
 }
 
-.classifications-table-content {
+.classifications-table th{
+    background-color: brown;
+}
+    
 
+
+
+/* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
+
+.game-rules {
+    height: auto;
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
 }
 
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
@@ -102,6 +118,10 @@ body {
 
 .button-style{
     margin: 2%;
+}
+
+.custom-size-input{
+    display: none;
 }
 
 /* CSS DEFINITION FOR THE GAME PAGE */
