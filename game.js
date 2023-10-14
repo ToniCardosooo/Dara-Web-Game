@@ -70,9 +70,6 @@ function clearboard(){
             tile.remove();
        }
     }
-    playerPieces = [0,0];
-    updateBoard();
-    updateSideBoards();
 }
 
 function setLeft(){
@@ -130,6 +127,7 @@ function setGame() {
         }
         board.push(row);
     }
+    updateBoard();
 
     let text = document.getElementById("text");
     let s = "";
