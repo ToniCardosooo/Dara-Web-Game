@@ -25,11 +25,9 @@
     <!-- HTML definition for the classifications page -->
     <div class="classifications" id="classifications">
         <span class="classifications-table-title">CLASSIFICATIONS TABLE</span>
-
         <div>
             <table class="classifications-table" id="classifications-table">
-                <tr><th>Player</th><th>Moves</th><th>Pieces Removed</th><th>Game Duration</th></tr>
-                <tr><td>1</td><td>12</td><td>7</td><td>1:23</td></tr>
+                <tr><th>Player</th><th>Board Size</th><th>Moves</th><th>Pieces Removed</th><th>Game Duration</th></tr>
             </table>
         </div>
         <button class="button-style" onclick="switchPage('classifications', 'homepage')">HOMEPAGE</button>
@@ -103,7 +101,7 @@
         </div>
         
         <div>
-            <button class="button-style" onclick="switchPage('game', 'menu');clearboard()">GIVE UP</button>
+            <button id="quit-game-button" class="button-style" onclick="switchPage('game', 'menu'); clearboard();">GIVE UP</button>
         </div>
     </div>
 

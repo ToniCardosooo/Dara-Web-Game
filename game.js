@@ -8,15 +8,26 @@ var lastmove=[-1,-1,-1,-1,-1,-1,-1,-1];
 var playerPieces = [0,0];
 var winner = 0
 
-// stats for the classificaiton table
-var stats = [];
-var num_moves = 0;
-var num_pieces_eaten = 0;
 
 //by default
 var rows = 6;
 var columns = 5;
 var currPlayer = 1;
+
+// stats for the classificaition table
+var stats = {"player": 1, "board_size": rows.toString()+"x"+columns.toString(), "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
+function updateClassificationTable(){
+    let table = document.getElementById("classifications-table");
+    let classification = document.createElement("tr");
+    for (let [key, value] of Object.entries(stats)){
+        let cell = document.createElement("td");
+        cell.textContent = value;
+        classification.append(cell);
+    }
+    table.append(classification);
+    // reset stats
+    stats = {"player": 1, "board_size": "6x5", "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
+}
 
 window.onload = function(){
     setLeft();
@@ -364,4 +375,9 @@ function setWinner(winner) {
     } else {
         win.innerText = "Yellow Wins";
     }
+
+    if (winner==1) updateClassificationTable();
+
+    let button = document.getElementById("quit-game-button");
+    button.textContent = "HOMEPAGE"
 }
