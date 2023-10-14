@@ -18,18 +18,30 @@ var secondPlayer = 0; //=0 se player vs player e =1 se player vs AI
 var AI_diff = 0; // =0 se easy =1 se medium =3 se hard
 
 // stats for the classificaition table
+var classifications = [];
 var stats = {"player": 1, "board_size": rows.toString()+"x"+columns.toString(), "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
+
 function updateClassificationTable(){
+    /* para orderar as classificacoes - do later
+
+    classifications.push(stats);
+    classifications = classifications.sort((stat1, stat2) => {
+        return stat1.num_moves - stat2.num_moves;
+    });
+
     let table = document.getElementById("classifications-table");
-    let classification = document.createElement("tr");
+    for (let i = 0; i < classifications.length; i++){
+        document.re
+    } */
+    let table_row = document.createElement("tr");
     for (let [key, value] of Object.entries(stats)){
         let cell = document.createElement("td");
         cell.textContent = value;
-        classification.append(cell);
+        table_row.append(cell);
     }
-    table.append(classification);
+    table.append(table_row);
     // reset stats
-    stats = {"player": 1, "board_size": "6x5", "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
+    stats = {"player": 1, "board_size": rows.toString()+"x"+columns.toString(), "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
 }
 
 window.onload = function(){
@@ -40,6 +52,7 @@ window.onload = function(){
 function startGame() {
     setGame();
     updateSideBoards();
+    document.getElementById("quit-game-button").textContent = "GIVE UP";
 }
 
 function switchPage(from_id, to_id){
@@ -382,13 +395,12 @@ function checkWinner() {
 function setWinner(winner) {
     let win = document.getElementById("winner");
     if (winner==1) {
-        win.innerText = "Red Wins";             
+        win.innerText = "Red Wins";
+        updateClassificationTable();      
     } else {
         win.innerText = "Yellow Wins";
     }
 
-    if (winner==1) updateClassificationTable();
+    document.getElementById("quit-game-button").textContent = "BACK TO MENU";
 
-    let button = document.getElementById("quit-game-button");
-    button.textContent = "HOMEPAGE"
 }
