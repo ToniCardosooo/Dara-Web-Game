@@ -1,18 +1,21 @@
-var putPhase = true
+var putPhase;
 var board;
-var selected = false;
-var remove=false;
+var selected;
+var remove;
 var rselected;
 var cselected;
-var lastmove=[-1,-1,-1,-1,-1,-1,-1,-1];
-var playerPieces = [0,0];
-var winner = 0
+var lastmove;
+var playerPieces;
+var winner;
+var currPlayer;
 
 
-//by default
+//by default and can be changed in configurations
 var rows = 6;
 var columns = 5;
-var currPlayer = 1;
+var startingPlayer = 1;
+var secondPlayer = 0; //=0 se player vs player e =1 se player vs AI
+var AI_diff = 0; // =0 se easy =1 se medium =3 se hard
 
 // stats for the classificaition table
 var stats = {"player": 1, "board_size": rows.toString()+"x"+columns.toString(), "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
@@ -88,8 +91,16 @@ function setRigth(){
 }
 
 function setGame() {
+    let win = document.getElementById("winner");
+    win.innerText="";
     board = [];
-    
+    currPlayer=startingPlayer;
+    playerPieces = [0,0];
+    lastmove=[-1,-1,-1,-1,-1,-1,-1,-1];
+    winner = 0;
+    putPhase = true;
+    selected = false;
+    remove=false;
 
 
     for (let r = 0; r < rows; r++) {
