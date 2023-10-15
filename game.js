@@ -22,26 +22,35 @@ var classifications = [];
 var stats = {"player": 1, "board_size": rows.toString()+"x"+columns.toString(), "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
 
 function updateClassificationTable(){
-    /* para orderar as classificacoes - do later
+    let table = document.getElementById("classifications-table");
 
+    for (let i = 0; i < classifications.length; i++){
+        let table_row = document.getElementById(i.toString()+"-row");
+        table_row.remove();
+    }
+
+    //para orderar as classificacoes - do later
     classifications.push(stats);
     classifications = classifications.sort((stat1, stat2) => {
         return stat1.num_moves - stat2.num_moves;
     });
 
-    let table = document.getElementById("classifications-table");
     for (let i = 0; i < classifications.length; i++){
-        document.re
-    } */
-    let table_row = document.createElement("tr");
-    for (let [key, value] of Object.entries(stats)){
-        let cell = document.createElement("td");
-        cell.textContent = value;
-        table_row.append(cell);
+        let table_row = document.createElement("tr");
+        table_row.id = i.toString()+"-row";
+        for (let [key, value] of Object.entries(stats)){
+            let cell = document.createElement("td");
+            cell.textContent = value;
+            table_row.append(cell);
+        }
+        table.append(table_row);
     }
-    table.append(table_row);
     // reset stats
     stats = {"player": 1, "board_size": rows.toString()+"x"+columns.toString(), "num_moves": 0, "num_pieces_eaten": 0, "match_duration": 0};
+}
+
+function updateStats(parameter){
+    if (currPlayer == 1) stats[parameter]++;
 }
 
 window.onload = function(){
@@ -232,6 +241,7 @@ function onClick() {
             if (remove){  //remove a opponent piece
                 if (board[r][c]==3-currPlayer){
                     board[r][c]=0;
+                    updateStats("num_pieces_eaten");
                     currPlayer=3-currPlayer;
                     playerPieces[currPlayer-1]--;
                     selected=false;
@@ -266,6 +276,7 @@ function onClick() {
                         lastmove[(currPlayer-1)*4+3]=cselected;
                         updateBoard(); 
                         updateSideBoards();
+                        updateStats("num_moves");
                         if (createsLine(r,c,currPlayer)){
                             remove=true;
                             if (currPlayer==1){s+="Red ";}
@@ -403,6 +414,5 @@ function setWinner(winner) {
         win.innerText = "Yellow Wins";
     }
 
-    document.getElementById("quit-game-button").textContent = "BACK TO MENU";
-
+    document.getElementById("quit-game-button").innerText = "BACK TO MENU";
 }
