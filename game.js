@@ -276,7 +276,7 @@ function onClick() {
 
   //Put Phase
   if (putPhase) {
-    if (CanPut(r, c, currPlayer, 0, 0)) {
+    if (CanPut(r, c, currPlayer, 0, 0,board)) {
       board[r][c] = currPlayer;
       playerPieces[currPlayer - 1]++;
       currPlayer = 3 - currPlayer;
@@ -373,7 +373,7 @@ function onClick() {
           s += "Player to select a piece";
         } else {
           if (
-            CanPut(r, c, currPlayer, rselected, cselected) &&
+            CanPut(r, c, currPlayer, rselected, cselected,board) &&
             CanMove(r, c, rselected, cselected) &&
             !Repeat(lastmove, r, c, rselected, cselected, currPlayer)
           ) {
@@ -386,7 +386,7 @@ function onClick() {
             updateBoard();
             updateSideBoards();
             updateStats("num_moves");
-            if (createsLine(r, c, currPlayer)) {
+            if (createsLine(r, c, currPlayer,board)) {
               remove = true;
               if (currPlayer == 1) {
                 s += "Red ";
@@ -419,7 +419,7 @@ function onClick() {
   }
 }
 
-function CanPut(r, c, currPlayer, rselected, cselected) {
+function CanPut(r, c, currPlayer, rselected, cselected,board) {
   //Check is Empty
   if (board[r][c] != 0) {
     return false;
@@ -489,7 +489,7 @@ function CanMove(r, c, rselected, cselected) {
   }
   return false;
 }
-function createsLine(r, c, currPlayer) {
+function createsLine(r, c, currPlayer,board) {
   //Check Horizontal
   let min = Math.max(0, c - 2);
   let max = Math.min(columns - 3, c);
@@ -535,7 +535,7 @@ function hasMoves(currPlayer, lastmove, rows, columns) {
       if (board[i][j] == currPlayer) {
         if (i > 0) {
           if (
-            CanPut(i - 1, j, currPlayer, i, j) &&
+            CanPut(i - 1, j, currPlayer, i, j,board) &&
             !Repeat(lastmove, i - 1, j, i, j, currPlayer)
           ) {
             return true;
@@ -543,7 +543,7 @@ function hasMoves(currPlayer, lastmove, rows, columns) {
         }
         if (i < rows - 1) {
           if (
-            CanPut(i + 1, j, currPlayer, i, j) &&
+            CanPut(i + 1, j, currPlayer, i, j,board) &&
             !Repeat(lastmove, i + 1, j, i, j, currPlayer)
           ) {
             return true;
@@ -551,7 +551,7 @@ function hasMoves(currPlayer, lastmove, rows, columns) {
         }
         if (j > 0) {
           if (
-            CanPut(i, j - 1, currPlayer, i, j) &&
+            CanPut(i, j - 1, currPlayer, i, j,board) &&
             !Repeat(lastmove, i, j - 1, i, j, currPlayer)
           ) {
             return true;
@@ -559,7 +559,7 @@ function hasMoves(currPlayer, lastmove, rows, columns) {
         }
         if (j < columns - 1) {
           if (
-            CanPut(i, j + 1, currPlayer, i, j) &&
+            CanPut(i, j + 1, currPlayer, i, j,board) &&
             !Repeat(lastmove, i, j + 1, i, j, currPlayer)
           ) {
             return true;
@@ -592,4 +592,130 @@ function setWinner(winner) {
   }
 
   document.getElementById("quit-game-button").innerText = "BACK TO MENU";
+}
+
+
+function everymove(currPlayer,putPhase,board){
+    let boardcopy = copy_array(board); 
+    let moves = [];
+    if (putPhase){
+        for(let i=0;i<rows;i++){
+            for(let j=0;j<columns;j++){
+                if (CanPut(i, j, currPlayer, 0, 0,boardcopy)){
+                    let move = [i,j];
+                    moves.push(move);
+                }
+            }
+        }
+    }
+    else{
+        for(let i=0;i<rows;i++){
+            for(let j=0;j<columns;j++){
+                let move = [];
+                if (boardcopy[i][j]==currPlayer){
+                    if(i>0){
+                        if(CanPut(i-1,j,currPlayer,i,j,boardcopy) && !Repeat(lastmove,i-1,j,i,j,currPlayer)){
+                            move.push([i,j]);
+                            move.push([i-1,j]);
+                            boardcopy[i-1][j] = currPlayer;
+                            boardcopy[i][j] = 0;
+                            if (createsLine(i-1,j,currPlayer,boardcopy)){
+                                for(let k=0;k<rows;k++){
+                                    for(let l=0;l<columns;l++){
+                                        if (boardcopy[k][l]==3-currPlayer){
+                                            move.push([k,l]);
+                                            moves.push(move);
+                                            move.pop();
+                                        }
+                                    }
+                                }
+                            }
+                            else{moves.push(move);}
+                            move=[];
+                            boardcopy[i-1][j] = 0;
+                            boardcopy[i][j] = currPlayer;
+                        }
+                    }
+                    if(i<rows-1){
+                        if(CanPut(i+1,j,currPlayer,i,j,boardcopy) && !Repeat(lastmove,i+1,j,i,j,currPlayer)){
+                            move.push([i,j]);
+                            move.push([i+1,j]);
+                            boardcopy[i+1][j] = currPlayer;
+                            boardcopy[i][j] = 0;
+                            if (createsLine(i+1,j,currPlayer,boardcopy)){
+                                for(let k=0;k<rows;k++){
+                                    for(let l=0;l<columns;l++){
+                                        if (boardcopy[k][l]==3-currPlayer){
+                                            move.push([k,l]);
+                                            moves.push(move);
+                                            move.pop();
+                                        }
+                                    }
+                                }
+                            }
+                            else{moves.push(move);}
+                            move=[];
+                            boardcopy[i+1][j] = 0;
+                            boardcopy[i][j] = currPlayer;
+                        }
+                    }
+                    if(j>0){
+                        if(CanPut(i,j-1,currPlayer,i,j,boardcopy) && !Repeat(lastmove,i,j-1,i,j,currPlayer)){
+                            move.push([i,j]);
+                            move.push([i,j-1]);
+                            boardcopy[i][j-1] = currPlayer;
+                            boardcopy[i][j] = 0;
+                            if (createsLine(i,j-1,currPlayer,boardcopy)){
+                                for(let k=0;k<rows;k++){
+                                    for(let l=0;l<columns;l++){
+                                        if (boardcopy[k][l]==3-currPlayer){
+                                            move.push([k,l]);
+                                            moves.push(move);
+                                            move.pop();
+                                        }
+                                    }
+                                }
+                            }
+                            else{moves.push(move);}
+                            move=[];
+                            boardcopy[i][j-1] = 0;
+                            boardcopy[i][j] = currPlayer;
+                        }
+                    }
+                    if(j<columns-1){
+                        if(CanPut(i,j+1,currPlayer,i,j,boardcopy) && !Repeat(lastmove,i,j+1,i,j,currPlayer)){
+                            move.push([i,j]);
+                            move.push([i,j+1]);
+                            boardcopy[i][j+1] = currPlayer;
+                            boardcopy[i][j] = 0;
+                            if (createsLine(i,j+1,currPlayer,boardcopy)){
+                                for(let k=0;k<rows;k++){
+                                    for(let l=0;l<columns;l++){
+                                        if (boardcopy[k][l]==3-currPlayer){
+                                            move.push([k,l]);
+                                            moves.push(move);
+                                            move.pop();
+                                        }
+                                    }
+                                }
+                            }
+                            else{moves.push(move);}
+                            move=[];
+                            boardcopy[i][j+1] = 0;
+                            boardcopy[i][j] = currPlayer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return moves;
+}
+
+function copy_array(array){
+    let copy=[];
+    for(let i=0;i<array.length;i++){
+        copy[i] = array[i].slice();
+    }
+    return copy;
 }
