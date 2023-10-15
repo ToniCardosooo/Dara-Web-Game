@@ -1,9 +1,9 @@
 body {
-    background: url("./background.jpg") no-repeat center center fixed;
-    background-size: cover;
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-    text-align: center;
+  background: url("./background.jpg") no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  text-align: center;
 }
 
 /*  CSS DEFINITION FOR THE HOMEPAGE */
@@ -36,171 +36,213 @@ body {
     width: 600px;
     height: 150px;
 
-    line-height: 150px;
-    text-align: center;
-    font-size: 300%;
+  line-height: 150px;
+  text-align: center;
+  font-size: 300%;
 
-    background-color: darkgoldenrod;
-    color: white;
+  background-color: darkgoldenrod;
+  color: white;
 
-    border-radius: 15px;
-    border-width: 10px;
-    border-color: black;
+  border-radius: 15px;
+  border-width: 10px;
+  border-color: black;
 
-    margin: 2%;
+  margin: 2%;
 }
 
 /* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
 
 .classifications {
-    height: auto;
-    display: none;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+  height: auto;
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
-.classifications-table{
-    display: table;
-    margin: 5%;
-    box-sizing: border-box;
-    border-collapse: collapse;
-    border-width: 10px;
-    background-color: darkgoldenrod;
-    text-align: center;
+.classifications-table {
+  display: table;
+  margin: 5%;
+  box-sizing: border-box;
+  border-collapse: collapse;
+  border-width: 10px;
+  background-color: darkgoldenrod;
+  text-align: center;
 }
 
-.classifications-table th, .classifications-table td{
-    padding: 10px;
-    border: 2px solid rgb(46, 18, 0);
+.classifications-table th,
+.classifications-table td {
+  padding: 10px;
+  border: 2px solid rgb(46, 18, 0);
 }
 
-.classifications-table th{
-    background-color: brown;
+.classifications-table th {
+  background-color: brown;
 }
 
 /* CSS DEFINITION FOR THE GAME RULES PAGE */
 
 .game-rules {
-    height: auto;
-    display: none;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+  height: auto;
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
 
 .menu {
-    height: auto;
-    display: none;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+  height: auto;
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
-.menu-top, .menu-bottom{
-    display: inherit;
-    flex-direction: row;
-    justify-content: center;
-    margin: 2%;
-    width: 100%;
+.menu-top,
+.menu-bottom {
+  display: inherit;
+  flex-direction: row;
+  justify-content: center;
+  margin: 2%;
+  width: 100%;
 }
 
-.config{
-    height: auto;
-    width: auto;
-    display: inherit;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    margin: 1%;
+.config {
+  height: auto;
+  width: auto;
+  display: inherit;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin: 1%;
 }
 
 .config-name {
-    width: max-content;
-    background-color: darkgoldenrod;
+  width: max-content;
+  background-color: darkgoldenrod;
 }
 
-.button-style{
-    margin: 2%;
+.button-style {
+  margin: 2%;
 }
 
-.custom-size-input{
-    display: none;
+.custom-size-input {
+  display: none;
 }
 
 /* CSS DEFINITION FOR THE GAME PAGE */
 
 .game {
-    height: auto;
-    display: none;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+  height: auto;
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
-#jogo{
-    display: flex;
-    justify-content: center;
+#jogo {
+  display: flex;
+  justify-content: center;
 }
 
 #board {
-    height: 540px; 
-    width: 450px;
-    background-color: blue;
-    border: 10px solid navy;
-    margin-right: 80px;
-    margin-left: 80px;
-    display: flex;
-    flex-wrap: wrap;
+  height: 540px;
+  width: 450px;
+  background-color: blue;
+  border: 10px solid navy;
+  margin-right: 80px;
+  margin-left: 80px;
+  display: flex;
+  flex-wrap: wrap;
 }
 #direita {
-    height: 540px; 
-    width: 180px;
-    background-color: black;
-    border: 10px solid navy;
-    display: flex;
-    flex-wrap: wrap;
+  height: 540px;
+  width: 180px;
+  background-color: black;
+  border: 10px solid navy;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 #esquerda {
-    height: 540px; 
-    width: 180px;
-    background-color: black;
-    border: 10px solid navy;
-    display: flex;
-    flex-wrap: wrap;
+  height: 540px;
+  width: 180px;
+  background-color: black;
+  border: 10px solid navy;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#custom-board-size {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  margin-top: 10px;
+  display: none;
+}
+
+#custom-num-rows,
+#custom-num-cols {
+  margin: 10px 0;
+}
+
+span {
+  display: block;
+  font-weight: bold;
+  color: black;
+}
+
+input {
+  width: 50px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button-style {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.button-style:hover {
+  background-color: #0056b3;
 }
 
 .tile {
-    height: 70px;
-    width: 70px;
-    margin: 5px;
+  height: 70px;
+  width: 70px;
+  margin: 5px;
 
-    /* Circle */
-    background-color: white;
-    border-radius: 50%;
-    border: 5px solid navy;
+  /* Circle */
+  background-color: white;
+  border-radius: 50%;
+  border: 5px solid navy;
 }
 
 .red-piece {
-    background-color: red;
+  background-color: red;
 }
 
 .yellow-piece {
-    background-color: yellow;
+  background-color: yellow;
 }
 
-.red-shallow  {
-    background-color: rgba(255,0,0,0.7);
+.red-shallow {
+  background-color: rgba(255, 0, 0, 0.7);
 }
 
-.yellow-shallow  {
-    background-color: rgba(255,255,0,0.7);
+.yellow-shallow {
+  background-color: rgba(255, 255, 0, 0.7);
 }
