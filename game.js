@@ -141,6 +141,11 @@ function setBoardSize(size) {
   board.style.height = rows * 90 + "px";
 }
 
+function setStartPlayer(player){
+  if (player==0){startingPlayer=1;}
+  else{startingPlayer=2;}
+}
+
 function clearboard() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
