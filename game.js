@@ -43,7 +43,7 @@ function updateClassificationTable() {
   for (let i = 0; i < classifications.length; i++) {
     let table_row = document.createElement("tr");
     table_row.id = i.toString() + "-row";
-    for (let [key, value] of Object.entries(stats)) {
+    for (let [key, value] of Object.entries(classifications[i])) {
       let cell = document.createElement("td");
       cell.textContent = value;
       table_row.append(cell);
