@@ -28,7 +28,7 @@ var stats = {
 
 function updateClassificationTable() {
   stats.board_size = rows.toString() + "x" + columns.toString();
-  
+
   let table = document.getElementById("classifications-table");
 
   for (let i = 0; i < classifications.length; i++) {
@@ -85,36 +85,60 @@ function switchPage(from_id, to_id) {
   to_doc.style.display = "flex";
 }
 
-function setBoardSize(size) {
-    
+function confirmCustomSize() {
+  var customRows = document.getElementById("num-rows").value;
+  var customColumns = document.getElementById("num-cols").value;
 
-    if (size === "0") {
-        rows = 6;
-        columns = 5;
-    }
-    else if (size === "1") {
-        rows = 7;
-        columns = 6;
-    } 
-    else if (size === "2") {
-        rows = 8;
-        columns = 7;
-    }
-    else if (size === "3") {
-        rows = 9;
-        columns = 8;
-    }
+  if (
+    !isNaN(customRows) &&
+    !isNaN(customColumns) &&
+    customRows > 0 &&
+    customColumns > 0
+  ) {
+    rows = parseInt(customRows);
+    columns = parseInt(customColumns);
 
     let board = document.getElementById("board");
     board.style.width = columns * 90 + "px";
     board.style.height = rows * 90 + "px";
+
+    clearboard();
+  } else {
+    alert("Please enter valid values for rows and columns.");
+  }
+}
+
+function setBoardSize(size) {
+  var customSizeDiv = document.getElementById("custom-board-size");
+  customSizeDiv.style.display = "none";
+  if (size === "0") {
+    rows = 6;
+    columns = 5;
+  } else if (size === "1") {
+    rows = 7;
+    columns = 6;
+  } else if (size === "2") {
+    rows = 8;
+    columns = 7;
+  } else if (size === "3") {
+    rows = 9;
+    columns = 8;
+  } else if (size === "4") {
+    customSizeDiv.style.display = "block";
+  }
+
+  let board = document.getElementById("board");
+  board.style.width = columns * 90 + "px";
+  board.style.height = rows * 90 + "px";
 }
 
 function clearboard() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
       let tile = document.getElementById(r.toString() + "-" + c.toString());
-      if(tile!=null){tile.remove();}
+      if (tile != null) {
+        tile.remove();
+      }
     }
   }
 }
