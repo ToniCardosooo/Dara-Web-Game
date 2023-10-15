@@ -27,6 +27,8 @@ var stats = {
 };
 
 function updateClassificationTable() {
+  stats.board_size = rows.toString() + "x" + columns.toString();
+  
   let table = document.getElementById("classifications-table");
 
   for (let i = 0; i < classifications.length; i++) {
