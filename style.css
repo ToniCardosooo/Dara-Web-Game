@@ -128,10 +128,6 @@ body {
   background-color: darkgoldenrod;
 }
 
-.button-style {
-  margin: 2%;
-}
-
 .custom-size-input {
   display: none;
 }
@@ -214,6 +210,7 @@ input {
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
+  margin: 2%;
 }
 
 .button-style:hover {
