@@ -118,7 +118,7 @@
 
         <div id="game-mode" class="config">
           <span>Game Mode</span>
-          <select id="game-mode-select">
+          <select id="game-mode-select" onchange="setGameMode(this.value)">
             <option value="0">Player X Player</option>
             <option value="1">Player X AI</option>
           </select>
@@ -134,7 +134,7 @@
 
         <div id="ai-difficuly" class="config">
           <span>AI Difficulty</span>
-          <select id="ai-difficulty-select">
+          <select id="ai-difficulty-select" onchange="setAIdiff(this.value)">
             <option value="0">Easy</option>
             <option value="1">Medium</option>
             <option value="2">Hard</option>

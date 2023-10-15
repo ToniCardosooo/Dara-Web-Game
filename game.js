@@ -14,7 +14,7 @@ var rows = 6;
 var columns = 5;
 var startingPlayer = 1;
 var secondPlayer = 0; //=0 se player vs player e =1 se player vs AI
-var AI_diff = 0; // =0 se easy =1 se medium =3 se hard
+var AI_diff = 0; // =0 se easy =1 se medium =2 se hard
 
 // stats for the classificaition table
 var classifications = [];
@@ -140,10 +140,20 @@ function setBoardSize(size) {
   board.style.width = columns * 90 + "px";
   board.style.height = rows * 90 + "px";
 }
+function setGameMode(mode){
+  if (mode==0){secondPlayer=0;}
+  else{secondPlayer=1;}
+}
 
 function setStartPlayer(player){
   if (player==0){startingPlayer=1;}
   else{startingPlayer=2;}
+}
+
+function setAIdiff(diff){
+  if (diff==0){AI_diff=0;}
+  else if (diff==1){AI_diff=1;}
+  else{AI_diff=2;}
 }
 
 function clearboard() {
