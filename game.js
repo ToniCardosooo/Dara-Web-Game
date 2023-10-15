@@ -84,32 +84,36 @@ function switchPage(from_id, to_id) {
 }
 
 function setBoardSize(size) {
-  if (size === "0") {
-    rows = 6;
-    columns = 5;
-  } else if (size === "1") {
-    rows = 7;
-    columns = 6;
-  } else if (size === "2") {
-    rows = 8;
-    columns = 7;
-  } else if (size === "3") {
-    rows = 9;
-    columns = 8;
-  }
+    
 
-  let board = document.getElementById("board");
-  board.style.width = columns * 90 + "px";
-  board.style.height = rows * 90 + "px";
+    if (size === "0") {
+        rows = 6;
+        columns = 5;
+    }
+    else if (size === "1") {
+        rows = 7;
+        columns = 6;
+    } 
+    else if (size === "2") {
+        rows = 8;
+        columns = 7;
+    }
+    else if (size === "3") {
+        rows = 9;
+        columns = 8;
+    }
 
-  clearboard();
+    let board = document.getElementById("board");
+    board.style.width = columns * 90 + "px";
+    board.style.height = rows * 90 + "px";
+    clearboard();
 }
 
 function clearboard() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
       let tile = document.getElementById(r.toString() + "-" + c.toString());
-      tile.remove();
+      if(tile!=null){tile.remove();}
     }
   }
 }
