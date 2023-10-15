@@ -108,7 +108,6 @@ function setBoardSize(size) {
     let board = document.getElementById("board");
     board.style.width = columns * 90 + "px";
     board.style.height = rows * 90 + "px";
-    clearboard();
 }
 
 function clearboard() {
