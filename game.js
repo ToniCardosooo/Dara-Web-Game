@@ -19,12 +19,16 @@ var AI_diff = 0; // =0 se easy =1 se medium =3 se hard
 // stats for the classificaition table
 var classifications = [];
 var stats = {
-  player: 1,
+  player_name: "",
   board_size: rows.toString() + "x" + columns.toString(),
   num_moves: 0,
   num_pieces_eaten: 0,
   match_duration: 0,
 };
+
+function setPlayerName(){
+    stats.player_name = document.getElementById("username-input").value.toString();
+}
 
 function updateClassificationTable() {
   stats.board_size = rows.toString() + "x" + columns.toString();

@@ -8,19 +8,33 @@ body {
 
 /*  CSS DEFINITION FOR THE HOMEPAGE */
 
-.homepage,
-.homepage-buttons {
-  height: auto;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
+.auth-page{
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
 }
 
-.logotipo {
-  width: 600px;
-  height: 150px;
+/*  CSS DEFINITION FOR THE HOMEPAGE */
+
+.homepage, .homepage-buttons{
+    height: auto;
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.homepage-buttons{
+    display: inherit    ;
+}
+
+.logotipo{
+    width: 600px;
+    height: 150px;
 
   line-height: 150px;
   text-align: center;
@@ -67,7 +81,7 @@ body {
   background-color: brown;
 }
 
-/* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
+/* CSS DEFINITION FOR THE GAME RULES PAGE */
 
 .game-rules {
   height: auto;
@@ -112,10 +126,6 @@ body {
 .config-name {
   width: max-content;
   background-color: darkgoldenrod;
-}
-
-.button-style {
-  margin: 2%;
 }
 
 .custom-size-input {
@@ -200,6 +210,7 @@ input {
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
+  margin: 2%;
 }
 
 .button-style:hover {
