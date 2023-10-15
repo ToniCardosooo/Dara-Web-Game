@@ -112,6 +112,10 @@ function setGame() {
     selected = false;
     remove=false;
 
+    let boardwidth = columns*90;
+    document.getElementById("board").style.width=boardwidth+"px";
+    let boardheight = rows*90;
+    document.getElementById("board").style.height=boardheight+"px";
 
     for (let r = 0; r < rows; r++) {
         let row = [];
@@ -299,7 +303,7 @@ function CanPut(r,c,currPlayer,rselected,cselected){
     
     //Check Horizontal
     let min = Math.max(0,c-3)
-    let max = Math.min(1,c)
+    let max = Math.min(columns-4,c)
     
     for (let i=min;i<=max;i++){
         if (currPlayer == board[r][i] && board[r][i] == board[r][i+1] && board[r][i+1] == board[r][i+2] && board[r][i+2] == board[r][i+3]){
@@ -311,7 +315,7 @@ function CanPut(r,c,currPlayer,rselected,cselected){
         
     // Check Vertical
     min = Math.max(0,r-3)
-    max = Math.min(2,r)
+    max = Math.min(rows-4,r)
 
     for (let i=min;i<=max;i++){
         if (currPlayer == board[i][c] && board[i][c] == board[i+1][c] && board[i+1][c] == board[i+2][c] && board[i+2][c] == board[i+3][c]){
@@ -339,7 +343,7 @@ function createsLine(r,c,currPlayer){
     
     //Check Horizontal
     let min = Math.max(0,c-2)
-    let max = Math.min(2,c)
+    let max = Math.min(columns-3,c)
     
     for (let i=min;i<=max;i++){
         if (currPlayer == board[r][i] && board[r][i] == board[r][i+1] && board[r][i+1] == board[r][i+2]){
@@ -349,7 +353,7 @@ function createsLine(r,c,currPlayer){
         
     // Check Vertical
     min = Math.max(0,r-2)
-    max = Math.min(3,r)
+    max = Math.min(rows-3,r)
 
     for (let i=min;i<=max;i++){
         if (currPlayer == board[i][c] && board[i][c] == board[i+1][c] && board[i+1][c] == board[i+2][c]){
