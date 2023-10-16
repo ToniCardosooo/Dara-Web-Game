@@ -115,7 +115,6 @@
             </div>
           </div>
         </div>
-
         <div id="game-mode" class="config">
           <span>Game Mode</span>
           <select id="game-mode-select" onchange="setGameMode(this.value)">
@@ -141,15 +140,10 @@
           </select>
         </div>
       </div>
-
       <div class="menu-bottom">
-        <button
-          type="button"
-          class="button-style"
-          onclick="switchPage('menu', 'game'); startGame()"
-        >
+        <button type="button" class="button-style" onclick="if (isCustomSizeValid()) { startGame(); switchPage('menu', 'game'); }">
           START !!!
-        </button>
+        </button>        
         <button class="button-style" onclick="switchPage('menu', 'homepage')">
           HOMEPAGE
         </button>

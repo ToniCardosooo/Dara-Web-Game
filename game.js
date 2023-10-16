@@ -78,10 +78,25 @@ window.onload = function () {
 };
 
 function startGame() {
-  setBoardSize(document.getElementById("board-size-select").value);
-  setGame();
-  updateSideBoards();
-  document.getElementById("quit-game-button").textContent = "GIVE UP";
+    setBoardSize(document.getElementById("board-size-select").value);
+    setGame();
+    updateSideBoards();
+    document.getElementById("quit-game-button").textContent = "GIVE UP";
+}
+
+function isCustomSizeValid() {
+  var sizeSelect = document.getElementById("board-size-select");
+  if (sizeSelect.value === "4") {
+    var numRows = parseInt(document.getElementById("num-rows").value);
+    var numCols = parseInt(document.getElementById("num-cols").value);
+    if (numRows >= 6 && numCols >= 6) {
+      return true;
+    } else {
+      alert("Custom size must have at least 6 rows and 6 columns.");
+      return false; 
+    }
+  }
+  return true; 
 }
 
 function switchPage(from_id, to_id) {
@@ -90,29 +105,6 @@ function switchPage(from_id, to_id) {
 
   from_doc.style.display = "none";
   to_doc.style.display = "flex";
-}
-
-function confirmCustomSize() {
-  var customRows = document.getElementById("num-rows").value;
-  var customColumns = document.getElementById("num-cols").value;
-
-  if (
-    !isNaN(customRows) &&
-    !isNaN(customColumns) &&
-    customRows > 0 &&
-    customColumns > 0
-  ) {
-    rows = parseInt(customRows);
-    columns = parseInt(customColumns);
-
-    let board = document.getElementById("board");
-    board.style.width = columns * 90 + "px";
-    board.style.height = rows * 90 + "px";
-
-    clearboard();
-  } else {
-    alert("Please enter valid values for rows and columns.");
-  }
 }
 
 function setBoardSize(size) {
@@ -140,6 +132,7 @@ function setBoardSize(size) {
   board.style.width = columns * 90 + "px";
   board.style.height = rows * 90 + "px";
 }
+
 function setGameMode(mode){
   if (mode==0){secondPlayer=0;}
   else{secondPlayer=1;}

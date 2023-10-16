@@ -190,6 +190,12 @@ body {
   margin: 10px 0;
 }
 
+.custom-size-input {
+  width: 200px; /* Defina o tamanho que desejar */
+  height: auto; /* Mantém a altura automática */
+}
+
+
 span {
   display: block;
   font-weight: bold;
