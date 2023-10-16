@@ -69,6 +69,19 @@ body {
   margin: 2%;
 }
 
+/* CSS DEFINITION FOR THE GAME RULES PAGE */
+
+.game-rules-list{
+  margin: 20px;
+  text-align: justify;
+  border-radius: 15px;
+  background-color: darkgoldenrod;
+}
+
+.game-rules-list li{
+  margin: 5px;
+}
+
 /* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
 
 .classifications {
