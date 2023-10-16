@@ -131,8 +131,13 @@ body {
 
 .custom-size-input {
   display: none;
+  width: max-content; /* Defina o tamanho que desejar */
+  height: auto; /* Mantém a altura automática */
 }
 
+#ai-difficulty{
+  display: none;
+}
 /* CSS DEFINITION FOR THE GAME PAGE */
 
 .game {
@@ -191,10 +196,6 @@ body {
   margin: 10px 0;
 }
 
-.custom-size-input {
-  width: 200px; /* Defina o tamanho que desejar */
-  height: auto; /* Mantém a altura automática */
-}
 
 
 span {
