@@ -108,6 +108,7 @@ body {
   display: inherit;
   flex-direction: row;
   justify-content: center;
+  align-items: baseline;
   margin: 2%;
   width: 100%;
 }

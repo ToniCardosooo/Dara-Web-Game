@@ -134,8 +134,8 @@ function setBoardSize(size) {
 }
 
 function setGameMode(mode){
-  if (mode==0){secondPlayer=0;}
-  else{secondPlayer=1;}
+  if (mode==0){secondPlayer=0; document.getElementById("ai-difficuly").style.display = "none";}
+  else{secondPlayer=1; document.getElementById("ai-difficuly").style.display = "flex";}
 }
 
 function setStartPlayer(player){
