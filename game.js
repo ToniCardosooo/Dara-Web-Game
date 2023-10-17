@@ -103,10 +103,9 @@ class Game  {
 	}
 
 	start(){
-		//setBoardSize(document.getElementById("board-size-select").value);
 		this.board = new Board(this.rows,this.columns,this.startingPlayer);
+		this.board.createBoardHTML();
 		this.board.createSideBoards();
-		//setGame();
 		this.board.updateSideBoards();
 		document.getElementById("quit-game-button").textContent = "GIVE UP";
 		this.showMessage();
@@ -139,6 +138,7 @@ class Game  {
 			tile.classList.add("yellow-piece");
 		}
 	}
+
 
 	showMessage(error){
 		let message = document.getElementById("text");
@@ -216,7 +216,6 @@ class Game  {
 
 	Click(r,c) {
 		if (this.board.winner != 0) {
-			console.log(this.board.winner);
 			return;
 		}
 
@@ -225,7 +224,10 @@ class Game  {
 		if (this.board.putPhase) {
 			if (this.board.CanPut(r, c)) {
 				this.board.Put(r,c)
+				this.board.updateBoard(r,c);
+				this.board.updateSideBoards();
 				this.board.changePlayer();
+				this.board.everymove();
 			}
 			else{error=true;}
 		}
@@ -249,6 +251,8 @@ class Game  {
 					else {
 						if (this.board.CanMove(r, c, this.rselected, this.cselected)) {
 							this.board.Move(r,c,this.rselected,this.cselected);
+							this.board.updateBoard(r,c);
+							this.board.updateBoard(this.rselected,this.cselected);
 							this.updateStats("num_moves");
 							if (this.board.createsLine(r, c)) {
 								this.remove = true;
@@ -258,6 +262,7 @@ class Game  {
 								this.selected = false;
 								this.board.checkWinner();
 								this.showWinner();
+								this.board.everymove();
 							}
 						}
 						else{error=true;} 
@@ -267,12 +272,15 @@ class Game  {
 					//remove a opponent piece
 					if (this.board.CanRemove(r,c)) {
 						this.board.Remove(r,c);
+						this.board.updateBoard(r,c);
+						this.board.updateSideBoards();
 						this.updateStats("num_pieces_eaten");
 						this.board.changePlayer();
 						this.selected = false;
 						this.remove = false;
 						this.board.checkWinner();
 						this.showWinner();
+						this.board.everymove();
 					}
 					else{error=true;} 
 				}
@@ -300,15 +308,22 @@ class Board {
 			let line = [];
 			for (let j=0;j<columns;j++){
 				line.push(0);
+			}
+			board.push(line);
+		}
+		return board;	
+	}
+
+	createBoardHTML(){
+		for (let i=0;i<this.rows;i++){
+			for (let j=0;j<this.columns;j++){
 				let tile = document.createElement("div");
 				tile.id = i.toString() + "-" + j.toString();
 				tile.classList.add("tile");
 				tile.addEventListener("click", onClick);
 				document.getElementById("board").append(tile);
 			}
-			board.push(line);
 		}
-		return board;	
 	}
 
 	createSideBoards() {
@@ -445,8 +460,6 @@ class Board {
 	Put(r,c){
 		this.board[r][c] = this.player;
 		if (this.putPhase){this.playerPieces[this.player-1]++;}
-		this.updateBoard(r,c);
-		this.updateSideBoards();
 		if (this.playerPieces[0] + this.playerPieces[1] == 24){this.putPhase = false;}
 	}
 
@@ -471,8 +484,6 @@ class Board {
 		this.lastmove[this.player-1][0][1] = c;
 		this.lastmove[this.player-1][1][0] = rselected;
 		this.lastmove[this.player-1][1][1] = cselected;
-		this.updateBoard(r,c);
-		this.updateBoard(rselected,cselected);
 	}
 
 	createsLine(r, c) {
@@ -531,8 +542,6 @@ class Board {
 	Remove(r,c){
 		this.board[r][c] = 0;
 		this.playerPieces[2-this.player]--;
-		this.updateBoard(r,c);
-		this.updateSideBoards();
 	}
 
 	changePlayer(){
@@ -576,6 +585,145 @@ class Board {
 		) {
 			this.winner = 3 - this.player;
 		}
+	}
+
+	everymove() {
+		let copy = this.copy();
+		let moves = [];
+		if (copy.putPhase) {
+			for (let r = 0; r < copy.rows; r++) {
+				for (let c = 0; c < copy.columns; c++) {
+					if (copy.CanPut(r, c)) {
+						moves.push([r,c]);
+					}
+				}
+			}
+		} 
+		else {
+			for (let r = 0; r < copy.rows; r++) {
+				for (let c = 0; c < copy.columns; c++) {
+					let move = [];
+					if (copy.board[r][c] == copy.player) {
+						if (r > 0) {
+							if (copy.CanMove(r-1,c,r,c)) {
+								move.push([r, c]);
+								move.push([r - 1, c]);
+								copy.board[r][c] = 0;
+								copy.board[r-1][c] = copy.player;
+								if (copy.createsLine(r - 1, c)) {
+									for (let r1 = 0; r1 < copy.rows; r1++) {
+										for (let c1 = 0; c1 < copy.columns; c1++) {
+											if (copy.CanRemove(r1,c1)) {
+												move.push([r1, c1]);
+												console.log(move.length);
+												moves.push(move);
+												move.pop();
+											}
+										}
+									}
+								}
+								 else {
+									moves.push(move);
+								}
+								copy.board[r][c] = copy.player;
+								copy.board[r-1][c] = 0;
+							}
+						}
+						if (r < copy.rows -1) {
+							if (copy.CanMove(r+1,c,r,c)) {
+								move.push([r, c]);
+								move.push([r+1, c]);
+								copy.board[r][c] = 0;
+								copy.board[r+1][c] = copy.player;
+								if (copy.createsLine(r+1, c)) {
+									for (let r1 = 0; r1 < copy.rows; r1++) {
+										for (let c1 = 0; c1 < copy.columns; c1++) {
+											if (copy.CanRemove(r1,c1)) {
+												move.push([r1, c1]);
+												console.log(move.length);
+												moves.push(move);
+												console.log(move.length);
+												move.pop();
+											}
+										}
+									}
+								}
+								 else {
+									moves.push(move);
+								}
+								move = [];
+								copy.board[r][c] = copy.player;
+								copy.board[r+1][c] = 0;
+							}
+						}
+						if (c > 0) {
+							if (copy.CanMove(r,c-1,r,c)) {
+								move.push([r, c]);
+								move.push([r, c-1]);
+								copy.board[r][c] = 0;
+								copy.board[r][c-1] = copy.player;
+								if (copy.createsLine(r, c-1)) {
+									for (let r1 = 0; r1 < copy.rows; r1++) {
+										for (let c1 = 0; c1 < copy.columns; c1++) {
+											if (copy.CanRemove(r1,c1)) {
+												move.push([r1, c1]);
+												console.log(move.length);
+												moves.push(move);
+												move.pop();
+											}
+										}
+									}
+								}
+								 else {
+									moves.push(move);
+								}
+								move = [];
+								copy.board[r][c] = copy.player;
+								copy.board[r][c-1] = 0;
+							}
+						}
+						if (c < copy.columns-1) {
+							if (copy.CanMove(r,c+1,r,c)) {
+								move.push([r, c]);
+								move.push([r, c+1]);
+								copy.board[r][c] = 0;
+								copy.board[r][c+1] = copy.player;
+								if (copy.createsLine(r, c+1)) {
+									for (let r1 = 0; r1 < copy.rows; r1++) {
+										for (let c1 = 0; c1 < copy.columns; c1++) {
+											if (copy.CanRemove(r1,c1)) {
+												move.push([r1, c1]);
+												console.log(move.length);
+												moves.push(move);
+												move.pop();
+											}
+										}
+									}
+								}
+								 else {
+									moves.push(move);
+								}
+								move = [];
+								copy.board[r][c] = copy.player;
+								copy.board[r][c+1] = 0;
+							}
+						}
+					}
+				}
+			}
+		}
+		console.log(moves);
+		return moves;
+	}
+
+	copy() {
+		let b = new Board(this.rows,this.columns, this.player);
+		b.putPhase = this.putPhase;
+		b.winner = this.winner;
+		b.lastmove = copy_3darray(this.lastmove);
+		b.playerPieces = this.playerPieces.slice();
+		b.board  = copy_2darray(this.board);
+		return b;
 	}
 }
 
@@ -624,142 +772,23 @@ function switchPage(from_id, to_id) {
 	to_doc.style.display = "flex";
 }
 
-function everymove(currPlayer, putPhase, board) {
-	let boardcopy = copy_array(board);
-	let moves = [];
-	if (putPhase) {
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < columns; j++) {
-				if (CanPut(i, j, currPlayer, 0, 0, boardcopy)) {
-					let move = [i, j];
-					moves.push(move);
-				}
-			}
-		}
-	} else {
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < columns; j++) {
-				let move = [];
-				if (boardcopy[i][j] == currPlayer) {
-					if (i > 0) {
-						if (
-							CanPut(i - 1, j, currPlayer, i, j, boardcopy) &&
-							!Repeat(lastmove, i - 1, j, i, j, currPlayer)
-						) {
-							move.push([i, j]);
-							move.push([i - 1, j]);
-							boardcopy[i - 1][j] = currPlayer;
-							boardcopy[i][j] = 0;
-							if (createsLine(i - 1, j, currPlayer, boardcopy)) {
-								for (let k = 0; k < rows; k++) {
-									for (let l = 0; l < columns; l++) {
-										if (boardcopy[k][l] == 3 - currPlayer) {
-											move.push([k, l]);
-											moves.push(move);
-											move.pop();
-										}
-									}
-								}
-							} else {
-								moves.push(move);
-							}
-							move = [];
-							boardcopy[i - 1][j] = 0;
-							boardcopy[i][j] = currPlayer;
-						}
-					}
-					if (i < rows - 1) {
-						if (
-							CanPut(i + 1, j, currPlayer, i, j, boardcopy) &&
-							!Repeat(lastmove, i + 1, j, i, j, currPlayer)
-						) {
-							move.push([i, j]);
-							move.push([i + 1, j]);
-							boardcopy[i + 1][j] = currPlayer;
-							boardcopy[i][j] = 0;
-							if (createsLine(i + 1, j, currPlayer, boardcopy)) {
-								for (let k = 0; k < rows; k++) {
-									for (let l = 0; l < columns; l++) {
-										if (boardcopy[k][l] == 3 - currPlayer) {
-											move.push([k, l]);
-											moves.push(move);
-											move.pop();
-										}
-									}
-								}
-							} else {
-								moves.push(move);
-							}
-							move = [];
-							boardcopy[i + 1][j] = 0;
-							boardcopy[i][j] = currPlayer;
-						}
-					}
-					if (j > 0) {
-						if (
-							CanPut(i, j - 1, currPlayer, i, j, boardcopy) &&
-							!Repeat(lastmove, i, j - 1, i, j, currPlayer)
-						) {
-							move.push([i, j]);
-							move.push([i, j - 1]);
-							boardcopy[i][j - 1] = currPlayer;
-							boardcopy[i][j] = 0;
-							if (createsLine(i, j - 1, currPlayer, boardcopy)) {
-								for (let k = 0; k < rows; k++) {
-									for (let l = 0; l < columns; l++) {
-										if (boardcopy[k][l] == 3 - currPlayer) {
-											move.push([k, l]);
-											moves.push(move);
-											move.pop();
-										}
-									}
-								}
-							} else {
-								moves.push(move);
-							}
-							move = [];
-							boardcopy[i][j - 1] = 0;
-							boardcopy[i][j] = currPlayer;
-						}
-					}
-					if (j < columns - 1) {
-						if (
-							CanPut(i, j + 1, currPlayer, i, j, boardcopy) &&
-							!Repeat(lastmove, i, j + 1, i, j, currPlayer)
-						) {
-							move.push([i, j]);
-							move.push([i, j + 1]);
-							boardcopy[i][j + 1] = currPlayer;
-							boardcopy[i][j] = 0;
-							if (createsLine(i, j + 1, currPlayer, boardcopy)) {
-								for (let k = 0; k < rows; k++) {
-									for (let l = 0; l < columns; l++) {
-										if (boardcopy[k][l] == 3 - currPlayer) {
-											move.push([k, l]);
-											moves.push(move);
-											move.pop();
-										}
-									}
-								}
-							} else {
-								moves.push(move);
-							}
-							move = [];
-							boardcopy[i][j + 1] = 0;
-							boardcopy[i][j] = currPlayer;
-						}
-					}
-				}
-			}
-		}
-	}
-	return moves;
-}
 
-function copy_array(array) {
+function copy_2darray(array) {
 	let copy = [];
 	for (let i = 0; i < array.length; i++) {
 		copy[i] = array[i].slice();
 	}
 	return copy;
+}
+
+function copy_3darray(array){
+	let copy = [];
+	for (let i = 0; i < array.length; i++) {
+		let line = [];
+		for (let j = 0; j < array[i].length; j++){
+			line[j] = array[j].slice();
+		}
+		copy[i] = line;
+	}
+	return copy[0];
 }
