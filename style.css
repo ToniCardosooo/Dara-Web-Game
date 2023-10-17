@@ -22,7 +22,7 @@ body {
 .left {
   flex: 40%;
   height: 100%;
-  background-image: url("/background.jpg");
+  background-image: url("background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -118,6 +118,32 @@ body {
 
 .button-style-login:hover {
   color: #ffe35e;
+}
+
+@media screen and (max-height: 830px) {
+  .login-game-name {
+    font-size: 80px;
+    margin-left: 7%;
+    margin-top: 9%;
+  }
+  .login-game-name-game {
+    font-size: 80px;
+    margin-left: 12%;
+    margin-bottom: 0%;
+  }
+
+  .auth-credentials {
+    margin-top: 5%;
+  }
+
+  .input-group input {
+    width: 60%;
+  }
+
+  .button-style-login {
+    margin-top: 40px;
+    height: 40px;
+  }
 }
 
 /*  CSS DEFINITION FOR THE HOMEPAGE */
