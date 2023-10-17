@@ -1,57 +1,142 @@
 body {
-  background: url("./background.jpg") no-repeat center center fixed;
+  background-color: #fbff7c;
   background-size: cover;
-  font-family: Arial, Helvetica, sans-serif;
   color: white;
   text-align: center;
 }
 
 /*  CSS DEFINITION FOR THE AUTHENTICATION PAGE */
 
-.auth-page{
-    height: auto;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 70vh;
+  margin: 15vh auto;
+  box-shadow: 7px 7px 20px rgb(63, 63, 63);
+  border-radius: 25px;
+  overflow: hidden;
 }
 
-.auth-credentials{
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-	padding: 10px;
-	background-color: darkgoldenrod;
-	border-radius: 15px;
+.left {
+  flex: 40%;
+  height: 100%;
+  background-image: url("/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.auth-credentials td{
-	margin: 1%;
-	text-align: right;
+.right {
+  flex: 60%;
+  height: 100%;
+  background-color: #ffe35e;
+  align-items: flex-start;
 }
 
-.auth-credentials input{
-	width: 100%;
+.form {
+  text-align: left;
+  width: 100%;
+}
+
+.form * {
+  font-family: "Montserrat", sans-serif;
+  color: #e4663a;
+}
+
+.login-game-name {
+  font-family: "ArcadeClassic", sans-serif;
+  letter-spacing: 10px;
+  font-size: 100px;
+  margin-left: 10%;
+  margin-top: 15%;
+  margin-bottom: 0%;
+  color: #468966;
+}
+
+.login-game-name-game {
+  font-family: "ArcadeClassic", sans-serif;
+  letter-spacing: 10px;
+  font-size: 100px;
+  margin-left: 20%;
+  color: #468966;
+  margin-top: -3%;
+}
+
+.auth-credentials {
+  margin-top: 50px;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.input-group .icon {
+  margin-left: 19%;
+  margin-right: 10px;
+  font-size: 25px;
+  color: #e4663a;
+  vertical-align: middle;
+  position: relative;
+  top: 4px;
+}
+
+.input-group input {
+  width: 63%;
+  height: 40px;
+  border: none;
+  border-bottom: 2px solid #e4663a;
+  background-color: transparent;
+  outline: none;
+  font-size: 18px;
+  border-radius: 0;
+}
+
+.input-group input:focus {
+  border-bottom: 3px solid #e4663a;
+}
+
+.input-group input::placeholder {
+  font-size: 16px;
+  color: #e4663a;
+}
+
+.button-style-login {
+  float: right;
+  margin-right: 10%;
+  margin-top: 60px;
+  height: 50px;
+  width: 130px;
+  border: none;
+  background-color: #468966;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 30px;
+  font-size: 15px;
+}
+
+.button-style-login:hover {
+  color: #ffe35e;
 }
 
 /*  CSS DEFINITION FOR THE HOMEPAGE */
 
-.homepage, .homepage-buttons{
-    height: auto;
-    display: none;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
+.homepage,
+.homepage-buttons {
+  height: auto;
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
-.homepage-buttons{
-    display: inherit    ;
+.homepage-buttons {
+  display: inherit;
 }
 
-.logotipo{
+.logotipo {
   width: 600px;
   height: 150px;
 
@@ -71,14 +156,14 @@ body {
 
 /* CSS DEFINITION FOR THE GAME RULES PAGE */
 
-.game-rules-list{
+.game-rules-list {
   margin: 20px;
   text-align: justify;
   border-radius: 15px;
   background-color: darkgoldenrod;
 }
 
-.game-rules-list li{
+.game-rules-list li {
   margin: 5px;
 }
 
@@ -167,7 +252,7 @@ body {
   height: auto; /* Mantém a altura automática */
 }
 
-#ai-difficulty{
+#ai-difficulty {
   display: none;
 }
 
@@ -228,8 +313,6 @@ body {
 #custom-num-cols {
   margin: 10px 0;
 }
-
-
 
 span {
   display: block;
