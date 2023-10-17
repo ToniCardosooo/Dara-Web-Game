@@ -58,7 +58,7 @@ body {
   font-family: "ArcadeClassic", sans-serif;
   letter-spacing: 10px;
   font-size: 100px;
-  margin-left: 20%;
+  margin-left: 15%;
   color: #468966;
   margin-top: -3%;
 }
@@ -126,6 +126,7 @@ body {
     margin-left: 7%;
     margin-top: 9%;
   }
+
   .login-game-name-game {
     font-size: 80px;
     margin-left: 12%;
@@ -143,6 +144,28 @@ body {
   .button-style-login {
     margin-top: 20px;
     height: 40px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .auth-page {
+    width: 90%;
+  }
+
+  .left {
+    flex: 0%;
+  }
+
+  .right {
+    flex: 100%;
+  }
+
+  .login-game-name {
+    margin-top: 5%;
+  }
+
+  .auth-credentials {
+    margin-top: 2%;
   }
 }
 
