@@ -56,7 +56,7 @@
           </form>
           <button
             class="button-style-login"
-            onclick="switchPage('auth-page', 'homepage');setPlayerName()"
+            onclick="switchPage('auth-page', 'homepage');changePlayerName()"
           >
             Log In
           </button>
@@ -195,28 +195,16 @@
       <div class="menu-top">
         <div id="board-size-menu" class="config">
           <span>Board Size</span>
-          <select id="board-size-select" onchange="setBoardSize(this.value)">
+          <select id="board-size-select" onchange="changeBoardSize(this.value)">
             <option value="0">6 X 5</option>
             <option value="1">7 X 6</option>
             <option value="2">8 X 7</option>
             <option value="3">9 X 8</option>
-            <option value="4">Custom</option>
           </select>
-          <!-- "Custom" selected -->
-          <div id="custom-board-size" class="custom-size-input">
-            <div id="custom-num-rows">
-              <span>Rows</span>
-              <input id="num-rows" type="text" />
-            </div>
-            <div id="custom-num-cols">
-              <span>Columns</span>
-              <input id="num-cols" type="text" />
-            </div>
-          </div>
         </div>
         <div id="game-mode" class="config">
           <span>Game Mode</span>
-          <select id="game-mode-select" onchange="setGameMode(this.value)">
+          <select id="game-mode-select" onchange="changeGameMode(this.value)">
             <option value="0">Player X Player</option>
             <option value="1">Player X AI</option>
           </select>
@@ -226,7 +214,7 @@
           <span>Starting Player</span>
           <select
             id="starting-player-select"
-            onchange="setStartPlayer(this.value)"
+            onchange="changeStartPlayer(this.value)"
           >
             <option value="0">Player 1 - Red</option>
             <option value="1">Player 2 - Yellow</option>
@@ -235,7 +223,7 @@
 
         <div id="ai-difficulty" class="config">
           <span>AI Difficulty</span>
-          <select id="ai-difficulty-select" onchange="setAIdiff(this.value)">
+          <select id="ai-difficulty-select" onchange="changeAIdiff(this.value)">
             <option value="0">Easy</option>
             <option value="1">Medium</option>
             <option value="2">Hard</option>
@@ -246,7 +234,7 @@
         <button
           type="button"
           class="button-style"
-          onclick="if (isCustomSizeValid()) { startGame(); switchPage('menu', 'game'); }"
+          onclick="startGame(); switchPage('menu', 'game');"
         >
           START !!!
         </button>
