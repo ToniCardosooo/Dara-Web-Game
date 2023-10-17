@@ -161,7 +161,7 @@ body {
   }
 
   .login-game-name {
-    margin-top: 5%;
+    margin-top: 8%;
   }
 
   .auth-credentials {
@@ -210,18 +210,14 @@ body {
 .logotipo {
   width: 600px;
   height: 150px;
-
   line-height: 150px;
   text-align: center;
   font-size: 300%;
-
   background-color: darkgoldenrod;
   color: white;
-
   border-radius: 15px;
   border-width: 10px;
   border-color: black;
-
   margin: 2%;
 }
 
