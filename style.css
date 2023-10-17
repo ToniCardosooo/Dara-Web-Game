@@ -147,7 +147,29 @@ body {
   }
 }
 
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1250px) {
+  .auth-page {
+    width: 70%;
+  }
+
+  .left {
+    flex: 40%;
+  }
+
+  .right {
+    flex: 60%;
+  }
+
+  .login-game-name {
+    margin-top: 5%;
+  }
+
+  .auth-credentials {
+    margin-top: 2%;
+  }
+}
+
+@media screen and (max-width: 850px) {
   .auth-page {
     width: 90%;
   }
