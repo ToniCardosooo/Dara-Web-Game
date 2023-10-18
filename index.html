@@ -66,29 +66,36 @@
 
     <!-- HTML definition for the Homepage -->
     <div class="homepage" id="homepage">
-      <div class="logotipo" id="game-name">DARA</div>
+      <div class="logotipo" id="game-name">
+        <span class="dara-text">DARA</span>
+        <span class="game-text">GAME</span>
+      </div>
       <div class="homepage-buttons">
-        <button class="button-style" onclick="switchPage('homepage', 'menu')">
-          PLAY
-        </button>
-        <button
-          class="button-style"
-          onclick="switchPage('homepage', 'classifications')"
-        >
-          CLASSIFICATIONS
-        </button>
-        <button
-          class="button-style"
-          onclick="switchPage('homepage', 'game-rules')"
-        >
-          GAME RULES
-        </button>
-        <button
-          class="button-style"
-          onclick="switchPage('homepage', 'auth-page')"
-        >
-          LOG OUT
-        </button>
+        <div class="left-buttons">
+          <button class="button-style" onclick="switchPage('homepage', 'menu')">
+            <span class="button-text">PLAY</span>
+          </button>
+        </div>
+        <div class="right-buttons">
+          <button
+            class="button-style"
+            onclick="switchPage('homepage', 'classifications')"
+          >
+            <span class="button-text">CLASSIFICATIONS</span>
+          </button>
+          <button
+            class="button-style"
+            onclick="switchPage('homepage', 'game-rules')"
+          >
+            <span class="button-text">GAME RULES</span>
+          </button>
+          <button
+            class="button-style"
+            onclick="switchPage('homepage', 'auth-page')"
+          >
+            <span class="button-text">LOGOUT</span>
+          </button>
+        </div>
       </div>
     </div>
 

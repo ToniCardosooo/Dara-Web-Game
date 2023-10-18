@@ -3,6 +3,9 @@ body {
   background-size: cover;
   color: white;
   text-align: center;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 /*  CSS DEFINITION FOR THE AUTHENTICATION PAGE */
@@ -193,32 +196,162 @@ body {
 
 /*  CSS DEFINITION FOR THE HOMEPAGE */
 
-.homepage,
-.homepage-buttons {
-  height: auto;
+.homepage {
+  height: 100vh;
   display: none;
   flex-wrap: wrap;
   flex-direction: column;
-  justify-content: center;
-  align-content: center;
 }
 
 .homepage-buttons {
-  display: inherit;
+  display: flex;
+  flex-grow: 1;
 }
 
 .logotipo {
-  width: 600px;
-  height: 150px;
-  line-height: 150px;
-  text-align: center;
-  font-size: 300%;
-  background-color: darkgoldenrod;
+  width: 100%;
+  height: 40%;
+  background-color: #ffe35e;
+}
+
+.dara-text {
+  font-family: "ArcadeClassic", sans-serif;
+  font-size: 145px;
+  letter-spacing: 10px;
+  color: #468966;
+  margin-top: 5%;
+}
+
+.game-text {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS";
+  font-size: 30px;
+  color: #468966;
+  margin-top: -30px;
+}
+
+.left-buttons {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex: 50%;
+}
+
+.left-buttons button {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-size: 30%;
+  border: 0px;
+  border-radius: 0px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.left-buttons button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("images/play.gif");
+  background-size: cover;
+  filter: blur(7px);
+  transition: filter 0.4s ease;
+}
+
+.left-buttons button:hover::before {
+  filter: blur(0px);
+}
+
+.left-buttons button .button-text {
   color: white;
-  border-radius: 15px;
-  border-width: 10px;
-  border-color: black;
-  margin: 2%;
+  position: relative;
+  font-family: "ArcadeClassic", sans-serif;
+  letter-spacing: 20px;
+  font-size: 68px;
+  z-index: 1;
+}
+
+.right-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 50%;
+}
+
+.right-buttons button {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-size: 30%;
+  border: 0px;
+  border-radius: 0px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.right-buttons button:nth-child(1)::before {
+  content: "";
+  background: url("/images/classification.gif");
+  background-size: cover;
+  filter: blur(5px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: filter 0.4s ease;
+}
+
+.right-buttons button:nth-child(2)::before {
+  content: "";
+  background: url("/images/rules.gif");
+  background-size: cover;
+  filter: blur(5px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: filter 0.4s ease;
+}
+
+.right-buttons button:nth-child(3)::before {
+  content: "";
+  background: url("/images/logout.gif");
+  background-size: cover;
+  filter: blur(5px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: filter 0.4s ease;
+}
+
+.right-buttons button:hover::before {
+  filter: blur(0px);
+}
+
+.right-buttons button .button-text {
+  color: white;
+  position: relative;
+  font-family: "ArcadeClassic", sans-serif;
+  font-size: 30px;
+}
+
+@media (max-width: 768px) {
+  .homepage-buttons {
+    flex-direction: column;
+  }
+
+  .logotipo {
+    height: 35%;
+  }
 }
 
 /* CSS DEFINITION FOR THE GAME RULES PAGE */
@@ -392,20 +525,6 @@ input {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-.button-style {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin: 2%;
-}
-
-.button-style:hover {
-  background-color: #0056b3;
 }
 
 .tile {
