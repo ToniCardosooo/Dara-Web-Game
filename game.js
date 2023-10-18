@@ -615,7 +615,6 @@ class Board {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
 												move.push([r1, c1]);
-												console.log(move.length);
 												moves.push(move);
 												move.pop();
 											}
@@ -640,9 +639,7 @@ class Board {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
 												move.push([r1, c1]);
-												console.log(move.length);
 												moves.push(move);
-												console.log(move.length);
 												move.pop();
 											}
 										}
@@ -667,7 +664,6 @@ class Board {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
 												move.push([r1, c1]);
-												console.log(move.length);
 												moves.push(move);
 												move.pop();
 											}
@@ -693,7 +689,6 @@ class Board {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
 												move.push([r1, c1]);
-												console.log(move.length);
 												moves.push(move);
 												move.pop();
 											}
