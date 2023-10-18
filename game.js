@@ -227,7 +227,6 @@ class Game  {
 				this.board.updateBoard(r,c);
 				this.board.updateSideBoards();
 				this.board.changePlayer();
-				this.board.everymove();
 			}
 			else{error=true;}
 		}
@@ -262,7 +261,6 @@ class Game  {
 								this.selected = false;
 								this.board.checkWinner();
 								this.showWinner();
-								this.board.everymove();
 							}
 						}
 						else{error=true;} 
@@ -280,7 +278,6 @@ class Game  {
 						this.remove = false;
 						this.board.checkWinner();
 						this.showWinner();
-						this.board.everymove();
 					}
 					else{error=true;} 
 				}
@@ -606,23 +603,19 @@ class Board {
 					if (copy.board[r][c] == copy.player) {
 						if (r > 0) {
 							if (copy.CanMove(r-1,c,r,c)) {
-								move.push([r, c]);
-								move.push([r - 1, c]);
 								copy.board[r][c] = 0;
 								copy.board[r-1][c] = copy.player;
 								if (copy.createsLine(r - 1, c)) {
 									for (let r1 = 0; r1 < copy.rows; r1++) {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
-												move.push([r1, c1]);
-												moves.push(move);
-												move.pop();
+												moves.push([[r,c],[r-1,c],[r1,c1]]);
 											}
 										}
 									}
 								}
 								 else {
-									moves.push(move);
+									moves.push([[r,c],[r-1,c]]);
 								}
 								copy.board[r][c] = copy.player;
 								copy.board[r-1][c] = 0;
@@ -630,23 +623,19 @@ class Board {
 						}
 						if (r < copy.rows -1) {
 							if (copy.CanMove(r+1,c,r,c)) {
-								move.push([r, c]);
-								move.push([r+1, c]);
 								copy.board[r][c] = 0;
 								copy.board[r+1][c] = copy.player;
 								if (copy.createsLine(r+1, c)) {
 									for (let r1 = 0; r1 < copy.rows; r1++) {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
-												move.push([r1, c1]);
-												moves.push(move);
-												move.pop();
+												moves.push([[r,c],[r+1,c],[r1,c1]]);
 											}
 										}
 									}
 								}
 								 else {
-									moves.push(move);
+									moves.push([[r,c],[r+1,c]]);
 								}
 								move = [];
 								copy.board[r][c] = copy.player;
@@ -655,23 +644,19 @@ class Board {
 						}
 						if (c > 0) {
 							if (copy.CanMove(r,c-1,r,c)) {
-								move.push([r, c]);
-								move.push([r, c-1]);
 								copy.board[r][c] = 0;
 								copy.board[r][c-1] = copy.player;
 								if (copy.createsLine(r, c-1)) {
 									for (let r1 = 0; r1 < copy.rows; r1++) {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
-												move.push([r1, c1]);
-												moves.push(move);
-												move.pop();
+												moves.push([[r,c],[r,c-1],[r1,c1]]);
 											}
 										}
 									}
 								}
 								 else {
-									moves.push(move);
+									moves.push([[r,c],[r,c-1]]);
 								}
 								move = [];
 								copy.board[r][c] = copy.player;
@@ -680,23 +665,19 @@ class Board {
 						}
 						if (c < copy.columns-1) {
 							if (copy.CanMove(r,c+1,r,c)) {
-								move.push([r, c]);
-								move.push([r, c+1]);
 								copy.board[r][c] = 0;
 								copy.board[r][c+1] = copy.player;
 								if (copy.createsLine(r, c+1)) {
 									for (let r1 = 0; r1 < copy.rows; r1++) {
 										for (let c1 = 0; c1 < copy.columns; c1++) {
 											if (copy.CanRemove(r1,c1)) {
-												move.push([r1, c1]);
-												moves.push(move);
-												move.pop();
+												moves.push([[r,c],[r,c+1],[r1,c1]]);
 											}
 										}
 									}
 								}
 								 else {
-									moves.push(move);
+									moves.push([[r,c],[r,c+1]]);
 								}
 								move = [];
 								copy.board[r][c] = copy.player;
@@ -707,7 +688,6 @@ class Board {
 				}
 			}
 		}
-		console.log(moves);
 		return moves;
 	}
 
