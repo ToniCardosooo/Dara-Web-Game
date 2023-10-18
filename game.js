@@ -137,7 +137,7 @@ class Game  {
 					s = "Red";
 				}
 				else{
-					s = "Yellow";
+					s = "Green";
 				}
 				if (error){message.innerText = s + " player cannot put a piece there";}
 				else {message.innerText = s + " player to put a piece";}
@@ -150,7 +150,7 @@ class Game  {
 						s = "Red";
 					}
 					else{
-						s = "Yellow";
+						s = "Green";
 					}
 					if (error){message.innerText = s + " player cannot sellect that piece";}
 					else {message.innerText = s + " player to select a piece";}
@@ -163,7 +163,7 @@ class Game  {
 							s = "Red";
 						}
 						else{
-							s = "Yellow";
+							s = "Green";
 						}
 						if (error){message.innerText = s + " player cannot move that piece there";}
 						else {message.innerText = s + " player to move the selected piece";}
@@ -175,7 +175,7 @@ class Game  {
 							s = "Red";
 						}
 						else{
-							s = "Yellow";
+							s = "Green";
 						}
 						if (error){message.innerText = s + " player cannot remove that piece";}
 						else {message.innerText = s + " player to remove a opponent piece";} 
@@ -190,12 +190,12 @@ class Game  {
 		if (this.board.winner == 1) {
 			win.innerText = "Red Wins";
 			this.updateClassificationTable();
+			document.getElementById("quit-game-button").innerText = "BACK TO MENU";
 		} 
 		else if (this.board.winner == 2) {
-			win.innerText = "Yellow Wins";
+			win.innerText = "Green Wins";
+			document.getElementById("quit-game-button").innerText = "BACK TO MENU";
 		}
-	
-		document.getElementById("quit-game-button").innerText = "BACK TO MENU";
 	}
 
 
