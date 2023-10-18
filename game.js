@@ -328,13 +328,27 @@ class Board {
 			let row = [];
 			for (let c = 0; c < 2; c++) {
 				row.push(0);
+				
 				let tile_e = document.createElement("div");
 				tile_e.id = "E" + r.toString() + "-" + c.toString();
 				tile_e.classList.add("tile");
+				let piece_img = document.createElement("img");
+				piece_img.setAttribute("src", "images/player1.png");
+				piece_img.setAttribute("id", "img-"+tile_e.id);
+				piece_img.style.width = "100%";
+				piece_img.style.height = "100%";
+				tile_e.append(piece_img);
 				document.getElementById("esquerda").append(tile_e);
+
 				let tile_d = document.createElement("div");
 				tile_d.id = "D" + r.toString() + "-" + c.toString();
 				tile_d.classList.add("tile");
+				piece_img = document.createElement("img");
+				piece_img.setAttribute("src", "images/player2.png");
+				piece_img.setAttribute("id", "img-"+tile_d.id);
+				piece_img.style.width = "100%";
+				piece_img.style.height = "100%";
+				tile_d.append(piece_img);
 				document.getElementById("direita").append(tile_d);
 			}
 		}
@@ -342,47 +356,37 @@ class Board {
 
 	updateBoard(r,c){
 		let tile = document.getElementById(r.toString() + "-" + c.toString());
-		if (this.board[r][c] == 1) {
-			tile.classList.add("red-piece");
+
+		if (tile.childElementCount > 0){
+			document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board[r][c]+".png");
 		}
-		if (this.board[r][c] == 2) {
-			tile.classList.add("yellow-piece");
-		}
-		if (this.board[r][c] == 0) {
-			tile.classList.remove("red-shallow");
-			tile.classList.remove("yellow-shallow");
-			tile.classList.remove("red-piece");
-			tile.classList.remove("yellow-piece");
-		}
+		else{
+			let piece_img = document.createElement("img");
+			piece_img.setAttribute("src", "images/player"+this.board[r][c]+".png");
+			piece_img.setAttribute("id", "img-"+tile.id);
+			piece_img.style.width = "100%";
+			piece_img.style.height = "100%";
+			tile.append(piece_img);
+		}		
 	}
 
 	updateSideBoards() {
-		let count = 12 - this.playerPieces[0];
-		for (let r = 0; r < 6; r++) {
-			for (let c = 0; c < 2; c++) {
-				let tile = document.getElementById(
-					"E" + r.toString() + "-" + c.toString()
-				);
-				if (count > 0) {
-					tile.classList.add("red-piece");
-					count--;
-				} else {
-					tile.classList.remove("red-piece");
-				}
+		let count = this.playerPieces[0];
+		for (let r = 5; r >= 0; r--) {
+			for (let c = 1; c >= 0; c--) {
+				if (count <= 0){continue;}
+				let tile = document.getElementById("E" + r.toString() + "-" + c.toString());
+				document.getElementById("img-"+tile.id).setAttribute("src", "images/player0.png");
+				count--;
 			}
 		}
-		count = 12 - this.playerPieces[1];
-		for (let r = 0; r < 6; r++) {
-			for (let c = 0; c < 2; c++) {
-				let tile = document.getElementById(
-					"D" + r.toString() + "-" + c.toString()
-				);
-				if (count > 0) {
-					tile.classList.add("yellow-piece");
-					count--;
-				} else {
-					tile.classList.remove("yellow-piece");
-				}
+		count = this.playerPieces[1];
+		for (let r = 5; r >= 0; r--) {
+			for (let c = 1; c >= 0; c--) {
+				if (count <= 0){continue;}
+				let tile = document.getElementById("D" + r.toString() + "-" + c.toString());
+				document.getElementById("img-"+tile.id).setAttribute("src", "images/player0.png");
+				count--;
 			}
 		}
 	}
