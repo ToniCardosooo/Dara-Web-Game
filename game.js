@@ -108,6 +108,8 @@ class Game  {
 		this.board.createSideBoards();
 		this.board.updateSideBoards();
 		document.getElementById("quit-game-button").textContent = "GIVE UP";
+		document.getElementById("winner").innerText = "";
+
 		this.showMessage();
 	}
 
@@ -198,6 +200,11 @@ class Game  {
 		}
 	}
 
+	playRandom(){
+		let moves = this.board.everymove();
+		this.board = this.board.playMove(moves[Math.floor(Math.random()*moves.length)]);
+	}
+
 
 	Click(r,c) {
 		if (this.board.winner != 0) {
@@ -209,7 +216,7 @@ class Game  {
 		if (this.board.putPhase) {
 			if (this.board.CanPut(r, c)) {
 				this.board.Put(r,c)
-				this.board.updateBoard(r,c);
+				this.board.updateBoard();
 				this.board.updateSideBoards();
 				this.board.changePlayer();
 			}
@@ -233,10 +240,9 @@ class Game  {
 						this.Unselect(r,c);
 					} 
 					else {
-						if (this.board.CanMove(r, c, this.rselected, this.cselected)) {
-							this.board.Move(r,c,this.rselected,this.cselected);
-							this.board.updateBoard(r,c);
-							this.board.updateBoard(this.rselected,this.cselected);
+						if (this.board.CanMove(this.rselected, this.cselected,r,c)) {
+							this.board.Move(this.rselected,this.cselected,r,c);
+							this.board.updateBoard();
 							this.updateStats("num_moves");
 							if (this.board.createsLine(r, c)) {
 								this.remove = true;
@@ -255,7 +261,7 @@ class Game  {
 					//remove a opponent piece
 					if (this.board.CanRemove(r,c)) {
 						this.board.Remove(r,c);
-						this.board.updateBoard(r,c);
+						this.board.updateBoard();
 						this.board.updateSideBoards();
 						this.updateStats("num_pieces_eaten");
 						this.board.changePlayer();
@@ -269,6 +275,16 @@ class Game  {
 			} 
 		}
 		this.showMessage(error);
+		if (this.secondPlayer == 1 && this.board.player == 2){
+			if (this.AI_diff == 0){
+				this.playRandom();
+			}
+			this.board.updateBoard();
+			this.board.updateSideBoards();
+			this.showMessage(false);
+			this.showWinner();
+		}
+			
 	}
 }
 
@@ -345,9 +361,14 @@ class Board {
 		}
 	}
 
-	updateBoard(r,c){
-		let tile = document.getElementById(r.toString() + "-" + c.toString());
-		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board[r][c]+".png");
+	updateBoard(){
+		for(let r=0;r<this.rows;r++){
+			for(let c=0;c<this.columns;c++){
+				let tile = document.getElementById(r.toString() + "-" + c.toString());
+				document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board[r][c]+".png");
+			}
+		}
+		
 			
 	}
 
@@ -459,7 +480,7 @@ class Board {
 		);
 	}
 
-	Move(r,c,rselected,cselected){
+	Move(rselected,cselected,r,c){
 		this.board[r][c] = this.player;
 		this.board[rselected][cselected] = 0;
 		this.lastmove[this.player-1][0][0] = r;
@@ -504,7 +525,7 @@ class Board {
 		this.playerPieces[player-1] ++;
 	}
 
-	CanMove(r, c, rselected, cselected) {
+	CanMove(rselected, cselected,r,c) {
 		if (this.Repeat(r,c,rselected,cselected)){return false;}
 		if ((r == rselected && Math.abs(c - cselected) == 1) || (c == cselected && Math.abs(r - rselected) == 1)) {
 			this.board[rselected][cselected] = 0;
@@ -535,22 +556,22 @@ class Board {
 			for (let j = 0; j < this.columns; j++) {
 				if (this.board[i][j] == this.player) {
 					if (i > 0) {
-						if (this.CanMove(i-1,j,i,j)){
+						if (this.CanMove(i,j,i-1,j)){
 							return true;
 						}
 					}
 					if (i < this.rows - 1) {
-						if (this.CanMove(i+1,j,i,j)){
+						if (this.CanMove(i,j,i+1,j)){
 							return true;
 						}
 					}
 					if (j > 0) {
-						if (this.CanMove(i,j-1,i,j)){
+						if (this.CanMove(i,j,i,j-1)){
 							return true;
 						}
 					}
 					if (j < this.columns - 1) {
-						if (this.CanMove(i,j+1,i,j)){
+						if (this.CanMove(i,j,i,j+1)){
 							return true;
 						}
 					}
@@ -576,7 +597,7 @@ class Board {
 			for (let r = 0; r < copy.rows; r++) {
 				for (let c = 0; c < copy.columns; c++) {
 					if (copy.CanPut(r, c)) {
-						moves.push([r,c]);
+						moves.push([[r,c]]);
 					}
 				}
 			}
@@ -587,7 +608,7 @@ class Board {
 					let move = [];
 					if (copy.board[r][c] == copy.player) {
 						if (r > 0) {
-							if (copy.CanMove(r-1,c,r,c)) {
+							if (copy.CanMove(r,c,r-1,c)) {
 								copy.board[r][c] = 0;
 								copy.board[r-1][c] = copy.player;
 								if (copy.createsLine(r - 1, c)) {
@@ -607,7 +628,7 @@ class Board {
 							}
 						}
 						if (r < copy.rows -1) {
-							if (copy.CanMove(r+1,c,r,c)) {
+							if (copy.CanMove(r,c,r+1,c)) {
 								copy.board[r][c] = 0;
 								copy.board[r+1][c] = copy.player;
 								if (copy.createsLine(r+1, c)) {
@@ -628,7 +649,7 @@ class Board {
 							}
 						}
 						if (c > 0) {
-							if (copy.CanMove(r,c-1,r,c)) {
+							if (copy.CanMove(r,c,r,c-1)) {
 								copy.board[r][c] = 0;
 								copy.board[r][c-1] = copy.player;
 								if (copy.createsLine(r, c-1)) {
@@ -649,7 +670,7 @@ class Board {
 							}
 						}
 						if (c < copy.columns-1) {
-							if (copy.CanMove(r,c+1,r,c)) {
+							if (copy.CanMove(r,c,r,c+1)) {
 								copy.board[r][c] = 0;
 								copy.board[r][c+1] = copy.player;
 								if (copy.createsLine(r, c+1)) {
@@ -684,6 +705,27 @@ class Board {
 		b.playerPieces = this.playerPieces.slice();
 		b.board  = copy_2darray(this.board);
 		return b;
+	}
+
+	playMove(move){
+		let copy = this.copy();
+		if (move.length==1){
+			copy.Put(move[0][0],move[0][1]);
+			copy.changePlayer();
+			if (copy.playerPieces[0]+copy.playerPieces[1] == 24){copy.putPhase = false;}
+		}
+		else if (move.length==2){
+			copy.Move(move[0][0],move[0][1],move[1][0],move[1][1]);
+			copy.changePlayer();
+			copy.checkWinner();
+		}
+		else if (move.length == 3) {
+			copy.Move(move[0][0],move[0][1],move[1][0],move[1][1]);
+			copy.Remove(move[2][0],move[2][1]);
+			copy.changePlayer();
+			copy.checkWinner();
+		}
+		return copy;
 	}
 }
 
