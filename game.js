@@ -116,29 +116,14 @@ class Game  {
 		this.rselected = r;
 		this.cselected = c;
 		let tile = document.getElementById(r.toString() + "-" + c.toString());
-		if (this.board.board[r][c] == 1) {
-			tile.classList.remove("red-piece");
-			tile.classList.add("red-shallow");
-		}
-		if (this.board.board[r][c] == 2) {
-			tile.classList.remove("yellow-piece");
-			tile.classList.add("yellow-shallow");
-		}
+		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board.board[r][c]+"-selected.png");
 	}
 
 	Unselect(r,c){
 		this.selected = false;
 		let tile = document.getElementById(r.toString() + "-" + c.toString());
-		if (this.board.board[r][c] == 1) {
-			tile.classList.remove("red-shallow");
-			tile.classList.add("red-piece");
-		}
-		if (this.board.board[r][c] == 2) {
-			tile.classList.remove("yellow-shallow");
-			tile.classList.add("yellow-piece");
-		}
+		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board.board[r][c]+".png");
 	}
-
 
 	showMessage(error){
 		let message = document.getElementById("text");
@@ -318,6 +303,12 @@ class Board {
 				tile.id = i.toString() + "-" + j.toString();
 				tile.classList.add("tile");
 				tile.addEventListener("click", onClick);
+				let piece_img = document.createElement("img");
+				piece_img.setAttribute("src", "images/player0.png");
+				piece_img.setAttribute("id", "img-"+tile.id);
+				piece_img.style.width = "100%";
+				piece_img.style.height = "100%";
+				tile.append(piece_img);
 				document.getElementById("board").append(tile);
 			}
 		}
@@ -356,18 +347,8 @@ class Board {
 
 	updateBoard(r,c){
 		let tile = document.getElementById(r.toString() + "-" + c.toString());
-
-		if (tile.childElementCount > 0){
-			document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board[r][c]+".png");
-		}
-		else{
-			let piece_img = document.createElement("img");
-			piece_img.setAttribute("src", "images/player"+this.board[r][c]+".png");
-			piece_img.setAttribute("id", "img-"+tile.id);
-			piece_img.style.width = "100%";
-			piece_img.style.height = "100%";
-			tile.append(piece_img);
-		}		
+		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board[r][c]+".png");
+			
 	}
 
 	updateSideBoards() {
@@ -740,7 +721,7 @@ function onClick() {
 	let coords = this.id.split("-");
 	let r = parseInt(coords[0]);
 	let c = parseInt(coords[1]);
-	G.Click(r,c);
+	G.Click(r,c); 
 }
 
 function switchPage(from_id, to_id) {
