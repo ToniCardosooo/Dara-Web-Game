@@ -111,9 +111,7 @@ class Game  {
 		document.getElementById("winner").innerText = "";
 		document.getElementById("AI").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2){
-<<<<<<< HEAD
 			this.AI_play();
-=======
 			if (this.AI_diff === 0){
 				this.playRandom();
 			}
@@ -126,7 +124,6 @@ class Game  {
 			this.board.updateBoard();
 			this.board.updateSideBoards();
 			this.showWinner();
->>>>>>> eec2b9b0afe108f5fc360432918a7906bca40504
 		}
 		this.showMessage(false);
 	}
@@ -350,9 +347,7 @@ class Game  {
 		}
 		this.showMessage(error);
 		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
-<<<<<<< HEAD
 			this.AI_play();
-=======
 			if (this.AI_diff == 0){
 				this.playRandom();
 			}
@@ -366,7 +361,6 @@ class Game  {
 			this.board.updateSideBoards();
 			this.showMessage(false);
 			this.showWinner();
->>>>>>> eec2b9b0afe108f5fc360432918a7906bca40504
 		}
 			
 	}
