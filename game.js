@@ -434,8 +434,9 @@ class Board {
 		let count = this.playerPieces[0];
 		for (let r = 5; r >= 0; r--) {
 			for (let c = 1; c >= 0; c--) {
-				if (count <= 0){continue;}
 				let tile = document.getElementById("E" + r.toString() + "-" + c.toString());
+				document.getElementById("img-"+tile.id).setAttribute("src", "images/player1.png");
+				if (count <= 0){continue;}
 				document.getElementById("img-"+tile.id).setAttribute("src", "images/player0.png");
 				count--;
 			}
@@ -443,8 +444,9 @@ class Board {
 		count = this.playerPieces[1];
 		for (let r = 5; r >= 0; r--) {
 			for (let c = 1; c >= 0; c--) {
-				if (count <= 0){continue;}
 				let tile = document.getElementById("D" + r.toString() + "-" + c.toString());
+				document.getElementById("img-"+tile.id).setAttribute("src", "images/player2.png");
+				if (count <= 0){continue;}
 				document.getElementById("img-"+tile.id).setAttribute("src", "images/player0.png");
 				count--;
 			}
