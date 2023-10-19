@@ -355,6 +355,10 @@ body {
 
 /* CSS DEFINITION FOR THE GAME RULES PAGE */
 
+.game-rules {
+  display: none;
+}
+
 .title-and-rules {
   display: flex;
   margin-top: 130px;
@@ -614,17 +618,6 @@ body {
 
 .classifications-table th {
   background-color: brown;
-}
-
-/* CSS DEFINITION FOR THE GAME RULES PAGE */
-
-.game-rules {
-  height: auto;
-  display: none;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
 }
 
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
