@@ -123,78 +123,61 @@
 
     <!-- HTML definition for the game rules page -->
     <div class="game-rules" id="game-rules">
-      <span>GAME RULES</span>
-      <div class="game-rules-list">
-        <ol>
-          <li>
-            Each player has a set of 12 pieces of the same color, which are
+      <div class="title-and-rules">
+        <div class="rules-title">
+          <div>
+            <span>Game</span>
+            <span>Rules</span>
+          </div>
+          <div class="button-rules-div">
+            <button
+              class="button-style-rules"
+              onclick="switchPage('game-rules', 'homepage')"
+            >
+              RETURN<br />
+              TO HOMEPAGE
+            </button>
+          </div>
+        </div>
+        <div class="game-rules-list">
+          <div class="top-window">
+            <div class="icons-terminal">
+              <div class="iconn close red"></div>
+              <div class="iconn minimize yellow"></div>
+              <div class="iconn maximize green"></div>
+            </div>
+            <div class="title-terminal">Terminal</div>
+          </div>
+          <div class="content-rules">
+            1 - Each player has a set of 12 pieces of the same color, which are
             initially not placed on the game board.
-          </li>
-          <br />
-          <li>
-            Every match has 2 phases:
-            <ul>
-              <li>Drop Phase</li>
-              <li>Move Phase</li>
-            </ul>
-          </li>
-          <br />
-          <li>
-            Pieces can be grouped in 3 consecutive pieces of the same color,
-            creating a line, both vertically and horizontally.
-          </li>
-          <br />
-          <li>
-            Drop Phase
-            <ul>
-              <li>
-                Players alternatively place a piece in a free cell of the board.
-              </li>
-              <li>Pieces cannot create lines with size greater than 3.</li>
-              <li>There can be lines of 3 pieces.</li>
-            </ul>
-          </li>
-          <br />
-          <li>
-            Move Phase
-            <ul>
-              <li>Each player moves alternatively one of their pieces.</li>
-              <li>
-                Each piece can only be moved to the vertically or horizontally
-                adjacent empty cells.
-              </li>
-              <li>
-                Creating a line of 3 pieces allows the current player to remove
-                one and only one piece from the opponent.
-              </li>
-              <li>It's not allowed to form lines with more than 3 pieces.</li>
-              <li>
-                In the following round of the same player, its last moved piece
-                cannot be played back to the cell where it came from.
-              </li>
-            </ul>
-          </li>
-          <br />
-          <li>
-            The match is finished when one of the following conditions is met:
-            <ul>
-              <li>A player only has 2 pieces left.</li>
-              <li>
-                A player cannot make any valid move (i.e., all pieces are
-                trapped)
-              </li>
-            </ul>
-            If player meets any of these conditions, then the opponent is the
-            winner.
-          </li>
-        </ol>
+            <br /><br />
+            2 - Every match has 2 phases: <br />- Drop Phase<br />
+            - Move Phase <br /><br />
+            3 - Pieces can be grouped in 3 consecutive pieces of the same color,
+            creating a line, both vertically and horizontally. <br /><br />
+            4 - Drop Phase: <br />- Players alternatively place a piece in a
+            free cell of the board.<br />
+            - Pieces cannot create lines with size greater than 3.<br />
+            - There can be lines of 3 pieces. <br /><br />
+            5 - Move Phase:<br />
+            - Each player moves alternatively one of their pieces.<br />
+            - Each piece can only be moved to the vertically or horizontally
+            adjacent empty cells.<br />
+            - Creating a line of 3 pieces allows the current player to remove
+            one and only one piece from the opponent.<br />
+            - It's not allowed to form lines with more than 3 pieces.<br />
+            - In the following round of the same player, its last moved piece
+            cannot be played back to the cell where it came from.<br /><br />
+            6 - The match is finished when one of the following conditions is
+            met:<br />
+            - A player only has 2 pieces left.<br />
+            - A player cannot make any valid move (i.e., all pieces are
+            trapped). If a player meets any of these conditions, then the
+            opponent is the <a class="waiting">winner</a>
+          </div>
+        </div>
       </div>
-      <button
-        class="button-style"
-        onclick="switchPage('game-rules', 'homepage')"
-      >
-        HOMEPAGE
-      </button>
     </div>
 
     <!-- HTML definition for the configuration menu -->

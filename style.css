@@ -5,7 +5,6 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 /*  CSS DEFINITION FOR THE AUTHENTICATION PAGE */
@@ -356,15 +355,233 @@ body {
 
 /* CSS DEFINITION FOR THE GAME RULES PAGE */
 
-.game-rules-list {
-  margin: 20px;
-  text-align: justify;
-  border-radius: 15px;
-  background-color: darkgoldenrod;
+.title-and-rules {
+  display: flex;
+  margin-top: 130px;
 }
 
-.game-rules-list li {
-  margin: 5px;
+.rules-title {
+  flex: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rules-title span {
+  font-family: "ArcadeClassic", sans-serif;
+  font-size: 145px;
+  letter-spacing: 10px;
+  color: #468966;
+}
+
+.game-rules-list {
+  margin-right: 40px;
+  flex: 50%;
+}
+
+.top-window {
+  background-color: rgba(69, 69, 69, 0.88);
+  padding: 5px;
+  display: flex;
+  font-family: "Courier New", monospace;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.icons-terminal {
+  display: flex;
+  align-items: center;
+}
+
+.iconn {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  position: relative;
+}
+
+.iconn::before {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+}
+
+.iconn:hover::before {
+  display: block;
+}
+
+.iconn.close::before {
+  content: "\2715";
+}
+
+.iconn.minimize::before {
+  content: "\2500";
+}
+
+.iconn.maximize::before {
+  content: "\2610";
+}
+
+.iconn.red {
+  background-color: #da3f3f;
+  margin-left: 5px;
+}
+
+.iconn.yellow {
+  background-color: #ffd429;
+}
+
+.iconn.green {
+  background-color: #53be53;
+}
+
+.title-terminal {
+  flex: 1;
+  margin-left: -70px;
+  color: white;
+}
+
+.content-rules {
+  text-align: justify;
+  background-color: rgba(0, 0, 0, 0.88);
+  color: #00ff00;
+  font-family: "Courier New", sans-serif;
+  font-size: 20px;
+  padding: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.button-rules-div {
+  margin-top: 20px;
+}
+
+.button-style-rules {
+  width: 200px;
+  height: 100px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  background-color: #468966;
+  color: white;
+  font-size: 15px;
+  border: 0;
+  margin-top: 30px;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.button-style-rules:hover {
+  color: #ffe35e;
+}
+
+.waiting::after {
+  content: "▮";
+  font-size: 30px;
+  vertical-align: -2px;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .title-and-rules {
+    margin-top: 0px;
+    flex-direction: column;
+  }
+
+  .rules-title {
+    margin-left: 30px;
+    margin-right: 30px;
+    flex-direction: row;
+  }
+
+  .rules-title span {
+    font-size: 80px;
+  }
+
+  .game-rules-list {
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 10px;
+  }
+
+  .button-style-rules {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 100px;
+  }
+}
+
+@media screen and (max-width: 876px) {
+  .content-rules {
+    font-size: 18px;
+  }
+
+  .rules-title {
+    flex-direction: column;
+  }
+
+  .button-style-rules {
+    margin-left: 0px;
+  }
+}
+
+@media screen and (max-height: 950px) and (min-width: 876px) {
+  .title-and-rules {
+    margin-top: 0px;
+    flex-direction: column;
+  }
+
+  .rules-title {
+    margin-left: 30px;
+    margin-right: 30px;
+    flex-direction: row;
+  }
+
+  .rules-title span {
+    font-size: 80px;
+  }
+
+  .game-rules-list {
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 10px;
+  }
+
+  .button-style-rules {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 100px;
+  }
 }
 
 /* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
@@ -537,4 +754,3 @@ input {
   border-radius: 50%;
   border: 5px solid navy;
 }
-
