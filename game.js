@@ -116,6 +116,9 @@ class Game  {
 			else if (this.AI_diff === 1){
 				this.playMinimax(5);
 			}
+			else if (this.AI_diff === 2){
+				this.playMinimax(7);
+			}
 			this.board.updateBoard();
 			this.board.updateSideBoards();
 			this.showWinner();
@@ -309,13 +312,15 @@ class Game  {
 			} 
 		}
 		this.showMessage(error);
-		console.log(this.board.heuristic());
 		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
 			if (this.AI_diff == 0){
 				this.playRandom();
 			}
 			else if (this.AI_diff === 1){
 				this.playMinimax(5);
+			}
+			else if (this.AI_diff === 2){
+				this.playMinimax(7);
 			}
 			this.board.updateBoard();
 			this.board.updateSideBoards();
