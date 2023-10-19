@@ -109,16 +109,24 @@ class Game  {
 		this.board.updateSideBoards();
 		document.getElementById("quit-game-button").textContent = "GIVE UP";
 		document.getElementById("winner").innerText = "";
+		document.getElementById("AI").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2){
+<<<<<<< HEAD
+			this.AI_play();
+=======
 			if (this.AI_diff === 0){
 				this.playRandom();
 			}
 			else if (this.AI_diff === 1){
 				this.playMinimax(5);
 			}
+			else if (this.AI_diff === 2){
+				this.playMinimax(7);
+			}
 			this.board.updateBoard();
 			this.board.updateSideBoards();
 			this.showWinner();
+>>>>>>> eec2b9b0afe108f5fc360432918a7906bca40504
 		}
 		this.showMessage(false);
 	}
@@ -210,9 +218,40 @@ class Game  {
 		}
 	}
 
+	AI_showMove(move){
+		let ai = document.getElementById("AI");
+		if (move.length == 1){
+			ai.innerText = "AI put a piece at position ("+move[0][0] +", "+move[0][1]+")";
+		}
+		else if (move.length == 2){
+			ai.innerText = "AI moved a piece from position ("+move[0][0] +", "+move[0][1]+") to position ( "+move[1][0] +", "+move[1][1]+")";
+		}
+		else if (move.length == 3){
+			ai.innerText = "AI moved a piece from position ("+move[0][0] +", "+move[0][1]+") to position ( "+move[1][0] +", "+move[1][1]+") and captured the piece at ( "+move[2][0] +", "+move[2][1]+")";
+		}
+	}
+
+	AI_play(){
+		if (this.AI_diff == 0){
+			this.playRandom();
+		}
+		else if (this.AI_diff === 1){
+			this.playMinimax(3);
+		}
+		else if (this.AI_diff == 2){
+			this.playMinimax(5);
+		}
+		this.board.updateBoard();
+		this.board.updateSideBoards();
+		this.showMessage(false);
+		this.showWinner();
+	}
+
 	playRandom(){
 		let moves = this.board.everymove();
-		this.board = this.board.playMove(moves[Math.floor(Math.random()*moves.length)]);
+		let move_to_play = moves[Math.floor(Math.random()*moves.length)];
+		this.board = this.board.playMove(move_to_play);
+		this.AI_showMove(move_to_play);
 	}
 
 	playMinimax(depth){
@@ -237,6 +276,7 @@ class Game  {
 		}
 		
 		this.board = this.board.playMove(move_to_play);
+		this.AI_showMove(move_to_play);
 	}
 
 
@@ -249,7 +289,7 @@ class Game  {
 		//Put Phase
 		if (this.board.putPhase) {
 			if (this.board.CanPut(r, c)) {
-				this.board.Put(r,c)
+				this.board.Put(r,c);
 				this.board.updateBoard();
 				this.board.updateSideBoards();
 				this.board.changePlayer();
@@ -309,18 +349,24 @@ class Game  {
 			} 
 		}
 		this.showMessage(error);
-		console.log(this.board.heuristic());
 		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
+<<<<<<< HEAD
+			this.AI_play();
+=======
 			if (this.AI_diff == 0){
 				this.playRandom();
 			}
 			else if (this.AI_diff === 1){
 				this.playMinimax(5);
 			}
+			else if (this.AI_diff === 2){
+				this.playMinimax(7);
+			}
 			this.board.updateBoard();
 			this.board.updateSideBoards();
 			this.showMessage(false);
 			this.showWinner();
+>>>>>>> eec2b9b0afe108f5fc360432918a7906bca40504
 		}
 			
 	}
