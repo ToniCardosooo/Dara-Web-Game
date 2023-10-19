@@ -112,18 +112,6 @@ class Game  {
 		document.getElementById("AI").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2){
 			this.AI_play();
-			if (this.AI_diff === 0){
-				this.playRandom();
-			}
-			else if (this.AI_diff === 1){
-				this.playMinimax(5);
-			}
-			else if (this.AI_diff === 2){
-				this.playMinimax(7);
-			}
-			this.board.updateBoard();
-			this.board.updateSideBoards();
-			this.showWinner();
 		}
 		this.showMessage(false);
 	}
@@ -216,6 +204,7 @@ class Game  {
 	}
 
 	AI_showMove(move){
+
 		let ai = document.getElementById("AI");
 		if (move.length == 1){
 			ai.innerText = "AI put a piece at position ("+move[0][0] +", "+move[0][1]+")";
@@ -348,19 +337,6 @@ class Game  {
 		this.showMessage(error);
 		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
 			this.AI_play();
-			if (this.AI_diff == 0){
-				this.playRandom();
-			}
-			else if (this.AI_diff === 1){
-				this.playMinimax(5);
-			}
-			else if (this.AI_diff === 2){
-				this.playMinimax(7);
-			}
-			this.board.updateBoard();
-			this.board.updateSideBoards();
-			this.showMessage(false);
-			this.showWinner();
 		}
 			
 	}
