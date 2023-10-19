@@ -109,8 +109,15 @@ class Game  {
 		this.board.updateSideBoards();
 		document.getElementById("quit-game-button").textContent = "GIVE UP";
 		document.getElementById("winner").innerText = "";
-
-		this.showMessage();
+		if (this.secondPlayer == 1 && this.board.player == 2){
+			if (this.AI_diff == 0){
+				this.playRandom();
+			}
+			this.board.updateBoard();
+			this.board.updateSideBoards();
+			this.showWinner();
+		}
+		this.showMessage(false);
 	}
 
 	Select(r,c){
@@ -275,7 +282,7 @@ class Game  {
 			} 
 		}
 		this.showMessage(error);
-		if (this.secondPlayer == 1 && this.board.player == 2){
+		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
 			if (this.AI_diff == 0){
 				this.playRandom();
 			}
