@@ -110,8 +110,11 @@ class Game  {
 		document.getElementById("quit-game-button").textContent = "GIVE UP";
 		document.getElementById("winner").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2){
-			if (this.AI_diff == 0){
+			if (this.AI_diff === 0){
 				this.playRandom();
+			}
+			else if (this.AI_diff === 1){
+				this.playMinimax(5);
 			}
 			this.board.updateBoard();
 			this.board.updateSideBoards();
@@ -212,6 +215,30 @@ class Game  {
 		this.board = this.board.playMove(moves[Math.floor(Math.random()*moves.length)]);
 	}
 
+	playMinimax(depth){
+		if (this.board.winner !== 0){ return ((this.board.winner == 1) ? -1000 : 1000); }
+		if (depth === 0){ return this.board.heuristic(); }
+
+		// AI is always max, given our heuristic
+		let value = -1*Infinity;
+		let moves_list = this.board.everymove();
+		let move_to_play = moves_list[0];
+		let alpha = -1*Infinity;
+		let beta = Infinity;
+		for (let move of moves_list){
+			let child_board = this.board.playMove(move);
+			let score = child_board.minimax(depth-1, alpha, beta);
+			if (score > value){
+				value = score;
+				alpha = Math.max(alpha, value);
+				move_to_play = move
+			}
+			if (value >= beta) break;
+		}
+		
+		this.board = this.board.playMove(move_to_play);
+	}
+
 
 	Click(r,c) {
 		if (this.board.winner != 0) {
@@ -282,9 +309,13 @@ class Game  {
 			} 
 		}
 		this.showMessage(error);
+		console.log(this.board.heuristic());
 		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
 			if (this.AI_diff == 0){
 				this.playRandom();
+			}
+			else if (this.AI_diff === 1){
+				this.playMinimax(5);
 			}
 			this.board.updateBoard();
 			this.board.updateSideBoards();
@@ -503,7 +534,6 @@ class Board {
 	
 		for (let i = min; i <= max; i++) {
 			if (
-				this.player == this.board[r][i] &&
 				this.board[r][i] == this.board[r][i + 1] &&
 				this.board[r][i + 1] == this.board[r][i + 2]
 			) {
@@ -517,7 +547,6 @@ class Board {
 	
 		for (let i = min; i <= max; i++) {
 			if (
-				this.player == this.board[i][c] &&
 				this.board[i][c] == this.board[i + 1][c] &&
 				this.board[i + 1][c] == this.board[i + 2][c]
 			) {
@@ -733,6 +762,71 @@ class Board {
 			copy.checkWinner();
 		}
 		return copy;
+	}
+
+	heuristic(){
+		if (this.putPhase){
+			let pontos = 0;
+			let player_tmp = this.player;
+			for (let r = 0; r < this.rows; r++){
+				for (let c = 0; c < this.columns; c++){
+					if (this.board[r][c] == 0){
+						this.player = 1;
+						if (this.CanPut(r,c)){
+							this.board[r][c] = 1;
+							if (this.createsLine(r,c)) pontos--;
+							this.board[r][c] = 0;
+						}
+						this.player = 2;
+						if (this.CanPut(r,c)){
+							this.board[r][c] = 2;
+							if (this.createsLine(r,c)) pontos++;
+							this.board[r][c] = 0;
+						}
+					}
+				}
+			}
+			this.player = player_tmp;
+			return pontos;
+		}
+		else{
+			return (this.playerPieces[1] - this.playerPieces[0]);
+		}
+	}
+
+	minimax(depth, alpha, beta){
+		if (this.winner !== 0){ return ((this.winner == 1) ? -1000 : 1000); }
+		if (depth === 0){ return this.heuristic(); }
+
+		if (this.player === 1){
+			let value = Infinity;
+			let moves_list = this.everymove();
+			for (let move of moves_list){
+				let child_board = this.playMove(move);
+				let score = child_board.minimax(depth-1, alpha, beta);
+				if (score < value){
+					value = score;
+					beta = Math.min(beta, value);
+				}
+				if (value <= alpha) return value;
+			}
+			return value;
+		}
+
+		if (this.player === 2){
+			let value = -1*Infinity;
+			let moves_list = this.everymove();
+			for (let move of moves_list){
+				let child_board = this.playMove(move);
+				let score = child_board.minimax(depth-1, alpha, beta);
+				if (score > value){
+					value = score;
+					alpha = Math.max(alpha, value);
+				}
+				if (value >= beta) return value;
+			}
+			return value;
+		}
 	}
 }
 
