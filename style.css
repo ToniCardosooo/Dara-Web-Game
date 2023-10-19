@@ -616,17 +616,6 @@ body {
   background-color: brown;
 }
 
-/* CSS DEFINITION FOR THE GAME RULES PAGE */
-
-.game-rules {
-  height: auto;
-  display: none;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-}
-
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
 
 .menu {
