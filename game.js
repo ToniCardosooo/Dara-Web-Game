@@ -111,7 +111,8 @@ class Game  {
 		document.getElementById("winner").innerText = "";
 		document.getElementById("AI").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2){
-			this.AI_play();
+			var that = this;
+ 			setTimeout(function () {that.AI_play();}, 100);
 		}
 		this.showMessage(false);
 	}
@@ -134,6 +135,9 @@ class Game  {
 		let message = document.getElementById("text");
 		if (this.board.winner != 0){
 			message.innerText = "";
+		}
+		else if (this.secondPlayer==1 && this.board.player==2){
+			message.innerText = "Waiting for AI to play";
 		}
 		else{
 			if (this.board.putPhase){
@@ -241,7 +245,7 @@ class Game  {
 	}
 
 	playMinimax(depth){
-		if (this.board.winner !== 0){ return ((this.board.winner == 1) ? -1000 : 1000); }
+		if (this.board.winner !== 0){ return ((this.board.winner == 1) ? -1000-depth : 1000+depth); }
 		if (depth === 0){ return this.board.heuristic(); }
 
 		// AI is always max, given our heuristic
@@ -260,17 +264,15 @@ class Game  {
 			}
 			if (value >= beta) break;
 		}
-		
 		this.board = this.board.playMove(move_to_play);
 		this.AI_showMove(move_to_play);
 	}
 
 
 	Click(r,c) {
-		if (this.board.winner != 0) {
+		if ((this.board.winner != 0) || (this.secondPlayer == 1 && this.board.player == 2) ) {
 			return;
 		}
-
 		let error = false;
 		//Put Phase
 		if (this.board.putPhase) {
@@ -335,8 +337,10 @@ class Game  {
 			} 
 		}
 		this.showMessage(error);
+		document.getElementById("AI").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
-			this.AI_play();
+			var that = this;
+ 			setTimeout(function () {that.AI_play();}, 0);
 		}
 			
 	}
@@ -525,22 +529,22 @@ class Board {
 	}
 
 
-	Repeat(r, c, rselected, cselected) {
+	Repeat(rselected, cselected, r, c) {
 		return (
-			this.lastmove[this.player-1][0][0] == rselected &&
-			this.lastmove[this.player-1][0][1] == cselected &&
-			this.lastmove[this.player-1][1][0] == r &&
-			this.lastmove[this.player-1][1][1] == c
+			this.lastmove[this.player-1][0][0] == r &&
+			this.lastmove[this.player-1][0][1] == c &&
+			this.lastmove[this.player-1][1][0] == rselected &&
+			this.lastmove[this.player-1][1][1] == cselected
 		);
 	}
 
 	Move(rselected,cselected,r,c){
 		this.board[r][c] = this.player;
 		this.board[rselected][cselected] = 0;
-		this.lastmove[this.player-1][0][0] = r;
-		this.lastmove[this.player-1][0][1] = c;
-		this.lastmove[this.player-1][1][0] = rselected;
-		this.lastmove[this.player-1][1][1] = cselected;
+		this.lastmove[this.player-1][0][0] = rselected;
+		this.lastmove[this.player-1][0][1] = cselected;
+		this.lastmove[this.player-1][1][0] = r;
+		this.lastmove[this.player-1][1][1] = c;
 	}
 
 	createsLine(r, c) {
@@ -578,7 +582,7 @@ class Board {
 	}
 
 	CanMove(rselected, cselected,r,c) {
-		if (this.Repeat(r,c,rselected,cselected)){return false;}
+		if (this.Repeat(rselected,cselected,r,c)){return false;}
 		if ((r == rselected && Math.abs(c - cselected) == 1) || (c == cselected && Math.abs(r - rselected) == 1)) {
 			this.board[rselected][cselected] = 0;
 			if (this.CanPut(r,c)){
@@ -811,7 +815,7 @@ class Board {
 	}
 
 	minimax(depth, alpha, beta){
-		if (this.winner !== 0){ return ((this.winner == 1) ? -1000 : 1000); }
+		if (this.winner !== 0){ return ((this.winner == 1) ? -1000-depth : 1000+depth); }
 		if (depth === 0){ return this.heuristic(); }
 
 		if (this.player === 1){
@@ -905,9 +909,9 @@ function copy_3darray(array){
 	for (let i = 0; i < array.length; i++) {
 		let line = [];
 		for (let j = 0; j < array[i].length; j++){
-			line[j] = array[j].slice();
+			line[j] = array[i][j].slice();
 		}
 		copy[i] = line;
 	}
-	return copy[0];
+	return copy;
 }
