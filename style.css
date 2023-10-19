@@ -449,7 +449,8 @@ body {
 
 .content-rules {
   text-align: justify;
-  background-color: rgba(0, 0, 0, 0.88);
+  background-color: rgba(0, 0, 0, 0.99);
+  box-shadow: 7px 7px 12px rgb(63, 63, 63);
   color: #00ff00;
   font-family: "Courier New", sans-serif;
   font-size: 20px;
