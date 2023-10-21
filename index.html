@@ -101,24 +101,34 @@
 
     <!-- HTML definition for the classifications page -->
     <div class="classifications" id="classifications">
-      <span class="classifications-table-title">CLASSIFICATIONS TABLE</span>
-      <div>
-        <table class="classifications-table" id="classifications-table">
-          <tr>
-            <th>Player Name</th>
-            <th>Board Size</th>
-            <th>Moves</th>
-            <th>Pieces Removed</th>
-            <th>Game Duration</th>
-          </tr>
-        </table>
+      <div class="classification-page">
+        <div class="classification-title">
+          <div>
+            <span class="small-font">CLASSIFICATIONS</span>
+            <span class="larger-font">TABLE</span>
+          </div>
+          <div class="button-classification-div">
+            <button
+              class="button-style-classification"
+              onclick="switchPage('classifications', 'homepage')"
+            >
+              RETURN<br />
+              TO HOMEPAGE
+            </button>
+          </div>
+        </div>
+        <div class="classification-results">
+          <table class="classifications-table" id="classifications-table">
+            <tr>
+              <th>Player Name</th>
+              <th>Board Size</th>
+              <th>Moves</th>
+              <th>Pieces Removed</th>
+              <th>Game Duration</th>
+            </tr>
+          </table>
+        </div>
       </div>
-      <button
-        class="button-style"
-        onclick="switchPage('classifications', 'homepage')"
-      >
-        HOMEPAGE
-      </button>
     </div>
 
     <!-- HTML definition for the game rules page -->

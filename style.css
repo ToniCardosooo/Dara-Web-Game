@@ -594,17 +594,83 @@ body {
 /* CSS DEFINITION FOR THE CLASSIFICATION PAGE */
 
 .classifications {
-  height: auto;
   display: none;
-  flex-wrap: wrap;
+}
+
+.classification-page {
+  display: flex;
+  margin-top: 130px;
+  width: 100%;
+}
+
+.classification-title {
+  flex: 50%;
+  display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: center;
+}
+
+.classification-title .small-font {
+  font-family: "ArcadeClassic", sans-serif;
+  font-size: 40px;
+  letter-spacing: 10px;
+  color: #468966;
+}
+
+.classification-title .larger-font {
+  font-family: "ArcadeClassic", sans-serif;
+  font-size: 50px;
+  letter-spacing: 10px;
+  color: #468966;
+}
+
+.button-classification-div {
+  margin-top: 20px;
+}
+
+.button-style-classification {
+  width: 200px;
+  height: 100px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  background-color: #468966;
+  color: white;
+  font-size: 15px;
+  border: 0;
+  margin-top: 30px;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.button-style-classification:hover {
+  color: #ffe35e;
+}
+
+.classification-results {
+  margin-right: 40px;
+  flex: 50%;
 }
 
 .classifications-table {
   display: table;
-  margin: 5%;
+  margin: 0px;
   box-sizing: border-box;
   border-collapse: collapse;
   border-width: 10px;
