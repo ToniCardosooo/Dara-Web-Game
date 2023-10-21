@@ -182,55 +182,76 @@
 
     <!-- HTML definition for the configuration menu -->
     <div class="menu" id="menu">
-      <div class="menu-top">
-        <div id="board-size-menu" class="config">
-          <span>Board Size</span>
-          <select id="board-size-select" onchange="changeBoardSize(this.value)">
-            <option value="0">6 X 5</option>
-            <option value="1">7 X 6</option>
-            <option value="2">8 X 7</option>
-            <option value="3">9 X 8</option>
-          </select>
+      <div class="menu-page">
+        <div class="menu-bottom">
+          <div class="button-start">
+            <button
+              type="button"
+              class="button-style-start"
+              onclick="startGame(); switchPage('menu', 'game');"
+            >
+              START !!!
+            </button>
+          </div>
+          <div class="button-homepage2">
+            <button
+              class="button-style-homepage2"
+              onclick="switchPage('menu', 'homepage')"
+            >
+              RETURN<br />
+              TO HOMEPAGE
+            </button>
+          </div>
         </div>
-        <div id="game-mode" class="config">
-          <span>Game Mode</span>
-          <select id="game-mode-select" onchange="changeGameMode(this.value)">
-            <option value="0">Player X Player</option>
-            <option value="1">Player X AI</option>
-          </select>
+        <div class="menu-top">
+          <div class="first-two-options">
+            <div id="board-size-menu" class="config">
+              <span>Board Size</span>
+              <select
+                id="board-size-select"
+                onchange="changeBoardSize(this.value)"
+              >
+                <option value="0">6 X 5</option>
+                <option value="1">7 X 6</option>
+                <option value="2">8 X 7</option>
+                <option value="3">9 X 8</option>
+              </select>
+            </div>
+            <div id="game-mode" class="config">
+              <span>Game Mode</span>
+              <select
+                id="game-mode-select"
+                onchange="changeGameMode(this.value)"
+              >
+                <option value="0">Player X Player</option>
+                <option value="1">Player X AI</option>
+              </select>
+            </div>
+          </div>
+          <div class="last-two-options">
+            <div id="starting-player" class="config">
+              <span>Starting Player</span>
+              <select
+                id="starting-player-select"
+                onchange="changeStartPlayer(this.value)"
+              >
+                <option value="0">Player 1 - Red</option>
+                <option value="1">Player 2 - Green</option>
+              </select>
+            </div>
+            <div id="ai-difficulty" class="config">
+              <span>AI Difficulty</span>
+              <select
+                id="ai-difficulty-select"
+                onchange="changeAIdiff(this.value)"
+              >
+                <option value="0">Easy</option>
+                <option value="1">Medium</option>
+                <option value="2">Hard</option>
+              </select>
+            </div>
+          </div>
         </div>
-
-        <div id="starting-player" class="config">
-          <span>Starting Player</span>
-          <select
-            id="starting-player-select"
-            onchange="changeStartPlayer(this.value)"
-          >
-            <option value="0">Player 1 - Red</option>
-            <option value="1">Player 2 - Green</option>
-          </select>
-        </div>
-
-        <div id="ai-difficulty" class="config">
-          <span>AI Difficulty</span>
-          <select id="ai-difficulty-select" onchange="changeAIdiff(this.value)">
-            <option value="0">Easy</option>
-            <option value="1">Medium</option>
-            <option value="2">Hard</option>
-          </select>
-        </div>
-      </div>
-      <div class="menu-bottom">
-        <button
-          type="button"
-          class="button-style"
-          onclick="startGame(); switchPage('menu', 'game');"
-        >
-          START !!!
-        </button>
-        <button class="button-style" onclick="switchPage('menu', 'homepage')">
-          HOMEPAGE
-        </button>
       </div>
     </div>
 
