@@ -781,7 +781,7 @@ body {
   display: flex;
   width: 23em;
   height: 5em;
-  border-radius: 0.25em;
+  border-radius: 15px;
   overflow: hidden;
 }
 
