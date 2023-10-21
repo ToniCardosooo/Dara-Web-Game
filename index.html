@@ -206,49 +206,69 @@
         <div class="menu-top">
           <div class="first-two-options">
             <div id="board-size-menu" class="config">
-              <span>Board Size</span>
-              <select
-                id="board-size-select"
-                onchange="changeBoardSize(this.value)"
+              <span class="board-size-configuration"
+                >Board<br />
+                Size</span
               >
-                <option value="0">6 X 5</option>
-                <option value="1">7 X 6</option>
-                <option value="2">8 X 7</option>
-                <option value="3">9 X 8</option>
-              </select>
+              <div class="select">
+                <select
+                  id="board-size-select"
+                  onchange="changeBoardSize(this.value)"
+                >
+                  <option value="0">6 X 5</option>
+                  <option value="1">7 X 6</option>
+                  <option value="2">8 X 7</option>
+                  <option value="3">9 X 8</option>
+                </select>
+              </div>
             </div>
             <div id="game-mode" class="config">
-              <span>Game Mode</span>
-              <select
-                id="game-mode-select"
-                onchange="changeGameMode(this.value)"
+              <span class="game-mode-configuration"
+                >Game<br />
+                Mode</span
               >
-                <option value="0">Player X Player</option>
-                <option value="1">Player X AI</option>
-              </select>
+              <div class="select">
+                <select
+                  id="game-mode-select"
+                  onchange="changeGameMode(this.value)"
+                >
+                  <option value="0">Player X Player</option>
+                  <option value="1">Player X AI</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="last-two-options">
-            <div id="starting-player" class="config">
-              <span>Starting Player</span>
-              <select
-                id="starting-player-select"
-                onchange="changeStartPlayer(this.value)"
-              >
-                <option value="0">Player 1 - Red</option>
-                <option value="1">Player 2 - Green</option>
-              </select>
-            </div>
             <div id="ai-difficulty" class="config">
-              <span>AI Difficulty</span>
-              <select
-                id="ai-difficulty-select"
-                onchange="changeAIdiff(this.value)"
+              <span class="ai-difficulty-configuration"
+                >AI<br />
+                Difficulty</span
               >
-                <option value="0">Easy</option>
-                <option value="1">Medium</option>
-                <option value="2">Hard</option>
-              </select>
+              <div class="select">
+                <select
+                  id="ai-difficulty-select"
+                  onchange="changeAIdiff(this.value)"
+                >
+                  <option value="0">Easy</option>
+                  <option value="1">Medium</option>
+                  <option value="2">Hard</option>
+                </select>
+              </div>
+            </div>
+            <div id="starting-player" class="config">
+              <span class="starting-player-configuration"
+                >Starting<br />
+                Player</span
+              >
+              <div class="select">
+                <select
+                  id="starting-player-select"
+                  onchange="changeStartPlayer(this.value)"
+                >
+                  <option value="0">Player 1 - Red</option>
+                  <option value="1">Player 2 - Green</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
