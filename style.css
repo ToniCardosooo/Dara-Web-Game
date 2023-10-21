@@ -703,7 +703,6 @@ body {
 
 .button-style-start {
   margin-bottom: 50px;
-  --green: #468966;
   height: 200px;
   width: 400px;
   font-size: 35px;
@@ -715,7 +714,7 @@ body {
   overflow: hidden;
   transition: all 0.3s;
   line-height: 1.4em;
-  border: 2px solid var(--green);
+  border: 2px solid #468966;
   background: linear-gradient(
     to right,
     rgba(70, 137, 102, 0.1) 1%,
@@ -723,7 +722,6 @@ body {
     transparent 60%,
     rgba(70, 137, 102, 0.1) 100%
   );
-  color: var(--green);
   box-shadow: inset 0 0 10px rgba(70, 137, 102, 0.4),
     0 0 9px 3px rgba(70, 137, 102, 0.1);
 }
@@ -753,6 +751,21 @@ body {
 
 .button-style-start:hover:before {
   transform: translateX(15em);
+}
+
+.jumping-text {
+  animation: jump 1s infinite;
+  color: #468966;
+}
+
+@keyframes jump {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
 }
 
 #ai-difficulty {
