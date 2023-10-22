@@ -611,14 +611,19 @@ body {
   justify-content: center;
 }
 
-.classification-title .small-font {
+.classification-results {
+  margin-right: 40px;
+  flex: 50%;
+}
+
+.titles .small-font {
   font-family: "ArcadeClassic", sans-serif;
   font-size: 40px;
   letter-spacing: 10px;
   color: #468966;
 }
 
-.classification-title .larger-font {
+.titles .larger-font {
   font-family: "ArcadeClassic", sans-serif;
   font-size: 50px;
   letter-spacing: 10px;
@@ -664,13 +669,8 @@ body {
   color: #ffe35e;
 }
 
-.classification-results {
-  margin-right: 40px;
-  flex: 50%;
-}
-
 .classifications-table {
-  width: 800px;
+  width: 900px;
   display: table;
   margin: 0 auto;
   box-sizing: border-box;
@@ -681,16 +681,17 @@ body {
   color: #00ff00;
   border-radius: 20px;
   font-family: "Montserrat", sans-serif;
+  font-size: 20px;
 }
 
-.classifications-table th,
-.classifications-table td {
-  padding: 10px;
+.classification-page tr {
+  height: 80px;
 }
 
 .classifications-table th {
+  padding: 10px;
   background-color: rgba(0, 0, 0, 1);
-  font-weight: lighter;
+  font-weight: bold;
 }
 
 .classifications-table .first {
@@ -703,6 +704,109 @@ body {
   border-bottom-right-radius: 20px;
 }
 
+@media screen and (max-width: 1600px) {
+  .classification-page {
+    margin-top: 0px;
+    flex-direction: column;
+  }
+
+  .classification-title {
+    margin-top: 50px;
+    flex-direction: row;
+    flex: 30%;
+  }
+
+  .classification-results {
+    flex: 70%;
+  }
+
+  .titles {
+    margin-right: 30px;
+    margin-bottom: 0px;
+    margin-top: 50px;
+  }
+
+  .button-style-classification {
+    margin-left: 30px;
+  }
+
+  .classifications-table {
+    width: 800px;
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 876px) {
+  .classification-title {
+    flex-direction: column;
+  }
+
+  .button-style-classification {
+    margin-left: 0px;
+  }
+
+  .titles {
+    margin-right: 0px;
+  }
+
+  .classification-results {
+    margin-top: 70px;
+    margin-right: 0px;
+  }
+
+  .classifications-table {
+    width: 600px;
+    font-size: 13px;
+  }
+
+  .classification-title .small-font {
+    font-size: 25px;
+  }
+}
+
+@media screen and (max-width: 900px) and (min-width: 877px) {
+  .classifications-table {
+    width: 700px;
+  }
+}
+
+@media screen and (max-width: 676px) {
+  .classifications-table {
+    width: 400px;
+  }
+}
+
+@media screen and (max-height: 950px) and (min-width: 876px) {
+  .classification-page {
+    margin-top: 0px;
+    flex-direction: column;
+  }
+
+  .classification-title {
+    margin-top: 50px;
+    flex-direction: row;
+    flex: 30%;
+  }
+
+  .classification-results {
+    flex: 70%;
+  }
+
+  .titles {
+    margin-right: 30px;
+    margin-bottom: 0px;
+    margin-top: 50px;
+  }
+
+  .button-style-classification {
+    margin-left: 30px;
+  }
+
+  .classifications-table {
+    width: 800px;
+    font-size: 15px;
+  }
+}
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
 
 .menu {
