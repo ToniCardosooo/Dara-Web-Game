@@ -595,6 +595,7 @@ body {
 
 .classifications {
   display: none;
+  height: 913px;
 }
 
 .classification-page {
@@ -669,23 +670,37 @@ body {
 }
 
 .classifications-table {
+  width: 800px;
   display: table;
-  margin: 0px;
+  margin: 0 auto;
   box-sizing: border-box;
   border-collapse: collapse;
   border-width: 10px;
-  background-color: darkgoldenrod;
+  background-color: rgba(0, 0, 0, 0.8);
   text-align: center;
+  color: #00ff00;
+  border-radius: 20px;
+  font-family: "Montserrat", sans-serif;
 }
 
 .classifications-table th,
 .classifications-table td {
   padding: 10px;
-  border: 2px solid rgb(46, 18, 0);
 }
 
 .classifications-table th {
-  background-color: brown;
+  background-color: rgba(0, 0, 0, 1);
+  font-weight: lighter;
+}
+
+.classifications-table .first {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.classifications-table .last {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
@@ -877,7 +892,7 @@ select {
   font-size: 25px;
   background-color: rgba(0, 0, 0, 0.99);
   color: #00ff00;
-  font-family: "Courier New", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 select::-ms-expand {
