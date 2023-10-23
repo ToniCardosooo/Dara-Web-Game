@@ -681,7 +681,7 @@ body {
   color: #00ff00;
   border-radius: 20px;
   font-family: "Montserrat", sans-serif;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .classification-page tr {
@@ -1132,18 +1132,23 @@ select::-ms-expand {
 #board {
   height: 540px;
   width: 450px;
-  background-color: navy;
-  border: 10px solid navy;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 6px solid #468966;
+  border-radius: 20px;
+  padding: 10px;
   margin-right: 80px;
   margin-left: 80px;
   display: flex;
   flex-wrap: wrap;
 }
+
 #direita {
   height: 540px;
   width: 180px;
-  background-color: black;
-  border: 10px solid navy;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 6px outset #468966;
+  border-radius: 20px;
+  padding: 10px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -1151,25 +1156,111 @@ select::-ms-expand {
 #esquerda {
   height: 540px;
   width: 180px;
-  background-color: black;
-  border: 10px solid navy;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 6px inset #468966;
+  border-radius: 20px;
+  padding: 10px;
   display: flex;
   flex-wrap: wrap;
 }
 
-#custom-board-size {
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  margin-top: 10px;
-  display: none;
+.play-game-name {
+  margin-bottom: 0px;
+  font-family: "ArcadeClassic", sans-serif;
+  letter-spacing: 10px;
+  font-size: 80px;
+  color: #468962;
+  margin-top: 20px;
 }
 
-#custom-num-rows,
-#custom-num-cols {
-  margin: 10px 0;
+#winner {
+  font-family: "Montserrat", sans-serif;
+  color: #468962;
+  font-size: 17px;
 }
+
+#AI {
+  font-family: "Montserrat", sans-serif;
+  color: #468962;
+  margin-top: 10px;
+  font-size: 17px;
+}
+
+#text {
+  font-family: "Montserrat", sans-serif;
+  color: #468962;
+  font-size: 17px;
+}
+
+.tile {
+  height: 70px;
+  width: 70px;
+  margin: 5px;
+
+  /* Circle */
+  border-radius: 50%;
+  border: 5px solid #468962;
+}
+
+#quit-game-button {
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  background-color: #468966;
+  color: white;
+  font-size: 15px;
+  border: 0;
+  margin-top: 30px;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+#quit-game-button:hover {
+  color: #ffe35e;
+}
+
+@media screen and (max-width: 1150px) {
+  #esquerda,
+  #direita {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 876px) {
+  #board {
+    margin: 0 auto;
+  }
+
+  .play-game-name {
+    font-size: 60px;
+  }
+
+  #winner,
+  #text,
+  #ai {
+    font-size: 14px;
+  }
+}
+
+/* GENERAL CSS */
 
 span {
   display: block;
@@ -1182,15 +1273,4 @@ input {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-.tile {
-  height: 70px;
-  width: 70px;
-  margin: 5px;
-
-  /* Circle */
-  background-color: white;
-  border-radius: 50%;
-  border: 5px solid navy;
 }
