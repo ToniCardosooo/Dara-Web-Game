@@ -13,16 +13,26 @@ class Game  {
 		this.cselected;
 		this.classifications = [];
 		this.stats = {
-		player_name: "",
-		board_size: this.rows.toString() + "x" + this.columns.toString(),
-		num_moves: 0,
-		num_pieces_eaten: 0,
-		match_duration: 0,
+			player_name: "",
+			board_size: this.rows.toString() + "x" + this.columns.toString(),
+			game_mode: "Player X ",
+			num_moves: 0,
+			num_pieces_eaten: 0,
+			score: 0,
 		};
 	}
 
 	updateClassificationTable() {
 		this.stats.board_size = this.rows.toString() + "x" + this.columns.toString();
+		if (this.secondPlayer === 1){
+			switch (this.AI_diff) {
+				case 0: this.stats.game_mode += "AI (Easy)"; break;
+				case 1: this.stats.game_mode += "AI (Medium)"; break;
+				case 2: this.stats.game_mode += "AI (Hard)"; break;
+				default: break;
+			}
+		}
+		else {this.stats.game_mode += "Player";}
 	
 		let table = document.getElementById("classifications-table");
 	
@@ -34,7 +44,10 @@ class Game  {
 		//para orderar as classificacoes - do later
 		this.classifications.push(this.stats);
 		this.classifications = this.classifications.sort((stat1, stat2) => {
-			return stat1.num_moves - stat2.num_moves;
+			if (stat1.score === stat2.score){
+				return stat1.num_moves - stat2.num_moves;
+			}
+			return -1*(stat1.score - stat2.score);
 		});
 	
 		for (let i = 0; i < this.classifications.length; i++) {
@@ -49,16 +62,17 @@ class Game  {
 		}
 		// reset stats
 		this.stats = {
-			player: 1,
+			player_name: this.stats.player_name,
 			board_size: this.rows.toString() + "x" + this.columns.toString(),
+			game_mode: "Player X ",
 			num_moves: 0,
 			num_pieces_eaten: 0,
-			match_duration: 0,
+			score: 0,
 		};
 	}
 
-	updateStats(parameter) {
-		if (this.board.player == 1) this.stats[parameter]++;
+	updateStats(parameter, increment=1) {
+		if (this.board.player == 1) this.stats[parameter] += increment;
 	}
 
 	setPlayerName() {
@@ -334,6 +348,7 @@ class Game  {
 					}
 					else{error=true;} 
 				}
+				this.updateStats("score", Math.abs(this.board.heuristic()))
 			} 
 		}
 		this.showMessage(error);
