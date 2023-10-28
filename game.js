@@ -81,6 +81,12 @@ class Game  {
 			.value.toString();
 	}
 
+	giveUp(){
+		this.board.winner = 3-this.board.player;
+		this.showWinner();
+		this.showMessage(false);
+	}
+
 	setBoardSize(size) {
 		if (size === "0") {
 			this.rows = 6;
@@ -121,7 +127,8 @@ class Game  {
 		this.board.createBoardHTML();
 		this.board.createSideBoards();
 		this.board.updateSideBoards();
-		document.getElementById("quit-game-button").textContent = "GIVE UP";
+		document.getElementById("give-up-button").style.display = "flex";
+		document.getElementById("quit-game-button").style.display = "none";
 		document.getElementById("winner").innerText = "";
 		document.getElementById("AI").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2){
@@ -213,11 +220,13 @@ class Game  {
 		if (this.board.winner == 1) {
 			win.innerText = "Red Wins";
 			this.updateClassificationTable();
-			document.getElementById("quit-game-button").innerText = "BACK TO MENU";
+			document.getElementById("give-up-button").style.display = "none";
+			document.getElementById("quit-game-button").style.display = "flex";
 		} 
 		else if (this.board.winner == 2) {
 			win.innerText = "Green Wins";
-			document.getElementById("quit-game-button").innerText = "BACK TO MENU";
+			document.getElementById("give-up-button").style.display = "none";
+			document.getElementById("quit-game-button").style.display = "flex";
 		}
 	}
 
@@ -355,7 +364,7 @@ class Game  {
 		document.getElementById("AI").innerText = "";
 		if (this.secondPlayer == 1 && this.board.player == 2 && this.board.winner == 0){
 			var that = this;
- 			setTimeout(function () {that.AI_play();}, 0);
+ 			setTimeout(function () {that.AI_play();}, 10);
 		}
 			
 	}
@@ -891,6 +900,10 @@ function changeStartPlayer(player){
 
 function changeAIdiff(diff){
 	G.setAIdiff(diff);
+}
+
+function giveUp(){
+	G.giveUp();
 }
 
 function clearboard() {
