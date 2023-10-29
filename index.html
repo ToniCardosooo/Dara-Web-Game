@@ -142,6 +142,7 @@
                   name="board-size-filter"
                   id="board-size-filter"
                   class="select-1"
+                  onchange="filterClassificationTable();"
                 >
                   <option value="0">All</option>
                   <option value="1">6 X 5</option>
@@ -158,12 +159,13 @@
                   name="game-mode-filter"
                   id="game-mode-filter"
                   class="select-2"
+                  onchange="filterClassificationTable();"
                 >
                   <option value="0">All</option>
                   <option value="1">Player X Player</option>
-                  <option value="2">AI (Easy)</option>
-                  <option value="3">AI (Medium)</option>
-                  <option value="4">AI (Hard)</option>
+                  <option value="2">Player X AI (Easy)</option>
+                  <option value="3">Player X AI (Medium)</option>
+                  <option value="4">Player X AI (Hard)</option>
                 </select>
               </div>
             </div>

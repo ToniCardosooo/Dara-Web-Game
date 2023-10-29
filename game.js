@@ -84,8 +84,9 @@ class Game  {
 		// clean the table
 		let table = document.getElementById("classifications-table");
 		for (let i = 1; i < table.rows.length; i++) {
-			let table_row = document.getElementById((i-1).toString() + "-row");
-			table_row.remove();
+			table.deleteRow(i);
+			/* let table_row = document.getElementById((i-1).toString() + "-row");
+			if (table_row !== null){ table_row.remove(); } */
 		}
 
 		// filter the match_history with the given filter selection on the classification page
@@ -109,7 +110,7 @@ class Game  {
 		});
 
 		// generate the table
-		for (let i = 0; i < filtered_match_history.length; i++) {
+		for (let i = 1; i < filtered_match_history.length; i++) {
 			let table_row = document.createElement("tr");
 			table_row.id = i.toString() + "-row";
 			for (let [key, value] of Object.entries(filtered_match_history[i])) {
@@ -137,8 +138,9 @@ class Game  {
 		
 		// clean the table
 		for (let i = 1; i < table.rows.length; i++) {
-			let table_row = document.getElementById((i-1).toString() + "-row");
-			table_row.remove();
+			table.deleteRow(i);
+			/* let table_row = document.getElementById((i-1).toString() + "-row");
+			if (table_row !== null){ table_row.remove(); } */
 		}
 	
 		//para orderar as classificacoes
