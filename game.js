@@ -15,7 +15,7 @@ class Game  {
 		this.players_stats = {};
 		this.stats = {
 			player_name: "",
-			board_size: this.rows.toString() + "x" + this.columns.toString(),
+			board_size: this.rows.toString() + " X " + this.columns.toString(),
 			game_mode: "Player X ",
 			num_moves: 0,
 			num_pieces_eaten: 0,
@@ -72,21 +72,57 @@ class Game  {
 			}
 			return p2_win_rate - p1_win_rate;
 		});
-		console.log(win_rate_classifications);
-		console.log(win_rate_classifications.length);
-		console.log(win_rate_classifications[0][1]["total_score"]);
-		console.log(win_rate_table.rows[0].cells[0].innerText);
 		// update win rate table
 		for (let i = 1; i < win_rate_table.rows.length; i++){
-			console.log(win_rate_table.rows[i]);
 			win_rate_table.rows[i].cells[0].innerText = win_rate_classifications[i-1][0];
 			win_rate_table.rows[i].cells[1].innerText = Math.round(win_rate_classifications[i-1][1]["win_count"]/win_rate_classifications[i-1][1]["matches_count"] * 100).toString() + "%";
 			win_rate_table.rows[i].cells[2].innerText = win_rate_classifications[i-1][1]["total_score"].toString();
 		}
 	}
 
+	filterClassificationTable(){
+		// clean the table
+		let table = document.getElementById("classifications-table");
+		for (let i = 1; i < table.rows.length; i++) {
+			let table_row = document.getElementById((i-1).toString() + "-row");
+			table_row.remove();
+		}
+
+		// filter the match_history with the given filter selection on the classification page
+		let filters = {
+			"board_size": document.getElementById("board-size-filter").options[document.getElementById("board-size-filter").selectedIndex].text,
+			"game_mode": document.getElementById("game-mode-filter").options[document.getElementById("game-mode-filter").selectedIndex].text
+		}
+		let filtered_match_history = [];
+		for (let match of this.match_history){
+			let board_size_filter_verified = (filters["board_size"] === "All" || match["board_size"] === filters["board_size"]);
+			let game_mode_filter_verified = (filters["game_mode"] === "All" || match["game_mode"] === filters["game_mode"]);
+			if (board_size_filter_verified && game_mode_filter_verified){ filtered_match_history.push(match); }
+		}
+
+		// sort the filtered results
+		filtered_match_history = filtered_match_history.sort((stat1, stat2) => {
+			if (stat1.score === stat2.score){
+				return stat1.num_moves - stat2.num_moves;
+			}
+			return -1*(stat1.score - stat2.score);
+		});
+
+		// generate the table
+		for (let i = 0; i < filtered_match_history.length; i++) {
+			let table_row = document.createElement("tr");
+			table_row.id = i.toString() + "-row";
+			for (let [key, value] of Object.entries(filtered_match_history[i])) {
+				let cell = document.createElement("td");
+				cell.textContent = value;
+				table_row.append(cell);
+			}
+			table.append(table_row);
+		}
+	}
+
 	updateClassificationTable() {
-		this.stats.board_size = this.rows.toString() + "x" + this.columns.toString();
+		this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
 		if (this.secondPlayer === 1){
 			switch (this.AI_diff) {
 				case 0: this.stats.game_mode += "AI (Easy)"; break;
@@ -98,13 +134,14 @@ class Game  {
 		else {this.stats.game_mode += "Player";}
 	
 		let table = document.getElementById("classifications-table");
-	
-		for (let i = 0; i < this.match_history.length; i++) {
-			let table_row = document.getElementById(i.toString() + "-row");
+		
+		// clean the table
+		for (let i = 1; i < table.rows.length; i++) {
+			let table_row = document.getElementById((i-1).toString() + "-row");
 			table_row.remove();
 		}
 	
-		//para orderar as classificacoes - do later
+		//para orderar as classificacoes
 		this.match_history.push(this.stats);
 		this.match_history = this.match_history.sort((stat1, stat2) => {
 			if (stat1.score === stat2.score){
@@ -113,6 +150,7 @@ class Game  {
 			return -1*(stat1.score - stat2.score);
 		});
 	
+		// generate the table
 		for (let i = 0; i < this.match_history.length; i++) {
 			let table_row = document.createElement("tr");
 			table_row.id = i.toString() + "-row";
@@ -126,7 +164,7 @@ class Game  {
 		// reset stats
 		this.stats = {
 			player_name: this.stats.player_name,
-			board_size: this.rows.toString() + "x" + this.columns.toString(),
+			board_size: this.rows.toString() + " X " + this.columns.toString(),
 			game_mode: "Player X ",
 			num_moves: 0,
 			num_pieces_eaten: 0,
@@ -993,9 +1031,13 @@ function showClassificationTable(show_id){
 		if (show_id == tables_ids[i]){ continue; }
 		document.getElementById(tables_ids[i]).style.display = "none";
 	}
+	document.getElementById("board-filter").style.display = (show_id == "classifications-table")? "flex" : "none";
 	document.getElementById(show_id).style.display = "table";
 }
 
+function filterClassificationTable(){
+	G.filterClassificationTable();
+}
 
 function copy_2darray(array) {
 	let copy = [];
