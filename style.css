@@ -730,7 +730,7 @@ body {
 }
 
 .select-mirror::after {
-  font-size: 17px;
+  font-size: 16px;
   content: "\25BC";
   position: absolute;
   top: 0;
@@ -753,7 +753,7 @@ body {
   padding: 0 1em;
   background-color: #34495e;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 15px;
   background-color: rgba(0, 0, 0, 0.99);
   color: #00ff00;
   font-family: "Montserrat", sans-serif;
@@ -785,7 +785,7 @@ body {
 }
 
 .classifications-table th {
-  padding: 10px;
+  padding: 18px;
   background-color: rgba(0, 0, 0, 1);
   font-weight: bold;
 }
@@ -797,7 +797,11 @@ body {
   width: 33.33%;
 }
 
-.classifications-table .first,
+.classifications-table .first {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
 .win-rate-table .first {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -879,9 +883,41 @@ body {
 }
 
 @media screen and (max-width: 676px) {
-  .classifications-table,
   .win-rate-table {
-    width: 400px;
+    width: 325px;
+    font-size: 10px;
+  }
+
+  .classifications-table {
+    width: 325px;
+    font-size: 8px;
+  }
+
+  .button-win-rate-list {
+    margin-left: 0px;
+    width: 175px;
+  }
+
+  .button-matches-list {
+    margin-right: 0px;
+    width: 175px;
+  }
+
+  .two-buttons {
+    flex-direction: column;
+  }
+
+  .select-mirror {
+    width: 11em;
+  }
+
+  .select-1,
+  .select-2 {
+    font-size: 12px;
+  }
+
+  .classifications-table th {
+    padding: 11px;
   }
 }
 
@@ -914,7 +950,7 @@ body {
   .classifications-table,
   .win-rate-table {
     width: 800px;
-    font-size: 15px;
+    font-size: 10px;
   }
 }
 
