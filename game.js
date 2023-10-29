@@ -35,7 +35,7 @@ class Game  {
 					this.players_stats[player_name]["win_count"]++;
 					this.players_stats[player_name]["total_score"] += this.stats.score;
 				}
-				else{ this.players_stats[player_name]["total_score"] -= this.stats.score; }
+				else{ this.players_stats[player_name]["total_score"] += this.stats.score; }
 				this.players_stats[player_name]["matches_count"]++;
 			}
 		}
@@ -43,7 +43,7 @@ class Game  {
 			// update win_rate_table relevant stats
 			this.players_stats[player_name] = (has_won)?
 			{"win_count": 1, "matches_count": 1, "total_score": this.stats.score}: // has won
-			{"win_count": 0, "matches_count": 1, "total_score": -1*this.stats.score}; // has not won
+			{"win_count": 0, "matches_count": 1, "total_score": this.stats.score}; // has not won
 			// create new line on the table
 			let new_row = document.createElement("tr");
 			// add the player name
@@ -106,7 +106,6 @@ class Game  {
 	updateClassificationTable() {
 		this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
 		this.stats.match_result = (this.board.winner===1)? "Winner" : "Loser";
-		if (this.board.winner!==1){ this.stats.score *= -1; }
 		if (this.secondPlayer === 1){
 			switch (this.AI_diff) {
 				case 0: this.stats.game_mode += "AI (Easy)"; break;
@@ -171,6 +170,8 @@ class Game  {
 
 	updateStats(parameter, increment=1) {
 		if (this.board.player == 1) this.stats[parameter] += increment;
+		else if (parameter === "score") this.stats[parameter] += increment;
+
 	}
 
 	setPlayerName() {
@@ -348,6 +349,7 @@ class Game  {
 		else if (this.AI_diff == 2){
 			this.playMinimax(5);
 		}
+		if(!this.board.putPhase){this.updateStats("score", -this.board.heuristic());}
 		this.board.updateBoard();
 		this.board.updateSideBoards();
 		this.showMessage(false);
@@ -443,6 +445,8 @@ class Game  {
 						this.board.updateBoard();
 						this.board.updateSideBoards();
 						this.updateStats("num_pieces_eaten");
+						this.updateStats("score", -this.board.heuristic());
+						console.log(this.stats.score);
 						this.board.changePlayer();
 						this.selected = false;
 						this.remove = false;
@@ -451,7 +455,7 @@ class Game  {
 					}
 					else{error=true;} 
 				}
-				this.updateStats("score", Math.abs(this.board.heuristic()))
+				
 			} 
 		}
 		this.showMessage(error);
