@@ -35,6 +35,7 @@ class Game  {
 					this.players_stats[player_name]["win_count"]++;
 					this.players_stats[player_name]["total_score"] += this.stats.score;
 				}
+				else{ this.players_stats[player_name]["total_score"] -= this.stats.score; }
 				this.players_stats[player_name]["matches_count"]++;
 			}
 		}
@@ -42,7 +43,7 @@ class Game  {
 			// update win_rate_table relevant stats
 			this.players_stats[player_name] = (has_won)?
 			{"win_count": 1, "matches_count": 1, "total_score": this.stats.score}: // has won
-			{"win_count": 0, "matches_count": 1, "total_score": 0}; // has not won
+			{"win_count": 0, "matches_count": 1, "total_score": -1*this.stats.score}; // has not won
 			// create new line on the table
 			let new_row = document.createElement("tr");
 			// add the player name
@@ -55,7 +56,7 @@ class Game  {
 			new_row.append(cell);
 			// add the player total score
 			cell = document.createElement("td");
-			cell.textContent = (has_won)? this.stats.score.toString() : "0";
+			cell.textContent = this.stats.score.toString();
 			new_row.append(cell);
 			// append row
 			win_rate_table.append(new_row);
@@ -105,6 +106,7 @@ class Game  {
 	updateClassificationTable() {
 		this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
 		this.stats.match_result = (this.board.winner===1)? "Winner" : "Loser";
+		if (this.board.winner!==1){ this.stats.score *= -1; }
 		if (this.secondPlayer === 1){
 			switch (this.AI_diff) {
 				case 0: this.stats.game_mode += "AI (Easy)"; break;
@@ -116,9 +118,19 @@ class Game  {
 		else {this.stats.game_mode += "Player";}
 	
 		let table = document.getElementById("classifications-table");
-		
+
 		// add new row
-		let new_row = document.createElement("tr");
+		let new_row = table.insertRow(1);
+		new_row.id = this.match_history.length.toString() + "-row";
+		let j = 0;
+		for (let [key, value] of Object.entries(this.stats)) {
+			let cell = new_row.insertCell(j);
+			cell.textContent = value;
+			j++;
+		}
+		this.match_history.push(this.stats);
+		
+		/* let new_row = document.createElement("tr");
 		new_row.id = this.match_history.length.toString() + "-row";
 		for (let [key, value] of Object.entries(this.stats)) {
 			let cell = document.createElement("td");
@@ -126,11 +138,10 @@ class Game  {
 			cell.style.display = "";
 			new_row.append(cell);
 		}
-		table.append(new_row);
+		table.append(new_row); */
 	
 		// sort match history
-		this.match_history.push(this.stats);
-		this.match_history = this.match_history.sort((stat1, stat2) => {
+		/*this.match_history = this.match_history.sort((stat1, stat2) => {
 			if (stat1.score === stat2.score){
 				return stat1.num_moves - stat2.num_moves;
 			}
@@ -144,7 +155,7 @@ class Game  {
 				table.rows[i+1].cells[j].innerText = stat_value.toString();
 				j++;
 			}
-		}
+		} */
 
 		// reset stats
 		this.stats = {
