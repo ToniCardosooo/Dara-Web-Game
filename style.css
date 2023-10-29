@@ -669,6 +669,96 @@ body {
   color: #ffe35e;
 }
 
+.button-matches-list,
+.button-win-rate-list {
+  width: 205px;
+  height: 50px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  background-color: #468966;
+  color: white;
+  font-size: 12px;
+  border: 0;
+  margin-top: 30px;
+}
+
+.button-matches-list:hover,
+.button-win-rate-list:hover {
+  color: #ffe35e;
+}
+
+.button-matches-list {
+  margin-right: 10px;
+}
+
+.button-win-rate-list {
+  margin-left: 10px;
+}
+
+.board-filter {
+  display: flex;
+  justify-content: center;
+}
+
+.board-filter > div {
+  margin: 0 10px;
+}
+
+.board-size-p,
+.game-mode-p {
+  font-family: "ArcadeClassic", sans-serif;
+  font-size: 25px;
+  color: #468966;
+  margin-bottom: 0px;
+}
+.select-mirror {
+  box-shadow: 7px 7px 12px rgb(63, 63, 63);
+  position: relative;
+  display: flex;
+  width: 13em;
+  height: 3em;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.select-mirror::after {
+  font-size: 17px;
+  content: "\25BC";
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  transition: 0.7s all ease;
+  pointer-events: none;
+}
+
+.select-mirror:hover::after {
+  color: #00ff00;
+}
+
+.select-1,
+.select-2 {
+  appearance: none;
+  outline: 0;
+  border: 0;
+  flex: 1;
+  padding: 0 1em;
+  background-color: #34495e;
+  cursor: pointer;
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0.99);
+  color: #00ff00;
+  font-family: "Montserrat", sans-serif;
+}
+
+.select-1::-ms-expand,
+.select-2::-ms-expand {
+  display: none;
+}
+
 .classifications-table,
 .win-rate-table {
   width: 900px;
