@@ -446,7 +446,6 @@ class Game  {
 						this.board.updateSideBoards();
 						this.updateStats("num_pieces_eaten");
 						this.updateStats("score", -this.board.heuristic());
-						console.log(this.stats.score);
 						this.board.changePlayer();
 						this.selected = false;
 						this.remove = false;
