@@ -15,6 +15,7 @@ class Game  {
 		this.players_stats = {};
 		this.stats = {
 			player_name: "",
+			match_result: "",
 			board_size: this.rows.toString() + " X " + this.columns.toString(),
 			game_mode: "Player X ",
 			num_moves: 0,
@@ -83,47 +84,27 @@ class Game  {
 	filterClassificationTable(){
 		// clean the table
 		let table = document.getElementById("classifications-table");
-		for (let i = 1; i < table.rows.length; i++) {
-			table.deleteRow(i);
-			/* let table_row = document.getElementById((i-1).toString() + "-row");
-			if (table_row !== null){ table_row.remove(); } */
-		}
 
 		// filter the match_history with the given filter selection on the classification page
 		let filters = {
 			"board_size": document.getElementById("board-size-filter").options[document.getElementById("board-size-filter").selectedIndex].text,
 			"game_mode": document.getElementById("game-mode-filter").options[document.getElementById("game-mode-filter").selectedIndex].text
 		}
+
 		let filtered_match_history = [];
+		let id = 0;
 		for (let match of this.match_history){
 			let board_size_filter_verified = (filters["board_size"] === "All" || match["board_size"] === filters["board_size"]);
 			let game_mode_filter_verified = (filters["game_mode"] === "All" || match["game_mode"] === filters["game_mode"]);
-			if (board_size_filter_verified && game_mode_filter_verified){ filtered_match_history.push(match); }
-		}
-
-		// sort the filtered results
-		filtered_match_history = filtered_match_history.sort((stat1, stat2) => {
-			if (stat1.score === stat2.score){
-				return stat1.num_moves - stat2.num_moves;
-			}
-			return -1*(stat1.score - stat2.score);
-		});
-
-		// generate the table
-		for (let i = 1; i < filtered_match_history.length; i++) {
-			let table_row = document.createElement("tr");
-			table_row.id = i.toString() + "-row";
-			for (let [key, value] of Object.entries(filtered_match_history[i])) {
-				let cell = document.createElement("td");
-				cell.textContent = value;
-				table_row.append(cell);
-			}
-			table.append(table_row);
+			let row = document.getElementById(id.toString() + "-row");
+			row.style.display = (board_size_filter_verified && game_mode_filter_verified)? "" : "none";
+			id++;
 		}
 	}
 
 	updateClassificationTable() {
 		this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
+		this.stats.match_result = (this.board.winner===1)? "Winner" : "Loser";
 		if (this.secondPlayer === 1){
 			switch (this.AI_diff) {
 				case 0: this.stats.game_mode += "AI (Easy)"; break;
@@ -136,14 +117,18 @@ class Game  {
 	
 		let table = document.getElementById("classifications-table");
 		
-		// clean the table
-		for (let i = 1; i < table.rows.length; i++) {
-			table.deleteRow(i);
-			/* let table_row = document.getElementById((i-1).toString() + "-row");
-			if (table_row !== null){ table_row.remove(); } */
+		// add new row
+		let new_row = document.createElement("tr");
+		new_row.id = this.match_history.length.toString() + "-row";
+		for (let [key, value] of Object.entries(this.stats)) {
+			let cell = document.createElement("td");
+			cell.textContent = value;
+			cell.style.display = "";
+			new_row.append(cell);
 		}
+		table.append(new_row);
 	
-		//para orderar as classificacoes
+		// sort match history
 		this.match_history.push(this.stats);
 		this.match_history = this.match_history.sort((stat1, stat2) => {
 			if (stat1.score === stat2.score){
@@ -152,20 +137,19 @@ class Game  {
 			return -1*(stat1.score - stat2.score);
 		});
 	
-		// generate the table
-		for (let i = 0; i < this.match_history.length; i++) {
-			let table_row = document.createElement("tr");
-			table_row.id = i.toString() + "-row";
-			for (let [key, value] of Object.entries(this.match_history[i])) {
-				let cell = document.createElement("td");
-				cell.textContent = value;
-				table_row.append(cell);
+		// update the table
+		for (let i = 0; i < this.match_history.length; i++){
+			let j = 0;
+			for (let [stat_name, stat_value] of Object.entries(this.match_history[i])){
+				table.rows[i+1].cells[j].innerText = stat_value.toString();
+				j++;
 			}
-			table.append(table_row);
 		}
+
 		// reset stats
 		this.stats = {
 			player_name: this.stats.player_name,
+			match_result: "",
 			board_size: this.rows.toString() + " X " + this.columns.toString(),
 			game_mode: "Player X ",
 			num_moves: 0,
@@ -321,12 +305,9 @@ class Game  {
 	showWinner() {
 		if (this.board.winner === 0){ return; }
 		this.updateWinRateTable((this.board.winner === 1));
+		this.updateClassificationTable();
 		let win = document.getElementById("winner");
-		if (this.board.winner === 1){
-			win.innerText = "Red Wins";
-			this.updateClassificationTable();
-		}
-		else { win.innerText = "Green Wins"; }
+		win.innerText = (this.board.winner === 1)? "Red Wins" : "Green Wins";
 		document.getElementById("give-up-button").style.display = "none";
 		document.getElementById("quit-game-button").style.display = "flex";
 		document.getElementById("quit-game-button").innerText = "BACK TO MENU";
