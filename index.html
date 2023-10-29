@@ -117,14 +117,15 @@
             </button>
           </div>
         </div>
-
-        <!-- Div for the buttons that alternate between the games history table and the win rate table -->
-        <div>
-          <button onclick="showClassificationTable('classification-results')">MATCHES LIST</button>
-          <button onclick="showClassificationTable('win-rate-classifications')">WIN RATE LIST</button>
-        </div>
-        <!-- Div for the matches history table -->
         <div class="classification-results" id="classification-results">
+          <div>
+            <button onclick="showClassificationTable('classifications-table')">
+              MATCHES LIST
+            </button>
+            <button onclick="showClassificationTable('win-rate-table')">
+              WIN RATE LIST
+            </button>
+          </div>
           <!-- Div for the filter select menus -->
           <div>
             <!-- Div for the Board Size filter -->
@@ -132,15 +133,10 @@
               <p>Board Size:</p>
               <select name="board-size-filter" id="board-size-filter">
                 <option value="0">All</option>
-                <option value="1">6x5</option>
-                <option value="2">5x6</option>
-                <option value="3">6x6</option>
-                <option value="4">7x6</option>
               </select>
             </div>
             <!-- Div for the Game Mode filter -->
             <div>
-              </select>
               <p>Game Mode:</p>
               <select name="game-mode-filter" id="game-mode-filter">
                 <option value="0">All</option>
@@ -162,9 +158,6 @@
               <th class="last">Match Score</th>
             </tr>
           </table>
-        </div>
-        <!-- Div for the win rate table -->
-        <div class="win-rate-classifications" id="win-rate-classifications">
           <table class="win-rate-table" id="win-rate-table">
             <tr>
               <th class="first">Player</th>
@@ -173,6 +166,7 @@
             </tr>
           </table>
         </div>
+        <!-- Div for the win rate table -->
       </div>
     </div>
 

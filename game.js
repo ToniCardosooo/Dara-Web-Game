@@ -988,12 +988,12 @@ function switchPage(from_id, to_id) {
 }
 
 function showClassificationTable(show_id){
-	let tables_ids = ["classification-results", "win-rate-classifications"];
+	let tables_ids = ["classifications-table", "win-rate-table"];
 	for (let i = 0; i < tables_ids.length; i++){
 		if (show_id == tables_ids[i]){ continue; }
 		document.getElementById(tables_ids[i]).style.display = "none";
 	}
-	document.getElementById(show_id).style.display = "block";
+	document.getElementById(show_id).style.display = "table";
 }
 
 
