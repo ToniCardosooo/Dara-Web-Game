@@ -155,14 +155,14 @@ class Game  {
 			this.rows = 6;
 			this.columns = 5;
 		} else if (size === "1") {
-			this.rows = 7;
+			this.rows = 5;
 			this.columns = 6;
 		} else if (size === "2") {
-			this.rows = 8;
-			this.columns = 7;
+			this.rows = 6;
+			this.columns = 6;
 		} else if (size === "3") {
-			this.rows = 9;
-			this.columns = 8;
+			this.rows = 7;
+			this.columns = 6;
 		} 
 		let board = document.getElementById("board");
 		board.style.width = this.columns * 90 + "px";
