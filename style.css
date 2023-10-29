@@ -669,7 +669,7 @@ body {
   color: #ffe35e;
 }
 
-.classifications-table {
+.classifications-table, .win-rate-table {
   width: 900px;
   display: table;
   margin: 0 auto;
@@ -688,18 +688,18 @@ body {
   height: 80px;
 }
 
-.classifications-table th {
+.classifications-table th, .win-rate-table th {
   padding: 10px;
   background-color: rgba(0, 0, 0, 1);
   font-weight: bold;
 }
 
-.classifications-table .first {
+.classifications-table .first, .win-rate-table .first {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
 
-.classifications-table .last {
+.classifications-table .last, .win-rate-table .last {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }
@@ -730,7 +730,7 @@ body {
     margin-left: 30px;
   }
 
-  .classifications-table {
+  .classifications-table, .win-rate-table {
     width: 800px;
     font-size: 15px;
   }
@@ -754,7 +754,7 @@ body {
     margin-right: 0px;
   }
 
-  .classifications-table {
+  .classifications-table, .win-rate-table {
     width: 600px;
     font-size: 13px;
   }
@@ -765,13 +765,13 @@ body {
 }
 
 @media screen and (max-width: 900px) and (min-width: 877px) {
-  .classifications-table {
+  .classifications-table, .win-rate-table {
     width: 700px;
   }
 }
 
 @media screen and (max-width: 676px) {
-  .classifications-table {
+  .classifications-table, .win-rate-table {
     width: 400px;
   }
 }
@@ -802,11 +802,16 @@ body {
     margin-left: 30px;
   }
 
-  .classifications-table {
+  .classifications-table, .win-rate-table {
     width: 800px;
     font-size: 15px;
   }
 }
+
+.win-rate-classifications{
+  display: none;
+}
+
 /* CSS DEFINITION FOR THE CONFIGURATION MENU */
 
 .menu {

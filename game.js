@@ -11,7 +11,8 @@ class Game  {
 		this.remove = false;
 		this.rselected;
 		this.cselected;
-		this.classifications = [];
+		this.match_history = [];
+		this.players_stats = {};
 		this.stats = {
 			player_name: "",
 			board_size: this.rows.toString() + "x" + this.columns.toString(),
@@ -20,6 +21,68 @@ class Game  {
 			num_pieces_eaten: 0,
 			score: 0,
 		};
+	}
+
+	updateWinRateTable(has_won){
+		let win_rate_table = document.getElementById("win-rate-table");
+		let player_name = this.stats.player_name;
+		if (this.players_stats[player_name] !== undefined){
+			for (let i = 0; i < win_rate_table.rows.length; i++){
+				if (win_rate_table.rows[i].cells[0].innerText != player_name){ continue; }
+				// update win_rate_table relevant stats
+				if (has_won){
+					this.players_stats[player_name]["win_count"]++;
+					this.players_stats[player_name]["total_score"] += this.stats.score;
+				}
+				this.players_stats[player_name]["matches_count"]++;
+			}
+		}
+		else{
+			// update win_rate_table relevant stats
+			this.players_stats[player_name] = (has_won)?
+			{"win_count": 1, "matches_count": 1, "total_score": this.stats.score}: // has won
+			{"win_count": 0, "matches_count": 1, "total_score": 0}; // has not won
+			// create new line on the table
+			let new_row = document.createElement("tr");
+			// add the player name
+			let cell = document.createElement("td");
+			cell.textContent = player_name;
+			new_row.append(cell);
+			// add the player win rate (at this point, either 0% or 100%)
+			cell = document.createElement("td");
+			cell.textContent = (has_won)? "100%" : "0%";
+			new_row.append(cell);
+			// add the player total score
+			cell = document.createElement("td");
+			cell.textContent = (has_won)? this.stats.score.toString() : "0";
+			new_row.append(cell);
+			// append row
+			win_rate_table.append(new_row);
+		}
+		// create array of the players_stats
+		let win_rate_classifications = Object.keys(this.players_stats).map(
+			(key) => {return [key, this.players_stats[key]];}
+		);
+		// sort it
+		win_rate_classifications = win_rate_classifications.sort((player1, player2) => {
+			let p1_win_rate = Math.round(player1[1]["win_count"]/player1[1]["matches_count"] * 100);
+			let p2_win_rate = Math.round(player2[1]["win_count"]/player2[1]["matches_count"] * 100);
+			if (p1_win_rate == p2_win_rate){
+				return player2[1]["total_score"] - player1[1]["total_score"];
+			}
+			return p2_win_rate - p1_win_rate;
+		});
+		console.log(win_rate_classifications);
+		console.log(win_rate_classifications.length);
+		console.log(win_rate_classifications[0][1]["total_score"]);
+		console.log(win_rate_table.rows[0].cells[0].innerText);
+		// update win rate table
+		for (let i = 1; i < win_rate_table.rows.length; i++){
+			console.log(win_rate_table.rows[i]);
+			win_rate_table.rows[i].cells[0].innerText = win_rate_classifications[i-1][0];
+			win_rate_table.rows[i].cells[1].innerText = Math.round(win_rate_classifications[i-1][1]["win_count"]/win_rate_classifications[i-1][1]["matches_count"] * 100).toString() + "%";
+			win_rate_table.rows[i].cells[2].innerText = win_rate_classifications[i-1][1]["total_score"].toString();
+		}
 	}
 
 	updateClassificationTable() {
@@ -36,24 +99,24 @@ class Game  {
 	
 		let table = document.getElementById("classifications-table");
 	
-		for (let i = 0; i < this.classifications.length; i++) {
+		for (let i = 0; i < this.match_history.length; i++) {
 			let table_row = document.getElementById(i.toString() + "-row");
 			table_row.remove();
 		}
 	
 		//para orderar as classificacoes - do later
-		this.classifications.push(this.stats);
-		this.classifications = this.classifications.sort((stat1, stat2) => {
+		this.match_history.push(this.stats);
+		this.match_history = this.match_history.sort((stat1, stat2) => {
 			if (stat1.score === stat2.score){
 				return stat1.num_moves - stat2.num_moves;
 			}
 			return -1*(stat1.score - stat2.score);
 		});
 	
-		for (let i = 0; i < this.classifications.length; i++) {
+		for (let i = 0; i < this.match_history.length; i++) {
 			let table_row = document.createElement("tr");
 			table_row.id = i.toString() + "-row";
-			for (let [key, value] of Object.entries(this.classifications[i])) {
+			for (let [key, value] of Object.entries(this.match_history[i])) {
 				let cell = document.createElement("td");
 				cell.textContent = value;
 				table_row.append(cell);
@@ -216,18 +279,17 @@ class Game  {
 	}
 	
 	showWinner() {
+		if (this.board.winner === 0){ return; }
+		this.updateWinRateTable((this.board.winner === 1));
 		let win = document.getElementById("winner");
-		if (this.board.winner == 1) {
+		if (this.board.winner === 1){
 			win.innerText = "Red Wins";
 			this.updateClassificationTable();
-			document.getElementById("give-up-button").style.display = "none";
-			document.getElementById("quit-game-button").style.display = "flex";
-		} 
-		else if (this.board.winner == 2) {
-			win.innerText = "Green Wins";
-			document.getElementById("give-up-button").style.display = "none";
-			document.getElementById("quit-game-button").style.display = "flex";
 		}
+		else { win.innerText = "Green Wins"; }
+		document.getElementById("give-up-button").style.display = "none";
+		document.getElementById("quit-game-button").style.display = "flex";
+		document.getElementById("quit-game-button").innerText = "BACK TO MENU";
 	}
 
 	AI_showMove(move){
@@ -923,6 +985,15 @@ function switchPage(from_id, to_id) {
 
 	from_doc.style.display = "none";
 	to_doc.style.display = "flex";
+}
+
+function showClassificationTable(show_id){
+	let tables_ids = ["classification-results", "win-rate-classifications"];
+	for (let i = 0; i < tables_ids.length; i++){
+		if (show_id == tables_ids[i]){ continue; }
+		document.getElementById(tables_ids[i]).style.display = "none";
+	}
+	document.getElementById(show_id).style.display = "block";
 }
 
 
