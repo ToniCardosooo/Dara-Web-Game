@@ -322,7 +322,7 @@ class Game  {
 		win.innerText = (this.board.winner === 1)? "Red Wins" : "Green Wins";
 		document.getElementById("give-up-button").style.display = "none";
 		document.getElementById("quit-game-button").style.display = "flex";
-		document.getElementById("quit-game-button").innerText = "BACK TO MENU";
+		document.getElementById("quit-game-button").innerHTML = "BACK&nbsp;&nbsp;&nbsp;TO&nbsp;&nbsp;&nbsp;MENU";
 	}
 
 	AI_showMove(move){
