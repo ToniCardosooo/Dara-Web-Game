@@ -128,33 +128,6 @@ class Game  {
 			j++;
 		}
 		this.match_history.push(this.stats);
-		
-		/* let new_row = document.createElement("tr");
-		new_row.id = this.match_history.length.toString() + "-row";
-		for (let [key, value] of Object.entries(this.stats)) {
-			let cell = document.createElement("td");
-			cell.textContent = value;
-			cell.style.display = "";
-			new_row.append(cell);
-		}
-		table.append(new_row); */
-	
-		// sort match history
-		/*this.match_history = this.match_history.sort((stat1, stat2) => {
-			if (stat1.score === stat2.score){
-				return stat1.num_moves - stat2.num_moves;
-			}
-			return -1*(stat1.score - stat2.score);
-		});
-	
-		// update the table
-		for (let i = 0; i < this.match_history.length; i++){
-			let j = 0;
-			for (let [stat_name, stat_value] of Object.entries(this.match_history[i])){
-				table.rows[i+1].cells[j].innerText = stat_value.toString();
-				j++;
-			}
-		} */
 
 		// reset stats
 		this.stats = {
