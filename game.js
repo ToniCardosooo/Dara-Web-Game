@@ -7,8 +7,8 @@ class Game  {
 		this.startingPlayer=1;
 		this.secondPlayer = 0;//=0 se player vs player e =1 se player vs AI
 		this.AI_diff = 0;// =0 se easy =1 se medium =2 se hard
-		this.selected = false;
-		this.remove = false;
+		this.selected = false; // is a piece selected to move
+		this.remove = false; // can remove a opponent piece
 		this.rselected;
 		this.cselected;
 		this.match_history = [];
@@ -153,12 +153,14 @@ class Game  {
 			.value.toString();
 	}
 
+	// when a player give up
 	giveUp(){
 		this.board.winner = 3-this.board.player;
 		this.showWinner();
 		this.showMessage(false);
 	}
 
+	// changing board size
 	setBoardSize(size) {
 		if (size === "0") {
 			this.rows = 6;
@@ -178,22 +180,26 @@ class Game  {
 		board.style.height = this.rows * 90 + "px";
 	}
 
+	// changing game mode
 	setGameMode(mode) {
 		if (mode == 0) { this.secondPlayer = 0; document.getElementById("ai-difficulty").style.display = "none"; }
 		else { this.secondPlayer = 1;document.getElementById("ai-difficulty").style.display = "flex"; }
 	}
 	
+	// changing the starting player
 	setStartPlayer(player) {
 		if (player == 0) { this.startingPlayer = 1; }
 		else { this.startingPlayer = 2; }
 	}
 	
+	// changing the AI difficulty
 	setAIdiff(diff) {
 		if (diff == 0) { this.AI_diff = 0; }
 		else if (diff == 1) { this.AI_diff = 1; }
 		else { this.AI_diff = 2; }
 	}
 
+	// starting a game
 	start(){
 		this.board = new Board(this.rows,this.columns,this.startingPlayer);
 		this.board.createBoardHTML();
@@ -210,6 +216,7 @@ class Game  {
 		this.showMessage(false);
 	}
 
+	// selecting a piece
 	Select(r,c){
 		this.selected = true;
 		this.rselected = r;
@@ -218,12 +225,14 @@ class Game  {
 		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board.board[r][c]+"-selected.png");
 	}
 
+	// unselecting a piece
 	Unselect(r,c){
 		this.selected = false;
 		let tile = document.getElementById(r.toString() + "-" + c.toString());
 		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board.board[r][c]+".png");
 	}
 
+	// showing different messages depending on game state and eventual invalid moves
 	showMessage(error){
 		let message = document.getElementById("text");
 		if (this.board.winner != 0){
@@ -287,6 +296,7 @@ class Game  {
 		}
 	}
 	
+	// displaying who won
 	showWinner() {
 		if (this.board.winner === 0){ return; }
 		this.updateWinRateTable((this.board.winner === 1));
@@ -298,6 +308,7 @@ class Game  {
 		document.getElementById("quit-game-button").innerHTML = "BACK&nbsp;&nbsp;&nbsp;TO&nbsp;&nbsp;&nbsp;MENU";
 	}
 
+	// showing the move the AI has played
 	AI_showMove(move){
 
 		let ai = document.getElementById("AI");
@@ -312,14 +323,15 @@ class Game  {
 		}
 	}
 
+	// AI makes a move
 	AI_play(){
-		if (this.AI_diff == 0){
+		if (this.AI_diff == 0){ // plays random moves
 			this.playRandom();
 		}
-		else if (this.AI_diff === 1){
+		else if (this.AI_diff === 1){ // playes according to minimax with depth = 3
 			this.playMinimax(3);
 		}
-		else if (this.AI_diff == 2){
+		else if (this.AI_diff == 2){ // playes according to minimax with depth = 3
 			this.playMinimax(5);
 		}
 		if(!this.board.putPhase){this.updateStats("score", -this.board.heuristic());}
@@ -329,6 +341,7 @@ class Game  {
 		this.showWinner();
 	}
 
+	// executes a random move
 	playRandom(){
 		let moves = this.board.everymove();
 		let move_to_play = moves[Math.floor(Math.random()*moves.length)];
@@ -336,6 +349,7 @@ class Game  {
 		this.AI_showMove(move_to_play);
 	}
 
+	// executes a move according to minimax
 	playMinimax(depth){
 		if (this.board.winner !== 0){ return ((this.board.winner == 1) ? -1000-depth : 1000+depth); }
 		if (depth === 0){ return this.board.heuristic(); }
@@ -360,7 +374,7 @@ class Game  {
 		this.AI_showMove(move_to_play);
 	}
 
-
+	// control flow of the game 
 	Click(r,c) {
 		if ((this.board.winner != 0) || (this.secondPlayer == 1 && this.board.player == 2) ) {
 			return;
@@ -445,13 +459,14 @@ class Board {
 		this.rows = rows;
 		this.columns = columns;
 		this.player = startingPlayer;
-		this.putPhase = true;
+		this.putPhase = true; // if we are in the put phase
 		this.winner = 0;
-		this.lastmove = [[[-1, -1], [-1, -1]], [[-1, -1], [-1, -1]]];
-		this.playerPieces = [0, 0];
+		this.lastmove = [[[-1, -1], [-1, -1]], [[-1, -1], [-1, -1]]]; // a record of each player's last move
+		this.playerPieces = [0, 0]; // a count of each player's pieces
 		this.board = this.createBoard(rows, columns);
 	}
 
+	// creating the 2D array that will represent the game
 	createBoard(rows,columns) {
 		let board = [];
 		for (let i=0;i<rows;i++){
@@ -464,6 +479,7 @@ class Board {
 		return board;	
 	}
 
+	// displaying the board
 	createBoardHTML(){
 		for (let i=0;i<this.rows;i++){
 			for (let j=0;j<this.columns;j++){
@@ -482,6 +498,7 @@ class Board {
 		}
 	}
 
+	// displaying the side boards
 	createSideBoards() {
 		for (let r = 0; r < 6; r++) {
 			let row = [];
@@ -513,6 +530,7 @@ class Board {
 		}
 	}
 
+	// updating the display of the board
 	updateBoard(){
 		for(let r=0;r<this.rows;r++){
 			for(let c=0;c<this.columns;c++){
@@ -524,6 +542,7 @@ class Board {
 			
 	}
 
+	// updating the display of the side boards
 	updateSideBoards() {
 		let count = this.playerPieces[0];
 		for (let r = 5; r >= 0; r--) {
@@ -547,6 +566,7 @@ class Board {
 		}
 	}
 
+	// removing the board display (because we may start another game with different board size)
 	clear() {
 		for (let r = 0; r < this.rows; r++) {
 			for (let c = 0; c < this.columns; c++) {
@@ -571,6 +591,7 @@ class Board {
 		}
 	}
 
+	// can the player puc a piece on this space
 	CanPut(r, c) {
 		//Check is Empty
 		if (this.board[r][c] != 0) {
@@ -613,18 +634,20 @@ class Board {
 		this.board[r][c] = 0;
 		return true;
 	}
-
+	
+	// puting a player's piece on the space
 	Put(r,c){
 		this.board[r][c] = this.player;
 		if (this.putPhase){this.playerPieces[this.player-1]++;}
 		if (this.playerPieces[0] + this.playerPieces[1] == 24){this.putPhase = false;}
 	}
 
+	// can the player select a piece
 	canPick(r, c) {
 		return this.board[r][c] == this.player;
 	}
 
-
+	// is this move a repeat of the last one
 	Repeat(rselected, cselected, r, c) {
 		return (
 			this.lastmove[this.player-1][0][0] == r &&
@@ -634,6 +657,7 @@ class Board {
 		);
 	}
 
+	// moving a player's piece
 	Move(rselected,cselected,r,c){
 		this.board[r][c] = this.player;
 		this.board[rselected][cselected] = 0;
@@ -643,6 +667,7 @@ class Board {
 		this.lastmove[this.player-1][1][1] = c;
 	}
 
+	// does this move create a line of 3
 	createsLine(r, c) {
 		//Check Horizontal
 		let min = Math.max(0, c - 2);
@@ -672,11 +697,7 @@ class Board {
 		return false;
 	}
 
-	putPiece(r,c){
-		this.board[r][c] = this.player;
-		this.playerPieces[player-1] ++;
-	}
-
+	// can a player make this move
 	CanMove(rselected, cselected,r,c) {
 		if (this.Repeat(rselected,cselected,r,c)){return false;}
 		if ((r == rselected && Math.abs(c - cselected) == 1) || (c == cselected && Math.abs(r - rselected) == 1)) {
@@ -690,19 +711,23 @@ class Board {
 		return false;
 	}
 
+	// can a player remove this piece
 	CanRemove(r,c){
 		return this.board[r][c] == 3 - this.player;
 	}
 
+	// removing a opponent's piece
 	Remove(r,c){
 		this.board[r][c] = 0;
 		this.playerPieces[2-this.player]--;
 	}
 
+	// changing wich player plays next
 	changePlayer(){
 		this.player = 3-this.player;
 	}
 
+	// does this player have any moves left
 	hasMoves() {
 		for (let i = 0; i < this.rows; i++) {
 			for (let j = 0; j < this.columns; j++) {
@@ -733,6 +758,7 @@ class Board {
 		return false;
 	}
 
+	// is the game over
 	checkWinner() {
 		if (
 			this.playerPieces[this.player - 1] <= 2 ||
@@ -742,6 +768,7 @@ class Board {
 		}
 	}
 
+	// return every possible move for the player
 	everymove() {
 		let copy = this.copy();
 		let moves = [];
@@ -849,6 +876,7 @@ class Board {
 		return moves;
 	}
 
+	// creates a copy of the board object
 	copy() {
 		let b = new Board(this.rows,this.columns, this.player);
 		b.putPhase = this.putPhase;
@@ -859,6 +887,7 @@ class Board {
 		return b;
 	}
 
+	// plays the move on the board
 	playMove(move){
 		let copy = this.copy();
 		if (move.length==1){
@@ -880,6 +909,7 @@ class Board {
 		return copy;
 	}
 
+	// return a static evaluation that classifies the board state
 	heuristic(){
 		if (this.putPhase){
 			let pontos = 0;
@@ -910,6 +940,7 @@ class Board {
 		}
 	}
 
+	// returns the best move according to minimax using alpha-beta prunning
 	minimax(depth, alpha, beta){
 		if (this.winner !== 0){ return ((this.winner == 1) ? -1000-depth : 1000+depth); }
 		if (depth === 0){ return this.heuristic(); }
@@ -987,6 +1018,7 @@ function onClick() {
 	G.Click(r,c); 
 }
 
+// controls the navigation between pages
 function switchPage(from_id, to_id) {
 	let from_doc = document.getElementById(from_id);
 	let to_doc = document.getElementById(to_id);
@@ -1009,6 +1041,7 @@ function filterClassificationTable(){
 	G.filterClassificationTable();
 }
 
+// returns copy of a 2D array
 function copy_2darray(array) {
 	let copy = [];
 	for (let i = 0; i < array.length; i++) {
@@ -1017,6 +1050,7 @@ function copy_2darray(array) {
 	return copy;
 }
 
+// returns copy of a 3D array
 function copy_3darray(array){
 	let copy = [];
 	for (let i = 0; i < array.length; i++) {
