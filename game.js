@@ -404,9 +404,14 @@ class Game  {
 				if (!this.remove) {
 					// mover a peça
 					if (r == this.rselected && c == this.cselected) {
-						//se clicar na mesma peça, volta a poder selecionar outra
+						//if clicks on the selected piece, unselect that piece
 						this.Unselect(r,c);
 					} 
+					else if (this.board.board[r][c] == this.board.player){
+						// if clicks a piece of the player, select that piece
+						this.Unselect(this.rselected,this.cselected);
+						this.Select(r,c);
+					}
 					else {
 						if (this.board.CanMove(this.rselected, this.cselected,r,c)) {
 							this.board.Move(this.rselected,this.cselected,r,c);
