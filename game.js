@@ -5,8 +5,8 @@ class Game  {
 		this.rows = 6;
 		this.columns = 5;
 		this.startingPlayer=1;
-		this.secondPlayer = 0;//=0 se player vs player e =1 se player vs AI
-		this.AI_diff = 0;// =0 se easy =1 se medium =2 se hard
+		this.secondPlayer = 0;// =0 if Player X Player, =1 if Player X AI
+		this.AI_diff = 0;// =0 if "easy", =1 if "medium", =2 if "hard"
 		this.selected = false; // is a piece selected to move
 		this.remove = false; // can remove a opponent piece
 		this.rselected;
@@ -83,21 +83,18 @@ class Game  {
 	}
 
 	filterClassificationTable(){
-		// clean the table
-		let table = document.getElementById("classifications-table");
-
 		// filter the match_history with the given filter selection on the classification page
 		let filters = {
 			"board_size": document.getElementById("board-size-filter").options[document.getElementById("board-size-filter").selectedIndex].text,
 			"game_mode": document.getElementById("game-mode-filter").options[document.getElementById("game-mode-filter").selectedIndex].text
 		}
 
-		let filtered_match_history = [];
 		let id = 0;
 		for (let match of this.match_history){
 			let board_size_filter_verified = (filters["board_size"] === "All" || match["board_size"] === filters["board_size"]);
 			let game_mode_filter_verified = (filters["game_mode"] === "All" || match["game_mode"] === filters["game_mode"]);
 			let row = document.getElementById(id.toString() + "-row");
+			// display the row if the conditions imposed by the filters are met, otherwise hide the row
 			row.style.display = (board_size_filter_verified && game_mode_filter_verified)? "" : "none";
 			id++;
 		}
