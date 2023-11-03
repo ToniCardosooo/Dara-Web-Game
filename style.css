@@ -257,7 +257,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url("images/play.gif");
+  background: url("images/play.png");
   background-size: cover;
   filter: blur(7px);
   transition: filter 0.4s ease;
@@ -298,7 +298,7 @@ body {
 
 .right-buttons button:nth-child(1)::before {
   content: "";
-  background: url("images/classification.gif");
+  background: url("images/class.png");
   background-size: cover;
   filter: blur(5px);
   position: absolute;
@@ -311,7 +311,7 @@ body {
 
 .right-buttons button:nth-child(2)::before {
   content: "";
-  background: url("images/rules.gif");
+  background: url("images/rules.png");
   background-size: cover;
   filter: blur(5px);
   position: absolute;
@@ -324,7 +324,7 @@ body {
 
 .right-buttons button:nth-child(3)::before {
   content: "";
-  background: url("images/logout.gif");
+  background: url("images/logout.png");
   background-size: cover;
   filter: blur(5px);
   position: absolute;
