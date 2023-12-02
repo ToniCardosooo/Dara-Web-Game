@@ -55,8 +55,9 @@
             </div>
           </form>
           <button
+            id="login-button"
             class="button-style-login"
-            onclick="switchPage('auth-page', 'homepage');changePlayerName();click_register_client();"
+            onclick="switchPage('auth-page', 'homepage');changePlayerName()"
           >
             Log&nbsp;&nbsp;In
           </button>
@@ -368,8 +369,7 @@
           id="quit-game-button"
           class="button-style"
           onclick="switchPage('game', 'menu');clearboard();"
-        >
-        </button>
+        ></button>
       </div>
     </div>
 

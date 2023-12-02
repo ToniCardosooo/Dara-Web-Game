@@ -1,36 +1,39 @@
-const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/"
+const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
+async function register(username, password) {
+  let url = SERVER + "register";
 
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ username: username, password: password }),
+    });
 
-function register_client(nick, password){
-    let url = SERVER + "register/";
-    let can_register = fetch(url,{
-        method: 'POST',
-        headers: {
-            'Access-Control-Allow-Origin' : '*'
-            //'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-          },
-          body: JSON.stringify({ 'nick': nick, 'password': password})
-    })
-    .then(function(response) {
-        if (response.ok){
-            return response.json();
-        }
-    })
-    .then(function(json){
-        if ( "error" in json){
-            return false;
-        }
-        else {
-            return true;
-        }
-    })
-    return can_register;
+    if (response.ok) {
+      const json = await response.json();
+      return !("error" in json);
+    }
+  } catch (error) {
+    return false;
+  }
 }
 
-function click_register_client(){
-    let nick = document.getElementById("username-input").value;
-    let password = document.getElementById("password-input").value;
-    let can_login = register_client(nick,password);
-    console.log(can_login);
+async function clickRegister() {
+  let username = document.getElementById("username-input").value;
+  let password = document.getElementById("password-input").value;
+  let canRegister = await registerClient(username, password);
+
+  if (canRegister) {
+    console.log("Registration successful");
+  } else {
+    console.log("Registration failed");
+  }
 }
+
+document
+  .getElementById("login-button")
+  .addEventListener("click", clickRegister);
