@@ -1,6 +1,6 @@
 const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
-async function register(username, password) {
+async function registerClient(username, password) {
   let url = SERVER + "register";
 
   try {
@@ -10,7 +10,7 @@ async function register(username, password) {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ username: username, password: password }),
+      body: JSON.stringify({ nick: username, password: password }),
     });
 
     if (response.ok) {
@@ -29,6 +29,7 @@ async function clickRegister() {
 
   if (canRegister) {
     console.log("Registration successful");
+    switchPage('auth-page', 'homepage');
   } else {
     console.log("Registration failed");
   }
