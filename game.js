@@ -1017,7 +1017,7 @@ function onClick() {
 	let coords = this.id.split("-");
 	let r = parseInt(coords[0]);
 	let c = parseInt(coords[1]);
-	G.Click(r,c); 
+	G.Click(r,c); notify(r,c);
 }
 
 // controls the navigation between pages

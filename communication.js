@@ -3,7 +3,8 @@ const group = 18;
 var game = 0;
 
 async function callServer(request_name, info) {
-	console.log("ola")
+	console.log(request_name);
+	console.log(info);
 	return fetch(SERVER + request_name, {
 		method: "POST",
 		headers: {
@@ -52,7 +53,8 @@ async function clickRegister() {
 		switchPage('auth-page', 'homepage');
 		
 	} else {
-		console.log("Registration failed");
+		console.log("Register failed. Response:");
+		console.log(response_json);
 	}
 }
 /* 
@@ -107,14 +109,20 @@ async function lookForGame() {
 		game = response_json.game;
 		// abrir SSE do update()
 		// mudar para a pagina de espera que tem de ter um botao para desistir de pesquisar
+		startGame();
+		switchPage("menu","game");
 	}
-	else console.log(response_json);
+	else{
+		console.log("Join failed. Response:");
+		console.log(response_json);
+	}
 }
 
 /* document
 	.getElementById("start-game-button")
 	.addEventListener("click", clickRegister); */
 
+// LEAVE REQUEST
 async function giveUpRequest(){
 	let nick = document.getElementById("username-input").value;
 	let password = document.getElementById("password-input").value;
@@ -122,5 +130,26 @@ async function giveUpRequest(){
 	if (!("error" in response_json)){
 		console.log("sai do jogo");
 	}
+	else{
+		console.log("Leave failed. Response:");
+		console.log(response_json);
+	}
 }
 
+// NOTIFY REQUEST
+async function notify(row, column){
+	let nick = document.getElementById("username-input").value;
+	let password = document.getElementById("password-input").value;
+	let response_json = await callServer("notify", {nick, password, game, "move":{row,column}});
+	console.log(response_json);
+	if ("error" in response_json){
+		console.log("Notify error. Response:");
+		console.log(response_json);
+	}
+}
+
+// UPDATE REQUEST (SSE)
+
+
+
+// RANKING REQUEST
