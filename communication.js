@@ -168,6 +168,7 @@ async function update(){
 		}
 		else{
 			console.log("The game has ended and player "+ json.winner +" won");
+			eventSource.close();
 		}
 	}
 }
