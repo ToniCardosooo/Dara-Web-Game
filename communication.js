@@ -1,19 +1,18 @@
 const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
-
+const group = 18;
+var game = 0;
 
 async function callServer(request_name, info) {
-	if (request_name === "register") {
-		console.log("ola")
-		return fetch(SERVER + request_name, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-			body: JSON.stringify(info)
-		})
-		.then(response => response.json());
-	}
+	console.log("ola")
+	return fetch(SERVER + request_name, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+		body: JSON.stringify(info)
+	})
+	.then(response => response.json());
 }
 
 
@@ -89,7 +88,6 @@ document
 
 // DEFINITION FOR THE JOIN REQUEST METHOD
 async function lookForGame() {
-	const GROUP = 18;
 	let nick = document.getElementById("username-input").value;
 	let password = document.getElementById("password-input").value;
 	let rows, columns;
@@ -103,14 +101,26 @@ async function lookForGame() {
 	} else if (size === "3") {
 		rows = 7; columns = 6;
 	}
-	let response_json = await callServer("join", {GROUP, username, password, "size":{rows, columns}});
+	let response_json = await callServer("join", {group, nick, password, "size":{rows, columns}});
 	console.log(response_json);
 	if ("game" in response_json) {
-		startGame(); switchPage('menu', 'game');
+		game = response_json.game;
+		// abrir SSE do update()
+		// mudar para a pagina de espera que tem de ter um botao para desistir de pesquisar
 	}
 	else console.log(response_json);
 }
 
-document
+/* document
 	.getElementById("start-game-button")
-	.addEventListener("click", clickRegister);
+	.addEventListener("click", clickRegister); */
+
+async function giveUpRequest(){
+	let nick = document.getElementById("username-input").value;
+	let password = document.getElementById("password-input").value;
+	let response_json = await callServer("leave", {nick, password, game});
+	if (!("error" in response_json)){
+		console.log("sai do jogo");
+	}
+}
+
