@@ -104,8 +104,8 @@ async function lookForGame() {
 		rows = 7; columns = 6;
 	}
 	let response_json = await callServer("join", {group, nick, password, "size":{rows, columns}});
-	console.log(response_json);
 	if ("game" in response_json) {
+		console.log("Sucessfuly joined a game with ID: "+ response_json.game);
 		game = response_json.game;
 		// abrir SSE do update()
 		// mudar para a pagina de espera que tem de ter um botao para desistir de pesquisar
@@ -128,7 +128,7 @@ async function giveUpRequest(){
 	let password = document.getElementById("password-input").value;
 	let response_json = await callServer("leave", {nick, password, game});
 	if (!("error" in response_json)){
-		console.log("sai do jogo");
+		console.log("Successfuly left the game");
 	}
 	else{
 		console.log("Leave failed. Response:");
@@ -141,10 +141,12 @@ async function notify(row, column){
 	let nick = document.getElementById("username-input").value;
 	let password = document.getElementById("password-input").value;
 	let response_json = await callServer("notify", {nick, password, game, "move":{row,column}});
-	console.log(response_json);
 	if ("error" in response_json){
 		console.log("Notify error. Response:");
 		console.log(response_json);
+	}
+	else{
+		console.log("Successfuly notified the server");
 	}
 }
 
@@ -153,3 +155,29 @@ async function notify(row, column){
 
 
 // RANKING REQUEST
+async function ranking(){
+	let size = document.getElementById("board-size-filter").options[document.getElementById("board-size-filter").selectedIndex].text;
+	let rows, columns;
+	if (size === "6 X 5") {
+		rows = 6; columns = 5;
+	} else if (size === "5 X 6") {
+		rows = 5; columns = 6;
+	} else if (size === "6 X 6") {
+		rows = 6; columns = 6;
+	} else if (size === "7 X 6") {
+		rows = 7; columns = 6;
+	}
+	// DEAL WITH ALL, for now if all then show 6 x 5
+	else {
+		rows = 6; columns = 5;
+	}
+	let response_json = await callServer("ranking", {group, "size": {rows,columns}});
+	if (!("error" in response_json)){
+		console.log("Successfuly received the ranking table");
+		console.log(response_json);
+	}
+	else{
+		console.log("Ranking error. Response:");
+		console.log(response_json);
+	}
+}
