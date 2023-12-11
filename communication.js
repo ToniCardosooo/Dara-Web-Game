@@ -107,6 +107,7 @@ async function lookForGame() {
 	if ("game" in response_json) {
 		console.log("Sucessfuly joined a game with ID: "+ response_json.game);
 		game = response_json.game;
+		update();
 		// abrir SSE do update()
 		// mudar para a pagina de espera que tem de ter um botao para desistir de pesquisar
 		startGame();
@@ -152,6 +153,24 @@ async function notify(row, column){
 
 // UPDATE REQUEST (SSE)
 
+async function update(){
+	let nick = document.getElementById("username-input").value;
+	let url = SERVER + "update?nick="+nick+"&game="+game;
+	const eventSource = new EventSource(url);
+	eventSource.onmessage = function(message){
+		console.log("Successfuly received an update from server");
+		let json = JSON.parse(message.data);
+		if (!("winner" in json)){
+			let board = json.board;
+			let phase = json.phase;
+			let step = json.step;
+			let turn = json.turn;
+		}
+		else{
+			console.log("The game has ended and player "+ json.winner +" won");
+		}
+	}
+}
 
 
 // RANKING REQUEST
