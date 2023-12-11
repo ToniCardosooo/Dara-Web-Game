@@ -57,7 +57,7 @@
           <button
             id="login-button"
             class="button-style-login"
-            onclick="changePlayerName()"
+            onclick="changePlayerName(); clickRegister();"
           >
             Log&nbsp;&nbsp;In
           </button>
@@ -260,6 +260,7 @@
         <div class="menu-bottom">
           <div class="button-start">
             <button
+              id="start-game-button"
               type="button"
               class="button-style-start"
               onclick="startGame(); switchPage('menu', 'game');"
