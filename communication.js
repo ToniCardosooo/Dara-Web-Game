@@ -16,33 +16,6 @@ async function callServer(request_name, info) {
 	.then(response => response.json());
 }
 
-
-/* 
-async function registerClient(nick, password) {
-	let url = SERVER + "register";
-	
-	try {
-		const response = await fetch(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-			body: JSON.stringify({ nick: nick, password: password }),
-		});
-		
-		if (response.ok) {
-			const json = await response.json();
-			console.log("b");
-			return !("error" in json);
-		}
-	} catch (error) {
-		console.log("a");
-		return false;
-	}
-}
-*/
-
 // DEFINITION FOR THE REGISTER REQUEST METHOD
 async function clickRegister() {
 	let nick = document.getElementById("username-input").value;
@@ -57,36 +30,6 @@ async function clickRegister() {
 		console.log(response_json);
 	}
 }
-/* 
-document
-	.getElementById("login-button")
-	.addEventListener("click", clickRegister); */
-
-
-	/* 
-	async function joinGame(group, nick, password, size) {
-		let url = SERVER + "join";
-		
-		try {
-			const response = await fetch(url, {
-				method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-			body: JSON.stringify({ group: group, nick: nick, password: password, size: size }),
-		});
-		
-		if (response.ok) {
-			const json = await response.json();
-			if ("game" in json) { console.log("Connected to game " + json.game); return true; }
-			else if ("error" in json) { console.log("Error: " + json.error); return false; }
-		}
-		
-	} catch (error) { return false; }
-	
-}
-*/
 
 // DEFINITION FOR THE JOIN REQUEST METHOD
 async function lookForGame() {
