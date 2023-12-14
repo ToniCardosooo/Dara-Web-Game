@@ -1456,3 +1456,14 @@ input {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+
+
+
+
+.wait-game {
+  height: 100vh;
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: column;
+}

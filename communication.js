@@ -50,11 +50,8 @@ async function lookForGame() {
 	if ("game" in response_json) {
 		console.log("Sucessfuly joined a game with ID: "+ response_json.game);
 		game = response_json.game;
-		update();
-		// abrir SSE do update()
-		// mudar para a pagina de espera que tem de ter um botao para desistir de pesquisar
-		startGame();
-		switchPage("menu","game");
+		switchPage("menu", "wait-game");
+		await update();
 	}
 	else{
 		console.log("Join failed. Response:");
@@ -62,9 +59,6 @@ async function lookForGame() {
 	}
 }
 
-/* document
-	.getElementById("start-game-button")
-	.addEventListener("click", clickRegister); */
 
 // LEAVE REQUEST
 async function giveUpRequest(){
@@ -73,6 +67,9 @@ async function giveUpRequest(){
 	let response_json = await callServer("leave", {nick, password, game});
 	if (!("error" in response_json)){
 		console.log("Successfuly left the game");
+		if (document.getElementById("wait-game").style.display === "flex"){switchPage("wait-game", "menu");}
+		else if (document.getElementById("game").style.display === "flex"){switchPage("game", "menu");}
+		
 	}
 	else{
 		console.log("Leave failed. Response:");
@@ -94,8 +91,8 @@ async function notify(row, column){
 	}
 }
 
-// UPDATE REQUEST (SSE)
 
+// UPDATE REQUEST (SSE)
 async function update(){
 	let nick = document.getElementById("username-input").value;
 	let url = SERVER + "update?nick="+nick+"&game="+game;
@@ -103,15 +100,26 @@ async function update(){
 	eventSource.onmessage = function(message){
 		console.log("Successfuly received an update from server");
 		let json = JSON.parse(message.data);
-		if (!("winner" in json)){
+		console.log(json);
+		if ("error" in json){
+			console.log("Update error. Response:");
+			console.log(json);
+			switchPage("wait-game", "menu");
+		}
+		else if ("board" in json){
+			if (document.getElementById("wait-game").style.display=="flex"){
+				startGame();
+				switchPage("wait-game", "game");
+			}
+			if ("winner" in json){
+				console.log("Game finished - Winner: " + json.winner);
+				eventSource.close();
+			}
 			let board = json.board;
 			let phase = json.phase;
 			let step = json.step;
 			let turn = json.turn;
-		}
-		else{
-			console.log("The game has ended and player "+ json.winner +" won");
-			eventSource.close();
+			// change the board in the browser side
 		}
 	}
 }
