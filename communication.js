@@ -1,12 +1,12 @@
-//const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
-const SERVER = "http://localhost:8008/"
+const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+//const SERVER = "http://localhost:8008/"
 const group = 18;
 var game = 0;
 
 async function callServer(request_name, info) {
 	console.log(request_name);
 	console.log(info);
-	return await fetch(SERVER + request_name, {
+	return	fetch(SERVER + request_name, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -15,6 +15,8 @@ async function callServer(request_name, info) {
 		body: JSON.stringify(info)
 	})
 	.then(response => response.json());
+
+	
 }
 
 // DEFINITION FOR THE REGISTER REQUEST METHOD
@@ -22,7 +24,6 @@ async function clickRegister() {
 	let nick = document.getElementById("username-input").value;
 	let password = document.getElementById("password-input").value;
 	let response_json = await callServer("register", { nick, password });
-	console.log(response_json);
 	if (!("error" in response_json)) {
 		console.log("Registration successful");
 		switchPage('auth-page', 'homepage');
