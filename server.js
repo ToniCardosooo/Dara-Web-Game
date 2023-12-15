@@ -96,16 +96,18 @@ const server = http.createServer(function (request, response) {
                                 let size = dados.size;
                                 let rows = size.rows;
                                 let columns = size.columns;
+                                let size_string = JSON.stringify(size);
                                 if (logins[nick]!=password){response.write(JSON.stringify({"error": "User registered with a different password"}));response.end();}
-                                if ((size in waiting)){
-                                    if (waiting[size].length > 0){
-                                        let player_1 = waiting[size].pop();
+                                if ((size_string in waiting)){
+                                    if (waiting[size_string].length > 0){
+                                        let player_1 = waiting[size_string].pop();
                                         //cria um jogo com player_1 e nick e manda para ambos os players, e começa o
                                         console.log("criei um jogo com os players "+player_1+" e "+nick);
                                     }
-                                    else{waiting[size].push(nick); console.log("fila de espera");}
+                                    else{waiting[size_string].push(nick); console.log("fila de espera");/*definir game_id e apagar push(nick); waiting[size].push(game_id);response.write(JSON.stringify({'game':game_id})); response.end();*/}
                                 }
-                                else{waiting[size] = [nick]; console.log("fila de espera");}
+                                else{waiting[size_string] = [nick]; console.log("fila de espera");/*definir game_id e apagar push(nick); waiting[size].push(game_id);response.write(JSON.stringify({'game':game_id})); response.end();*/}
+                                console.log(waiting);
                             }
                             catch(err){console.log(err);}
                         })
