@@ -101,7 +101,6 @@ async function update(){
 	let url = SERVER + "update?nick="+nick+"&game="+game;
 	const eventSource = new EventSource(url);
 	eventSource.onmessage = function(message){
-		console.log("Successfuly received an update from server");
 		let json = JSON.parse(message.data);
 		console.log(json);
 		if ("error" in json){
@@ -111,10 +110,12 @@ async function update(){
 		}
 		else if ("board" in json){
 			if (document.getElementById("wait-game").style.display=="flex"){
+				console.log("Successfuly received an update from server");
 				startGame();
 				switchPage("wait-game", "game");
 			}
 			if ("winner" in json){
+				console.log("Successfuly received an update from server");
 				console.log("Game finished - Winner: " + json.winner);
 				eventSource.close();
 			}
