@@ -981,8 +981,7 @@ var G = new Game();
 
 function startGame(){
 	if (G.secondPlayer == 0) {lookForGame();}
-	G.start();
-	if (G.secondPlayer == 1) {switchPage("menu","game");}
+	if (G.secondPlayer == 1) {G.start(); switchPage("menu","game");}
 }
 
 function changePlayerName() {
@@ -1010,19 +1009,16 @@ function giveUp(){
 }
 
 function clearboard() {
-	G.board.clear();
+	if (G.secondPlayer == 0){ clearPvP(); }
+	else { G.board.clear(); }
 }
 
 function onClick() {
 	let coords = this.id.split("-");
 	let r = parseInt(coords[0]);
 	let c = parseInt(coords[1]);
-	if (G.secondPlayer==0){
-		notify(r,c);
-	}
+	if (G.secondPlayer==0){ notify(r,c); }
 	else{ G.Click(r,c); }
-	
-
 }
 
 // controls the navigation between pages

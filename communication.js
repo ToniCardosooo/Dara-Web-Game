@@ -3,6 +3,7 @@ const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 //const SERVER = "http://localhost:8008/"
 const group = 18;
 var game = 0;
+var game_board = [[]];
 
 async function callServer(request_name, info) {
 	console.log(request_name);
@@ -94,7 +95,6 @@ async function notify(row, column){
 	}
 	else{
 		console.log("Successfuly notified the server");
-		//G.Click(row, column);
 	}
 }
 
@@ -121,28 +121,37 @@ async function update(){
 			document.getElementById("give-up-button").style.display = "none";
 			document.getElementById("quit-game-button").style.display = "flex";
 			document.getElementById("quit-game-button").innerHTML = "BACK&nbsp;&nbsp;&nbsp;TO&nbsp;&nbsp;&nbsp;MENU";
+			document.getElementById("give-up-button").style.display = "flex";
 			// update the ranking table
 			// ^^^^^^^^^^^^^^^^^^^^^^^^
 		}
-		if ("board" in json){
-			if (document.getElementById("wait-game").style.display=="flex"){
-				console.log("Successfuly received an update from server");
-				switchPage("wait-game", "game");
-			}
-			let update_board = json.board;
+		else if ("board" in json){
+			game_board = json.board;
 			// change the board in the browser side and message
 			color_value = {"empty":0, "white":1, "black":2};
-			for (let i = 0; i < G.rows; i++){
-				for (let j = 0; j < G.columns; j++){
-					G.board.board[i][j] = color_value[update_board[i][j]];
+			piece_count = [0,0];
+			for (let i = 0; i < game_board.length; i++){
+				for (let j = 0; j < game_board[0].length; j++){
+					game_board[i][j] = color_value[game_board[i][j]];
+					if (game_board[i][j] !== 0){ piece_count[game_board[i][j]-1]++; }
 				}
 			}
-			G.board.updateBoard();
-			G.board.updateSideBoards();
+			// go to the game page if still at the waiting page
+			if (document.getElementById("wait-game").style.display=="flex"){
+				console.log("Successfuly received an update from server");
+				// create HTML for the board and side boards
+				createBoardHTML(game_board);
+				createSideBoardsHTML();
+				document.getElementById("quit-game-button").style.display = "none";
+				document.getElementById("winner").innerText = "";
+				document.getElementById("AI").innerText = "";
+				switchPage("wait-game", "game");
+			}
+			updateBoardPvP(game_board);
+			updateSideBoardsPvP(piece_count[0], piece_count[1]);
 			let phase = json.phase;
 			let step = json.step;
 			let turn = json.turn;
-			console.log(step);
 			let message = document.getElementById("text");
 			if (phase == "drop"){
 				message.innerText = "[Drop Phase] Turn: " + turn;
@@ -188,5 +197,112 @@ async function ranking(){
 	else{
 		console.log("Ranking error. Response:");
 		console.log(response_json);
+	}
+}
+
+
+function createBoardHTML(board){
+	for (let i = 0; i < board.length; i++){
+		for (let j = 0; j < board[0].length; j++){
+			let tile = document.createElement("div");
+			tile.id = i.toString() + "-" + j.toString();
+			tile.classList.add("tile");
+			tile.addEventListener("click", onClick);
+			let piece_img = document.createElement("img");
+			piece_img.setAttribute("src", "images/player0.png");
+			piece_img.setAttribute("id", "img-"+tile.id);
+			piece_img.style.width = "100%";
+			piece_img.style.height = "100%";
+			tile.append(piece_img);
+			document.getElementById("board").append(tile);
+		}
+	}
+}
+
+function createSideBoardsHTML() {
+	for (let r = 0; r < 6; r++) {
+		let row = [];
+		for (let c = 0; c < 2; c++) {
+			row.push(0);
+			
+			let tile_e = document.createElement("div");
+			tile_e.id = "E" + r.toString() + "-" + c.toString();
+			tile_e.classList.add("tile");
+			let piece_img = document.createElement("img");
+			piece_img.setAttribute("src", "images/player1.png");
+			piece_img.setAttribute("id", "img-"+tile_e.id);
+			piece_img.style.width = "100%";
+			piece_img.style.height = "100%";
+			tile_e.append(piece_img);
+			document.getElementById("esquerda").append(tile_e);
+
+			let tile_d = document.createElement("div");
+			tile_d.id = "D" + r.toString() + "-" + c.toString();
+			tile_d.classList.add("tile");
+			piece_img = document.createElement("img");
+			piece_img.setAttribute("src", "images/player2.png");
+			piece_img.setAttribute("id", "img-"+tile_d.id);
+			piece_img.style.width = "100%";
+			piece_img.style.height = "100%";
+			tile_d.append(piece_img);
+			document.getElementById("direita").append(tile_d);
+		}
+	}
+}
+
+function updateBoardPvP(board){
+	let rows = board.length;
+	let columns = board[0].length;
+	for(let r = 0; r < rows; r++){
+		for(let c = 0; c < columns; c++){
+			let tile = document.getElementById(r.toString() + "-" + c.toString());
+			document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+board[r][c]+".png");
+		}
+	}	
+}
+
+function updateSideBoardsPvP(p1_count, p2_count) {
+	for (let r = 5; r >= 0; r--) {
+		for (let c = 1; c >= 0; c--) {
+			let tile = document.getElementById("E" + r.toString() + "-" + c.toString());
+			document.getElementById("img-"+tile.id).setAttribute("src", "images/player1.png");
+			if (p1_count <= 0){continue;}
+			document.getElementById("img-"+tile.id).setAttribute("src", "images/player0.png");
+			p1_count--;
+		}
+	}
+	for (let r = 5; r >= 0; r--) {
+		for (let c = 1; c >= 0; c--) {
+			let tile = document.getElementById("D" + r.toString() + "-" + c.toString());
+			document.getElementById("img-"+tile.id).setAttribute("src", "images/player2.png");
+			if (p2_count <= 0){continue;}
+			document.getElementById("img-"+tile.id).setAttribute("src", "images/player0.png");
+			p2_count--;
+		}
+	}
+}
+
+function clearPvP() {
+	for (let r = 0; r < game_board.length; r++) {
+		for (let c = 0; c < game_board[0].length; c++) {
+			let tile = document.getElementById(r.toString() + "-" + c.toString());
+			if (tile != null) {
+				tile.remove();
+			}
+		}
+		console.log(r);
+	}
+	
+	for (let r = 0; r < 6; r++) {
+		for (let c = 0; c < 2; c++) {
+			let tile_e = document.getElementById("E" + r.toString() + "-" + c.toString());
+			if (tile_e != null) {
+				tile_e.remove();
+			}
+			let tile_d = document.getElementById("D" + r.toString() + "-" + c.toString());
+			if (tile_d != null) {
+				tile_d.remove();
+			}
+		}
 	}
 }
