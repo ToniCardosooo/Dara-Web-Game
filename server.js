@@ -64,9 +64,9 @@ const server = http.createServer(function (request, response) {
                     let nick = query.nick;
                     let game = query.game;
                     remember(response,game);
-                    request.on('close', () =>  {console.log("adeus");forget(response,game)} );
+                    request.on('close', () =>  {console.log("fechei o SSE");forget(response,game)} );
                     setImmediate(() =>{
-                        send({"counter":update_responses[game].length},game);//obviamente mudar isto, isto é o q acontece quando o sse é iniciado
+                        send({"counter":update_responses[game].length},game);//obviamente mudar isto, isto é o q acontece quando o SSE é iniciado, eventualmente não é preciso ter código aqui
                     }); 
                 break;
             }
