@@ -34,6 +34,189 @@
         </form>
         <button id="login-button" class="button-style-login" onclick="changePlayerName(); clickRegister();">
           Log&nbsp;&nbsp;In
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML definition for the game rules page -->
+    <div class="game-rules" id="game-rules">
+      <div class="title-and-rules">
+        <div class="rules-title">
+          <div>
+            <span>Game</span>
+            <span>Rules</span>
+          </div>
+          <div class="button-rules-div">
+            <button
+              class="button-style-rules"
+              onclick="switchPage('game-rules', 'homepage')"
+            >
+              RETURN<br />
+              TO&nbsp;&nbsp;HOMEPAGE
+            </button>
+          </div>
+        </div>
+        <div class="game-rules-list">
+          <div class="top-window">
+            <div class="icons-terminal">
+              <div class="iconn close red"></div>
+              <div class="iconn minimize yellow"></div>
+              <div class="iconn maximize green"></div>
+            </div>
+            <div class="title-terminal">Terminal</div>
+          </div>
+          <div class="content-rules">
+            1 - Each player has a set of 12 pieces of the same color, which are
+            initially not placed on the game board.
+            <br /><br />
+            2 - Every match has 2 phases: <br />- Drop Phase<br />
+            - Move Phase <br /><br />
+            3 - Pieces can be grouped in 3 consecutive pieces of the same color,
+            creating a line, both vertically and horizontally. <br /><br />
+            4 - Drop Phase: <br />- Players alternatively place a piece in a
+            free cell of the board.<br />
+            - Pieces cannot create lines with size greater than 3.<br />
+            - There can be lines of 3 pieces. <br /><br />
+            5 - Move Phase:<br />
+            - Each player moves alternatively one of their pieces.<br />
+            - Each piece can only be moved to the vertically or horizontally
+            adjacent empty cells.<br />
+            - Creating a line of 3 pieces allows the current player to remove
+            one and only one piece from the opponent.<br />
+            - It's not allowed to form lines with more than 3 pieces.<br />
+            - In the following round of the same player, its last moved piece
+            cannot be played back to the cell where it came from.<br /><br />
+            6 - The match is finished when one of the following conditions is
+            met:<br />
+            - A player only has 2 pieces left.<br />
+            - A player cannot make any valid move (i.e., all pieces are
+            trapped). If a player meets any of these conditions, then the
+            opponent is the <a class="waiting">winner.</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML definition for the configuration menu -->
+    <div class="menu" id="menu">
+      <div class="menu-page">
+        <div class="menu-bottom">
+          <div class="button-start">
+            <button
+              id="start-game-button"
+              type="button"
+              class="button-style-start"
+              onclick="lookForGame();"
+            >
+              <span class="jumping-text">START !!!</span>
+            </button>
+          </div>
+          <div class="button-homepage2">
+            <button
+              class="button-style-homepage2"
+              onclick="switchPage('menu', 'homepage')"
+            >
+              RETURN<br />
+              TO&nbsp;&nbsp;HOMEPAGE
+            </button>
+          </div>
+        </div>
+        <div class="menu-top">
+          <div class="first-two-options">
+            <div id="board-size-menu" class="config">
+              <span class="board-size-configuration"
+                >Board<br />
+                Size</span
+              >
+              <div class="select">
+                <select
+                  id="board-size-select"
+                  onchange="changeBoardSize(this.value)"
+                >
+                  <option value="0">6 X 5</option>
+                  <option value="1">5 X 6</option>
+                  <option value="2">6 X 6</option>
+                  <option value="3">7 X 6</option>
+                </select>
+              </div>
+            </div>
+            <div id="game-mode" class="config">
+              <span class="game-mode-configuration"
+                >Game<br />
+                Mode</span
+              >
+              <div class="select">
+                <select
+                  id="game-mode-select"
+                  onchange="changeGameMode(this.value)"
+                >
+                  <option value="0">Player X Player</option>
+                  <option value="1">Player X AI</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="last-two-options">
+            <div id="ai-difficulty" class="config">
+              <span class="ai-difficulty-configuration"
+                >AI<br />
+                Difficulty</span
+              >
+              <div class="select">
+                <select
+                  id="ai-difficulty-select"
+                  onchange="changeAIdiff(this.value)"
+                >
+                  <option value="0">Easy</option>
+                  <option value="1">Medium</option>
+                  <option value="2">Hard</option>
+                </select>
+              </div>
+            </div>
+            <div id="starting-player" class="config">
+              <span class="starting-player-configuration"
+                >Starting<br />
+                Player</span
+              >
+              <div class="select">
+                <select
+                  id="starting-player-select"
+                  onchange="changeStartPlayer(this.value)"
+                >
+                  <option value="0">Player 1 - Red</option>
+                  <option value="1">Player 2 - Green</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML definition for the Waiting For Game page -->
+    <div class="wait-game" id="wait-game">
+      <h2>Waiting for a game</h2>
+      <!-- Colocar uma ampulheta com o Canvas -->
+      <div class="button-style" id="quit-wait-game-button" onclick="giveUpRequest();">
+        STOP<br>BACK TO MENU
+      </div>
+    </div>
+
+    <!-- HTML definition for the Game page -->
+    <div class="game" id="game">
+      <h1 class="play-game-name">Dara Game</h1>
+      <h2 id="winner"></h2>
+      <h3 id="text"></h3>
+      <h4 id="AI"></h4>
+      <div id="jogo">
+        <div id="esquerda"></div>
+        <div id="board"></div>
+        <div id="direita"></div>
+      </div>
+
+      <div class="buttons-give-up-back-to-menu">
+        <button id="give-up-button" class="button-style" onclick="giveUp();">
+          GIVE&nbsp;&nbsp;UP
         </button>
       </div>
     </div>

@@ -1446,7 +1446,7 @@ select::-ms-expand {
 
 .wait-game {
   height: 100vh;
-  display: flex;
+  display: none;
   align-items: center;
   flex-wrap: wrap;
   flex-direction: column;
