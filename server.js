@@ -39,10 +39,21 @@ class Game_Server  {
         this.board = new Board_Server(this.rows,this.columns,this.startingPlayer);
 	}
 
-    canDothis(row,column,nick){
-        //ver se a jogada é valida e retornar uma string com o erro
-        return 'valid';
-    }
+		canDothis(row, column, nick) {
+    		/*if ((this.players['player 1'] == nick && this.startingPlayer === 1) || (this.players['player 2'] == nick && this.startingPlayer === 2)) {
+        	if (row >= 0 && row < this.rows && column >= 0 && column < this.columns) {
+            	if (this.board.board[row][column] === 0) {
+                	return 'valid';
+            	} else {
+                	return 'Selected cell is not empty.';
+            	}
+        	} else {
+            	return 'Selected cell is outside the board boundaries.';
+        	}
+    		} else {
+        	return 'It is not your turn.';
+   	 		}*/
+		}
 
     Dothis(row,column,nick){
         let player;
