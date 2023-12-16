@@ -1442,6 +1442,65 @@ select::-ms-expand {
   }
 }
 
+/* CSS DEFINITION FOR THE WAITING PAGE */
+
+.wait-game {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.button-style-waiting-page {
+  width: 200px;
+  height: 60px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "ArcadeClassic", sans-serif;
+  font-weight: 700;
+  background-color: #9e4539;
+  color: white;
+  font-size: 19px;
+  border: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+}
+
+.wait-game h2 {
+  font-family: "ArcadeClassic", sans-serif;
+  color: #468966;
+  font-size: 50px;
+  letter-spacing: 4px;
+  position: relative;
+}
+
+.wait-game h2::after {
+  content: '...';
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.button-style-waiting-page:hover {
+  color: #ffe35e;
+}
+
+@media screen and (max-width: 876px) {
+  .wait-game h2 {
+    font-size: 35px;
+  }
+
+  .button-style-waiting-page {
+    font-size: 15px;
+  }
+}
 /* GENERAL CSS */
 
 span {
@@ -1455,15 +1514,4 @@ input {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-
-
-
-
-.wait-game {
-  height: 100vh;
-  display: none;
-  flex-wrap: wrap;
-  flex-direction: column;
 }

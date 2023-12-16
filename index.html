@@ -1,391 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>Dara</title>
-    <link rel="shortcut icon" href="images/logo.jpg" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.cdnfonts.com/css/arcade-classic"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-  </head>
 
-  <body>
-    <!-- HTML definition for the Authentication Page -->
-    <div class="auth-page" id="auth-page">
-      <div class="left"></div>
-      <div class="right">
-        <div class="form">
-          <h1 class="login-game-name">DARA</h1>
-          <h1 class="login-game-name-game">GAME</h1>
-          <form class="auth-credentials">
-            <div class="input-group">
-              <i class="icon fa fa-user"></i>
-              <input
-                id="username-input"
-                type="text"
-                required
-                placeholder="Username"
-                autocomplete="off"
-              />
-            </div>
-            <div class="input-group">
-              <i class="icon fa fa-lock"></i>
-              <input
-                type="password"
-                id="password-input"
-                required
-                placeholder="Password"
-              />
-            </div>
-          </form>
-          <button
-            id="login-button"
-            class="button-style-login"
-            onclick="changePlayerName(); clickRegister();"
-          >
-            Log&nbsp;&nbsp;In
-          </button>
-        </div>
-      </div>
-    </div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Dara</title>
+  <link rel="shortcut icon" href="images/logo.jpg" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.cdnfonts.com/css/arcade-classic" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
 
-    <!-- HTML definition for the Homepage -->
-    <div class="homepage" id="homepage">
-      <div class="logotipo" id="game-name">
-        <span class="dara-text">DARA</span>
-        <span class="game-text">GAME</span>
-      </div>
-      <div class="homepage-buttons">
-        <div class="left-buttons">
-          <button class="button-style" onclick="switchPage('homepage', 'menu')">
-            <span class="button-text">PLAY</span>
-          </button>
-        </div>
-        <div class="right-buttons">
-          <button
-            class="button-style"
-            onclick="switchPage('homepage', 'classifications')"
-          >
-            <span class="button-text">CLASSIFICATIONS</span>
-          </button>
-          <button
-            class="button-style"
-            onclick="switchPage('homepage', 'game-rules')"
-          >
-            <span class="button-text">GAME RULES</span>
-          </button>
-          <button
-            class="button-style"
-            onclick="switchPage('homepage', 'auth-page')"
-          >
-            <span class="button-text">LOGOUT</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- HTML definition for the classifications page -->
-    <div class="classifications" id="classifications">
-      <div class="classification-page">
-        <div class="classification-title">
-          <div class="titles">
-            <span class="small-font">CLASSIFICATIONS</span>
-            <span class="larger-font">TABLE</span>
+<body>
+  <!-- HTML definition for the Authentication Page -->
+  <div class="auth-page" id="auth-page">
+    <div class="left"></div>
+    <div class="right">
+      <div class="form">
+        <h1 class="login-game-name">DARA</h1>
+        <h1 class="login-game-name-game">GAME</h1>
+        <form class="auth-credentials">
+          <div class="input-group">
+            <i class="icon fa fa-user"></i>
+            <input id="username-input" type="text" required placeholder="Username" autocomplete="off" />
           </div>
-          <div class="button-classification-div">
-            <button
-              class="button-style-classification"
-              onclick="switchPage('classifications', 'homepage')"
-            >
-              RETURN<br />
-              TO&nbsp;&nbsp;HOMEPAGE
-            </button>
+          <div class="input-group">
+            <i class="icon fa fa-lock"></i>
+            <input type="password" id="password-input" required placeholder="Password" />
           </div>
-        </div>
-        <div class="classification-results" id="classification-results">
-          <div class="two-buttons">
-            <button
-              onclick="showClassificationTable('classifications-table')"
-              class="button-matches-list"
-            >
-              MATCHES&nbsp;&nbsp;LIST
-            </button>
-            <button
-              onclick="showClassificationTable('win-rate-table')"
-              class="button-win-rate-list"
-            >
-              WIN&nbsp;&nbsp;&nbsp;RATE&nbsp;&nbsp;&nbsp;LIST
-            </button>
-          </div>
-          <!-- Div for the filter select menus -->
-          <div class="board-filter" id="board-filter">
-            <!-- Div for the Board Size filter -->
-            <div>
-              <p class="board-size-p">Board Size:</p>
-              <div class="select-mirror">
-                <select
-                  name="board-size-filter"
-                  id="board-size-filter"
-                  class="select-1"
-                  onchange="filterClassificationTable();ranking();"
-                >
-                  <option value="0">All</option>
-                  <option value="1">6 X 5</option>
-                  <option value="2">5 X 6</option>
-                  <option value="3">6 X 6</option>
-                  <option value="4">7 X 6</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <p class="game-mode-p">Game Mode:</p>
-              <div class="select-mirror">
-                <select
-                  name="game-mode-filter"
-                  id="game-mode-filter"
-                  class="select-2"
-                  onchange="filterClassificationTable();"
-                >
-                  <option value="0">All</option>
-                  <option value="1">Player X Player</option>
-                  <option value="2">Player X AI (Easy)</option>
-                  <option value="3">Player X AI (Medium)</option>
-                  <option value="4">Player X AI (Hard)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <!-- Table for the matches results -->
-          <table class="classifications-table" id="classifications-table">
-            <tr>
-              <th class="first">Player</th>
-              <th>Match Result</th>
-              <th>Board Size</th>
-              <th>Game Mode</th>
-              <th>Number of Moves</th>
-              <th>Pieces Removed</th>
-              <th class="last">Match Score</th>
-            </tr>
-          </table>
-          <!-- Table for the win rates -->
-          <table class="win-rate-table" id="win-rate-table">
-            <tr>
-              <th class="first">Player</th>
-              <th>Win Rate</th>
-              <th class="last">Total Score</th>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- HTML definition for the game rules page -->
-    <div class="game-rules" id="game-rules">
-      <div class="title-and-rules">
-        <div class="rules-title">
-          <div>
-            <span>Game</span>
-            <span>Rules</span>
-          </div>
-          <div class="button-rules-div">
-            <button
-              class="button-style-rules"
-              onclick="switchPage('game-rules', 'homepage')"
-            >
-              RETURN<br />
-              TO&nbsp;&nbsp;HOMEPAGE
-            </button>
-          </div>
-        </div>
-        <div class="game-rules-list">
-          <div class="top-window">
-            <div class="icons-terminal">
-              <div class="iconn close red"></div>
-              <div class="iconn minimize yellow"></div>
-              <div class="iconn maximize green"></div>
-            </div>
-            <div class="title-terminal">Terminal</div>
-          </div>
-          <div class="content-rules">
-            1 - Each player has a set of 12 pieces of the same color, which are
-            initially not placed on the game board.
-            <br /><br />
-            2 - Every match has 2 phases: <br />- Drop Phase<br />
-            - Move Phase <br /><br />
-            3 - Pieces can be grouped in 3 consecutive pieces of the same color,
-            creating a line, both vertically and horizontally. <br /><br />
-            4 - Drop Phase: <br />- Players alternatively place a piece in a
-            free cell of the board.<br />
-            - Pieces cannot create lines with size greater than 3.<br />
-            - There can be lines of 3 pieces. <br /><br />
-            5 - Move Phase:<br />
-            - Each player moves alternatively one of their pieces.<br />
-            - Each piece can only be moved to the vertically or horizontally
-            adjacent empty cells.<br />
-            - Creating a line of 3 pieces allows the current player to remove
-            one and only one piece from the opponent.<br />
-            - It's not allowed to form lines with more than 3 pieces.<br />
-            - In the following round of the same player, its last moved piece
-            cannot be played back to the cell where it came from.<br /><br />
-            6 - The match is finished when one of the following conditions is
-            met:<br />
-            - A player only has 2 pieces left.<br />
-            - A player cannot make any valid move (i.e., all pieces are
-            trapped). If a player meets any of these conditions, then the
-            opponent is the <a class="waiting">winner.</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- HTML definition for the configuration menu -->
-    <div class="menu" id="menu">
-      <div class="menu-page">
-        <div class="menu-bottom">
-          <div class="button-start">
-            <button
-              id="start-game-button"
-              type="button"
-              class="button-style-start"
-              onclick="lookForGame();"
-            >
-              <span class="jumping-text">START !!!</span>
-            </button>
-          </div>
-          <div class="button-homepage2">
-            <button
-              class="button-style-homepage2"
-              onclick="switchPage('menu', 'homepage')"
-            >
-              RETURN<br />
-              TO&nbsp;&nbsp;HOMEPAGE
-            </button>
-          </div>
-        </div>
-        <div class="menu-top">
-          <div class="first-two-options">
-            <div id="board-size-menu" class="config">
-              <span class="board-size-configuration"
-                >Board<br />
-                Size</span
-              >
-              <div class="select">
-                <select
-                  id="board-size-select"
-                  onchange="changeBoardSize(this.value)"
-                >
-                  <option value="0">6 X 5</option>
-                  <option value="1">5 X 6</option>
-                  <option value="2">6 X 6</option>
-                  <option value="3">7 X 6</option>
-                </select>
-              </div>
-            </div>
-            <div id="game-mode" class="config">
-              <span class="game-mode-configuration"
-                >Game<br />
-                Mode</span
-              >
-              <div class="select">
-                <select
-                  id="game-mode-select"
-                  onchange="changeGameMode(this.value)"
-                >
-                  <option value="0">Player X Player</option>
-                  <option value="1">Player X AI</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="last-two-options">
-            <div id="ai-difficulty" class="config">
-              <span class="ai-difficulty-configuration"
-                >AI<br />
-                Difficulty</span
-              >
-              <div class="select">
-                <select
-                  id="ai-difficulty-select"
-                  onchange="changeAIdiff(this.value)"
-                >
-                  <option value="0">Easy</option>
-                  <option value="1">Medium</option>
-                  <option value="2">Hard</option>
-                </select>
-              </div>
-            </div>
-            <div id="starting-player" class="config">
-              <span class="starting-player-configuration"
-                >Starting<br />
-                Player</span
-              >
-              <div class="select">
-                <select
-                  id="starting-player-select"
-                  onchange="changeStartPlayer(this.value)"
-                >
-                  <option value="0">Player 1 - Red</option>
-                  <option value="1">Player 2 - Green</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- HTML definition for the Waiting For Game page -->
-    <div class="wait-game" id="wait-game">
-      <h2>Waiting for a game...</h2>
-      <!-- Colocar uma ampulheta com o Canvas -->
-      <div class="button-style" id="quit-wait-game-button" onclick="giveUpRequest();">
-        STOP<br>BACK TO MENU
-      </div>
-    </div>
-
-    <!-- HTML definition for the Game page -->
-    <div class="game" id="game">
-      <h1 class="play-game-name">Dara Game</h1>
-      <h2 id="winner"></h2>
-      <h3 id="text"></h3>
-      <h4 id="AI"></h4>
-      <div id="jogo">
-        <div id="esquerda"></div>
-        <div id="board"></div>
-        <div id="direita"></div>
-      </div>
-
-      <div class="buttons-give-up-back-to-menu">
-        <button id="give-up-button" class="button-style" onclick="giveUp();giveUpRequest();">
-          GIVE&nbsp;&nbsp;UP
+        </form>
+        <button id="login-button" class="button-style-login" onclick="changePlayerName(); clickRegister();">
+          Log&nbsp;&nbsp;In
         </button>
-        <button
-          id="quit-game-button"
-          class="button-style"
-          onclick="switchPage('game', 'menu');clearboard();"
-        ></button>
       </div>
     </div>
+  </div>
 
-    <!-- Importing necessary scripts -->
+  <!-- HTML definition for the Homepage -->
+  <div class="homepage" id="homepage">
+    <div class="logotipo" id="game-name">
+      <span class="dara-text">DARA</span>
+      <span class="game-text">GAME</span>
+    </div>
+    <div class="homepage-buttons">
+      <div class="left-buttons">
+        <button class="button-style" onclick="switchPage('homepage', 'menu')">
+          <span class="button-text">PLAY</span>
+        </button>
+      </div>
+      <div class="right-buttons">
+        <button class="button-style" onclick="switchPage('homepage', 'classifications')">
+          <span class="button-text">CLASSIFICATIONS</span>
+        </button>
+        <button class="button-style" onclick="switchPage('homepage', 'game-rules')">
+          <span class="button-text">GAME RULES</span>
+        </button>
+        <button class="button-style" onclick="switchPage('homepage', 'auth-page')">
+          <span class="button-text">LOGOUT</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-    <script src="game.js"></script>
-    <script src="communication.js"></script>
-  </body>
+  <!-- HTML definition for the classifications page -->
+  <div class="classifications" id="classifications">
+    <div class="classification-page">
+      <div class="classification-title">
+        <div class="titles">
+          <span class="small-font">CLASSIFICATIONS</span>
+          <span class="larger-font">TABLE</span>
+        </div>
+        <div class="button-classification-div">
+          <button class="button-style-classification" onclick="switchPage('classifications', 'homepage')">
+            RETURN<br />
+            TO&nbsp;&nbsp;HOMEPAGE
+          </button>
+        </div>
+      </div>
+      <div class="classification-results" id="classification-results">
+        <div class="two-buttons">
+          <button onclick="showClassificationTable('classifications-table')" class="button-matches-list">
+            MATCHES&nbsp;&nbsp;LIST
+          </button>
+          <button onclick="showClassificationTable('win-rate-table')" class="button-win-rate-list">
+            WIN&nbsp;&nbsp;&nbsp;RATE&nbsp;&nbsp;&nbsp;LIST
+          </button>
+        </div>
+        <!-- Div for the filter select menus -->
+        <div class="board-filter" id="board-filter">
+          <!-- Div for the Board Size filter -->
+          <div>
+            <p class="board-size-p">Board Size:</p>
+            <div class="select-mirror">
+              <select name="board-size-filter" id="board-size-filter" class="select-1"
+                onchange="filterClassificationTable();ranking();">
+                <option value="0">All</option>
+                <option value="1">6 X 5</option>
+                <option value="2">5 X 6</option>
+                <option value="3">6 X 6</option>
+                <option value="4">7 X 6</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <p class="game-mode-p">Game Mode:</p>
+            <div class="select-mirror">
+              <select name="game-mode-filter" id="game-mode-filter" class="select-2"
+                onchange="filterClassificationTable();">
+                <option value="0">All</option>
+                <option value="1">Player X Player</option>
+                <option value="2">Player X AI (Easy)</option>
+                <option value="3">Player X AI (Medium)</option>
+                <option value="4">Player X AI (Hard)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Table for the matches results -->
+        <table class="classifications-table" id="classifications-table">
+          <tr>
+            <th class="first">Player</th>
+            <th>Match Result</th>
+            <th>Board Size</th>
+            <th>Game Mode</th>
+            <th>Number of Moves</th>
+            <th>Pieces Removed</th>
+            <th class="last">Match Score</th>
+          </tr>
+        </table>
+        <!-- Table for the win rates -->
+        <table class="win-rate-table" id="win-rate-table">
+          <tr>
+            <th class="first">Player</th>
+            <th>Win Rate</th>
+            <th class="last">Total Score</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTML definition for the game rules page -->
+  <div class="game-rules" id="game-rules">
+    <div class="title-and-rules">
+      <div class="rules-title">
+        <div>
+          <span>Game</span>
+          <span>Rules</span>
+        </div>
+        <div class="button-rules-div">
+          <button class="button-style-rules" onclick="switchPage('game-rules', 'homepage')">
+            RETURN<br />
+            TO&nbsp;&nbsp;HOMEPAGE
+          </button>
+        </div>
+      </div>
+      <div class="game-rules-list">
+        <div class="top-window">
+          <div class="icons-terminal">
+            <div class="iconn close red"></div>
+            <div class="iconn minimize yellow"></div>
+            <div class="iconn maximize green"></div>
+          </div>
+          <div class="title-terminal">Terminal</div>
+        </div>
+        <div class="content-rules">
+          1 - Each player has a set of 12 pieces of the same color, which are
+          initially not placed on the game board.
+          <br /><br />
+          2 - Every match has 2 phases: <br />- Drop Phase<br />
+          - Move Phase <br /><br />
+          3 - Pieces can be grouped in 3 consecutive pieces of the same color,
+          creating a line, both vertically and horizontally. <br /><br />
+          4 - Drop Phase: <br />- Players alternatively place a piece in a
+          free cell of the board.<br />
+          - Pieces cannot create lines with size greater than 3.<br />
+          - There can be lines of 3 pieces. <br /><br />
+          5 - Move Phase:<br />
+          - Each player moves alternatively one of their pieces.<br />
+          - Each piece can only be moved to the vertically or horizontally
+          adjacent empty cells.<br />
+          - Creating a line of 3 pieces allows the current player to remove
+          one and only one piece from the opponent.<br />
+          - It's not allowed to form lines with more than 3 pieces.<br />
+          - In the following round of the same player, its last moved piece
+          cannot be played back to the cell where it came from.<br /><br />
+          6 - The match is finished when one of the following conditions is
+          met:<br />
+          - A player only has 2 pieces left.<br />
+          - A player cannot make any valid move (i.e., all pieces are
+          trapped). If a player meets any of these conditions, then the
+          opponent is the <a class="waiting">winner.</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTML definition for the configuration menu -->
+  <div class="menu" id="menu">
+    <div class="menu-page">
+      <div class="menu-bottom">
+        <div class="button-start">
+          <button id="start-game-button" type="button" class="button-style-start" onclick="lookForGame();">
+            <span class="jumping-text">START !!!</span>
+          </button>
+        </div>
+        <div class="button-homepage2">
+          <button class="button-style-homepage2" onclick="switchPage('menu', 'homepage')">
+            RETURN<br />
+            TO&nbsp;&nbsp;HOMEPAGE
+          </button>
+        </div>
+      </div>
+      <div class="menu-top">
+        <div class="first-two-options">
+          <div id="board-size-menu" class="config">
+            <span class="board-size-configuration">Board<br />
+              Size</span>
+            <div class="select">
+              <select id="board-size-select" onchange="changeBoardSize(this.value)">
+                <option value="0">6 X 5</option>
+                <option value="1">5 X 6</option>
+                <option value="2">6 X 6</option>
+                <option value="3">7 X 6</option>
+              </select>
+            </div>
+          </div>
+          <div id="game-mode" class="config">
+            <span class="game-mode-configuration">Game<br />
+              Mode</span>
+            <div class="select">
+              <select id="game-mode-select" onchange="changeGameMode(this.value)">
+                <option value="0">Player X Player</option>
+                <option value="1">Player X AI</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="last-two-options">
+          <div id="ai-difficulty" class="config">
+            <span class="ai-difficulty-configuration">AI<br />
+              Difficulty</span>
+            <div class="select">
+              <select id="ai-difficulty-select" onchange="changeAIdiff(this.value)">
+                <option value="0">Easy</option>
+                <option value="1">Medium</option>
+                <option value="2">Hard</option>
+              </select>
+            </div>
+          </div>
+          <div id="starting-player" class="config">
+            <span class="starting-player-configuration">Starting<br />
+              Player</span>
+            <div class="select">
+              <select id="starting-player-select" onchange="changeStartPlayer(this.value)">
+                <option value="0">Player 1 - Red</option>
+                <option value="1">Player 2 - Green</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTML definition for the Waiting For Game page -->
+  <div class="wait-game" id="wait-game">
+    <h2>Waiting&nbsp;&nbsp;for&nbsp;&nbsp;a&nbsp;&nbsp;game</h2>
+    <!-- Colocar uma ampulheta com o Canvas -->
+    <div class="button-style-waiting-page" id="quit-wait-game-button" onclick="giveUpRequest();">
+      STOP<br>BACK TO MENU
+    </div>
+  </div>
+
+  <!-- HTML definition for the Game page -->
+  <div class="game" id="game">
+    <h1 class="play-game-name">Dara Game</h1>
+    <h2 id="winner"></h2>
+    <h3 id="text"></h3>
+    <h4 id="AI"></h4>
+    <div id="jogo">
+      <div id="esquerda"></div>
+      <div id="board"></div>
+      <div id="direita"></div>
+    </div>
+
+    <div class="buttons-give-up-back-to-menu">
+      <button id="give-up-button" class="button-style" onclick="giveUp();giveUpRequest();">
+        GIVE&nbsp;&nbsp;UP
+      </button>
+      <button id="quit-game-button" class="button-style" onclick="switchPage('game', 'menu');clearboard();"></button>
+    </div>
+  </div>
+
+  <!-- Importing necessary scripts -->
+
+  <script src="game.js"></script>
+  <script src="communication.js"></script>
+</body>
+
 </html>
