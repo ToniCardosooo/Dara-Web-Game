@@ -1,3 +1,4 @@
+//const SERVER = "http://34.67.217.93:8008/";
 const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 //const SERVER = "http://localhost:8008/"
 const group = 18;
@@ -70,8 +71,8 @@ async function giveUpRequest(){
 	let response_json = await callServer("leave", {nick, password, game});
 	if (!("error" in response_json)){
 		console.log("Successfuly left the game");
-		if (document.getElementById("wait-game").style.display === "flex"){switchPage("wait-game", "menu");}
-		else if (document.getElementById("game").style.display === "flex"){switchPage("game", "menu");}
+		//if (document.getElementById("wait-game").style.display === "flex"){switchPage("wait-game", "menu"); game = null;}
+		//else if (document.getElementById("game").style.display === "flex"){switchPage("game", "menu");}
 		
 	}
 	else{
@@ -88,9 +89,12 @@ async function notify(row, column){
 	if ("error" in response_json){
 		console.log("Notify error. Response:");
 		console.log(response_json);
+		let message = document.getElementById("text");
+		message.innerText = response_json.error;
 	}
 	else{
 		console.log("Successfuly notified the server");
+		//G.Click(row, column);
 	}
 }
 
@@ -108,25 +112,55 @@ async function update(){
 			console.log(json);
 			switchPage("wait-game", "menu");
 		}
-		else if ("board" in json){
+		if ("winner" in json){
+			console.log("Successfuly received an update from server");
+			console.log("Game finished - Winner: " + json.winner);
+			eventSource.close();
+			let message = document.getElementById("text");
+			message.innerText = "Game finished - Winner: " + json.winner;
+			document.getElementById("give-up-button").style.display = "none";
+			document.getElementById("quit-game-button").style.display = "flex";
+			document.getElementById("quit-game-button").innerHTML = "BACK&nbsp;&nbsp;&nbsp;TO&nbsp;&nbsp;&nbsp;MENU";
+			// update the ranking table
+			// ^^^^^^^^^^^^^^^^^^^^^^^^
+		}
+		if ("board" in json){
 			if (document.getElementById("wait-game").style.display=="flex"){
 				console.log("Successfuly received an update from server");
-				startGame();
 				switchPage("wait-game", "game");
 			}
-			if ("winner" in json){
-				console.log("Successfuly received an update from server");
-				console.log("Game finished - Winner: " + json.winner);
-				eventSource.close();
+			let update_board = json.board;
+			// change the board in the browser side and message
+			color_value = {"empty":0, "white":1, "black":2};
+			for (let i = 0; i < G.rows; i++){
+				for (let j = 0; j < G.columns; j++){
+					G.board.board[i][j] = color_value[update_board[i][j]];
+				}
 			}
-			let board = json.board;
+			G.board.updateBoard();
+			G.board.updateSideBoards();
 			let phase = json.phase;
 			let step = json.step;
 			let turn = json.turn;
-			// change the board in the browser side
+			console.log(step);
+			let message = document.getElementById("text");
+			if (phase == "drop"){
+				message.innerText = "[Drop Phase] Turn: " + turn;
+			}
+			else if (step == "from"){
+				message.innerText = "[Move Phase - Select Piece] Turn: " + turn;
+			}
+			else if (step == "to"){
+				message.innerText = "[Move Phase - Select Destination] Turn: " + turn;
+			}
+			else if (step == "take"){
+				message.innerText = "[Move Phase - Take Oponent's Piece] Turn: " + turn;
+			}
 		}
 	}
 }
+
+
 
 
 // RANKING REQUEST

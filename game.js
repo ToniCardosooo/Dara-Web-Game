@@ -539,9 +539,7 @@ class Board {
 				let tile = document.getElementById(r.toString() + "-" + c.toString());
 				document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board[r][c]+".png");
 			}
-		}
-		
-			
+		}	
 	}
 
 	// updating the display of the side boards
@@ -982,7 +980,9 @@ class Board {
 var G = new Game();
 
 function startGame(){
+	if (G.secondPlayer == 0) {lookForGame();}
 	G.start();
+	if (G.secondPlayer == 1) {switchPage("menu","game");}
 }
 
 function changePlayerName() {
@@ -1017,7 +1017,12 @@ function onClick() {
 	let coords = this.id.split("-");
 	let r = parseInt(coords[0]);
 	let c = parseInt(coords[1]);
-	G.Click(r,c); notify(r,c);
+	if (G.secondPlayer==0){
+		notify(r,c);
+	}
+	else{ G.Click(r,c); }
+	
+
 }
 
 // controls the navigation between pages
