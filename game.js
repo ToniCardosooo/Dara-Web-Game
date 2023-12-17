@@ -24,80 +24,27 @@ class Game  {
 		};
 	}
 
-	updateWinRateTable(has_won){
-		let win_rate_table = document.getElementById("win-rate-table");
-		let player_name = this.stats.player_name;
-		if (this.players_stats[player_name] !== undefined){
-			for (let i = 0; i < win_rate_table.rows.length; i++){
-				if (win_rate_table.rows[i].cells[0].innerText != player_name){ continue; }
-				// update win_rate_table relevant stats
-				if (has_won){
-					this.players_stats[player_name]["win_count"]++;
-					this.players_stats[player_name]["total_score"] += this.stats.score;
-				}
-				else{ this.players_stats[player_name]["total_score"] += this.stats.score; }
-				this.players_stats[player_name]["matches_count"]++;
-			}
-		}
-		else{
-			// update win_rate_table relevant stats
-			this.players_stats[player_name] = (has_won)?
-			{"win_count": 1, "matches_count": 1, "total_score": this.stats.score}: // has won
-			{"win_count": 0, "matches_count": 1, "total_score": this.stats.score}; // has not won
-			// create new line on the table
-			let new_row = document.createElement("tr");
-			// add the player name
-			let cell = document.createElement("td");
-			cell.textContent = player_name;
-			new_row.append(cell);
-			// add the player win rate (at this point, either 0% or 100%)
-			cell = document.createElement("td");
-			cell.textContent = (has_won)? "100%" : "0%";
-			new_row.append(cell);
-			// add the player total score
-			cell = document.createElement("td");
-			cell.textContent = this.stats.score.toString();
-			new_row.append(cell);
-			// append row
-			win_rate_table.append(new_row);
-		}
-		// create array of the players_stats
-		let win_rate_classifications = Object.keys(this.players_stats).map(
-			(key) => {return [key, this.players_stats[key]];}
-		);
-		// sort it
-		win_rate_classifications = win_rate_classifications.sort((player1, player2) => {
-			let p1_win_rate = Math.round(player1[1]["win_count"]/player1[1]["matches_count"] * 100);
-			let p2_win_rate = Math.round(player2[1]["win_count"]/player2[1]["matches_count"] * 100);
-			if (p1_win_rate == p2_win_rate){
-				return player2[1]["total_score"] - player1[1]["total_score"];
-			}
-			return p2_win_rate - p1_win_rate;
-		});
-		// update win rate table
-		for (let i = 1; i < win_rate_table.rows.length; i++){
-			win_rate_table.rows[i].cells[0].innerText = win_rate_classifications[i-1][0];
-			win_rate_table.rows[i].cells[1].innerText = Math.round(win_rate_classifications[i-1][1]["win_count"]/win_rate_classifications[i-1][1]["matches_count"] * 100).toString() + "%";
-			win_rate_table.rows[i].cells[2].innerText = win_rate_classifications[i-1][1]["total_score"].toString();
-		}
-	}
-
 	filterClassificationTable(){
-		// filter the match_history with the given filter selection on the classification page
-		let filters = {
-			"board_size": document.getElementById("board-size-filter").options[document.getElementById("board-size-filter").selectedIndex].text,
-			"game_mode": document.getElementById("game-mode-filter").options[document.getElementById("game-mode-filter").selectedIndex].text
+		// showing Player vs AI table
+		if (document.getElementById("classifications-table").style.display != "none"){
+			// filter the match_history with the given filter selection on the classification page
+			let filters = {
+				"board_size": document.getElementById("board-size-filter").options[document.getElementById("board-size-filter").selectedIndex].text,
+				"game_mode": document.getElementById("game-mode-filter").options[document.getElementById("game-mode-filter").selectedIndex].text
+			}
+	
+			let id = 0;
+			for (let match of this.match_history){
+				let board_size_filter_verified = (filters["board_size"] === "All" || match["board_size"] === filters["board_size"]);
+				let game_mode_filter_verified = (filters["game_mode"] === "All" || match["game_mode"] === filters["game_mode"]);
+				let row = document.getElementById(id.toString() + "-row");
+				// display the row if the conditions imposed by the filters are met, otherwise hide the row
+				row.style.display = (board_size_filter_verified && game_mode_filter_verified)? "" : "none";
+				id++;
+			}
 		}
-
-		let id = 0;
-		for (let match of this.match_history){
-			let board_size_filter_verified = (filters["board_size"] === "All" || match["board_size"] === filters["board_size"]);
-			let game_mode_filter_verified = (filters["game_mode"] === "All" || match["game_mode"] === filters["game_mode"]);
-			let row = document.getElementById(id.toString() + "-row");
-			// display the row if the conditions imposed by the filters are met, otherwise hide the row
-			row.style.display = (board_size_filter_verified && game_mode_filter_verified)? "" : "none";
-			id++;
-		}
+		// showing PvP table
+		else{ ranking(); }
 	}
 
 	updateClassificationTable() {
@@ -127,7 +74,10 @@ class Game  {
 
         // Save to localStorage only when playing against AI
         window.localStorage.setItem("match_history", JSON.stringify(this.match_history));
-    } else {
+    }
+
+	/* 
+	else {
         this.stats.game_mode += "Player";
 
         let table = document.getElementById("classifications-table");
@@ -142,6 +92,7 @@ class Game  {
             j++;
         }
     }
+	*/
 
     // reset stats
     this.stats = {
@@ -313,7 +264,6 @@ class Game  {
 	// displaying who won
 	showWinner() {
 		if (this.board.winner === 0){ return; }
-		this.updateWinRateTable((this.board.winner === 1));
 		this.updateClassificationTable();
 		let win = document.getElementById("winner");
 		win.innerText = (this.board.winner === 1)? "Red Wins" : "Green Wins";
@@ -1041,6 +991,8 @@ function onClick() {
 
 // controls the navigation between pages
 function switchPage(from_id, to_id) {
+	if (to_id == "classifications"){ ranking(); }
+
 	let from_doc = document.getElementById(from_id);
 	let to_doc = document.getElementById(to_id);
 
@@ -1048,14 +1000,31 @@ function switchPage(from_id, to_id) {
 	to_doc.style.display = "flex";
 }
 
-function showClassificationTable(show_id){
-	let tables_ids = ["classifications-table", "win-rate-table"];
-	for (let i = 0; i < tables_ids.length; i++){
-		if (show_id == tables_ids[i]){ continue; }
-		document.getElementById(tables_ids[i]).style.display = "none";
+async function showClassificationTable(show_id){
+	// table for Player vs AI games
+	if (show_id == "classifications-table"){
+		document.getElementById("win-rate-table").style.display = "none";
+		document.getElementById("board-filter-game-mode").style.display ="block";
+		document.getElementById(show_id).style.display = "table";
+		let select = document.getElementById("board-size-filter");
+		if (select.options.length == 4){
+			let option = document.createElement("option");
+			option.text = "All";
+			option.value = "0";
+			select.insertBefore(option, select.firstChild);
+			select.selectedIndex = 0;
+			select.dispatchEvent(new Event("change"));
+		}
 	}
-	document.getElementById("board-filter").style.display = (show_id == "classifications-table")? "flex" : "none";
-	document.getElementById(show_id).style.display = "table";
+	// table that uses the ranking request to get its results
+	else if (show_id == "win-rate-table"){
+		document.getElementById("classifications-table").style.display = "none";
+		document.getElementById("board-filter-game-mode").style.display = "none";
+		document.getElementById(show_id).style.display = "table";
+		let select = document.getElementById("board-size-filter");
+		if (select.options.length > 4){ select.remove(0); }
+		ranking();
+	}
 }
 
 function filterClassificationTable(){

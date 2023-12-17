@@ -81,22 +81,21 @@
       </div>
       <div class="classification-results" id="classification-results">
         <div class="two-buttons">
-          <button onclick="showClassificationTable('classifications-table')" class="button-matches-list">
-            MATCHES&nbsp;&nbsp;LIST
+          <button onclick="showClassificationTable('win-rate-table');" class="button-win-rate-list">
+            MULTIPLAYER&nbsp;&nbsp;&nbsp;PVP
           </button>
-          <button onclick="ranking();showClassificationTable('win-rate-table');" class="button-win-rate-list">
-            WIN&nbsp;&nbsp;&nbsp;RATE&nbsp;&nbsp;&nbsp;LIST
+          <button onclick="showClassificationTable('classifications-table')" class="button-matches-list">
+              PLAYER&nbsp;&nbsp;X&nbsp;&nbsp;AI
           </button>
         </div>
         <!-- Div for the filter select menus -->
         <div class="board-filter" id="board-filter">
           <!-- Div for the Board Size filter -->
-          <div>
+          <div id="board-filter-board-size">
             <p class="board-size-p">Board Size:</p>
             <div class="select-mirror">
               <select name="board-size-filter" id="board-size-filter" class="select-1"
                 onchange="filterClassificationTable();">
-                <option value="0">All</option>
                 <option value="1">6 X 5</option>
                 <option value="2">5 X 6</option>
                 <option value="3">6 X 6</option>
@@ -104,7 +103,7 @@
               </select>
             </div>
           </div>
-          <div>
+          <div id="board-filter-game-mode">
             <p class="game-mode-p">Game Mode:</p>
             <div class="select-mirror">
               <select name="game-mode-filter" id="game-mode-filter" class="select-2"
@@ -118,7 +117,7 @@
           </div>
         </div>
         <!-- Table for the matches results -->
-        <table class="classifications-table" id="classifications-table">
+        <table class="classifications-table" id="classifications-table" style="display: none;">
           <tr>
             <th class="first">Player</th>
             <th>Match Result</th>
@@ -130,11 +129,11 @@
           </tr>
         </table>
         <!-- Table for the win rates -->
-        <table class="win-rate-table" id="win-rate-table">
+        <table class="win-rate-table" id="win-rate-table" style="display: table;">
           <tr>
             <th class="first">Player</th>
-            <th>Win Rate</th>
-            <th class="last">Total Score</th>
+            <th>Number of Victories</th>
+            <th class="last">Number of Games</th>
           </tr>
         </table>
       </div>

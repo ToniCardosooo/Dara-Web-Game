@@ -956,7 +956,11 @@ body {
   }
 }
 
-.win-rate-table {
+.classifications-table {
+  display: none;
+}
+
+#board-filter-game-mode {
   display: none;
 }
 
