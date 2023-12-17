@@ -1216,7 +1216,7 @@ const server = http.createServer(function (request, response) {
 										try {
 											fsp.writeFile('logins.json',JSON.stringify(logins))
 										}
-										catch (err){console.log("ERRO1: "+err);}
+										catch (err){console.log("ERRO: "+err);}
 											
 		                          	}							                           		
                             		if (valido){
@@ -1229,7 +1229,7 @@ const server = http.createServer(function (request, response) {
                             		response.end();
                         			return;
 								})
-								.catch((err) => console.log("ERRO2: "+err));								
+								.catch((err) => console.log("ERRO: "+err));								
                         }
                             catch(err) {  console.log(err); }
                         })
@@ -1262,12 +1262,12 @@ const server = http.createServer(function (request, response) {
 									try {
 										fsp.writeFile('rankings.json',JSON.stringify(rankings))
 									}
-									catch (err){console.log("ERRO3: "+err);}
+									catch (err){console.log("ERRO: "+err);}
 									response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
 									response.write(JSON.stringify({'ranking':list}));
 									response.end();
 								})
-								.catch((err) => console.log("ERRO4: "+err));								
+								.catch((err) => console.log("ERRO: "+err));								
                             }
                             catch(err){console.log(err);}
                         })
@@ -1331,10 +1331,10 @@ const server = http.createServer(function (request, response) {
 												try {
 													fsp.writeFile('rankings.json',JSON.stringify(rankings))
 												}
-												catch (err){console.log("ERRO6: "+err);}
+												catch (err){console.log("ERRO: "+err);}
 												return;
 											})
-											.catch((err) => console.log("ERRO7: "+err));										
+											.catch((err) => console.log("ERRO: "+err));										
                                     }
                                     else{
                                         console.log("fila de espera");
@@ -1428,9 +1428,9 @@ const server = http.createServer(function (request, response) {
 									try {
 										fsp.writeFile('rankings.json',JSON.stringify(rankings))
 									}
-									catch (err){console.log("ERRO9: "+err);}
+									catch (err){console.log("ERRO: "+err);}
 								})
-								.catch((err) => console.log("ERRO10: "+err));									
+								.catch((err) => console.log("ERRO: "+err));									
                                 send(game.object_to_update(), game_id);
 								delete games[game_id];
                                 return;
@@ -1504,9 +1504,9 @@ const server = http.createServer(function (request, response) {
 											try {
 												fsp.writeFile('rankings.json',JSON.stringify(rankings))
 											}
-											catch (err){console.log("ERRO12: "+err);}
+											catch (err){console.log("ERRO: "+err);}
 								})
-								.catch((err) => console.log("ERRO13: "+err));									
+								.catch((err) => console.log("ERRO: "+err));									
 								delete games[game_id];
 								}
                                 return;
