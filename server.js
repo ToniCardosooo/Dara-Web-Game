@@ -39,27 +39,53 @@ class Game_Server  {
         this.board = new Board_Server(this.rows,this.columns,this.startingPlayer);
 	}
 
-		canDothis(row, column, nick) {
-    		/*if ((this.players['player 1'] == nick && this.startingPlayer === 1) || (this.players['player 2'] == nick && this.startingPlayer === 2)) {
-        	if (row >= 0 && row < this.rows && column >= 0 && column < this.columns) {
-            	if (this.board.board[row][column] === 0) {
-                	return 'valid';
-            	} else {
-                	return 'Selected cell is not empty.';
-            	}
-        	} else {
-            	return 'Selected cell is outside the board boundaries.';
-        	}
-    		} else {
-        	return 'It is not your turn.';
-   	 		}*/
+	canDothis(row, column, nick) {
+		let player;
+    	if (this.players['player 1'] == nick){player=1;}
+    	else{player = 2;}
+		if (player!=this.board.player){return 'Not your turn to play';}
+		if (row<0 || row>=this.rows || column<0 || column>=this.columns || !Number.isInteger(row) || !Number.isInteger(column)){return 'Invalid position';}
+    	if (this.board.putPhase){
+			if (this.board.board[row][column]!=0)return 'Invalid move: non empty cell';
+			if (this.board.CanPut(row,column)){return 'valid';}
+			return 'Invalid move: more than 3 inline pieces';
 		}
+		if (!this.selected){
+			if (this.board.canPick(row,column)){return 'valid';}
+			return 'Not your piece';
+		}
+		if (!this.remove){
+			if (row == this.rselected && column==this.cselected){return 'valid';}
+			if (this.board.board[row][column]!=0)return 'Invalid move: non empty cell';
+			if (this.board.Repeat(this.rselected,this.cselected,row,column)){return 'Invalid move: cannot return immediastly to this cell';}
+			if (this.board.CanMove(this.rselected, this.cselected, row, column)){return 'valid';}
+			return 'Invalid move: can only move to neigbouring cells, vertically or horizontally';
+		}
+		if (this.board.board[row][column]!=3-player)return 'No opponent piece to take';
+		return 'valid';
+	}
 
     Dothis(row,column,nick){
         let player;
         if (this.players['player 1'] == nick){player=1;}
         else{player = 2;}
-        this.board.board[row][column] = player;
+		if(this.board.putPhase){this.board.Put(row,column);this.board.changePlayer();return;}
+		if(!this.selected){this.Select(row,column);return;}
+		if(!this.remove){
+			if(row == this.rselected && column==this.cselected){this.Unselect(row,column);return;}
+			this.board.Move(this.rselected,this.cselected,row,column);
+			if (this.board.createsLine(row, column))this.remove=true;
+			else{this.board.changePlayer();
+				this.selected = false;
+				this.board.checkWinner();
+			}
+			return;
+		}
+		this.board.Remove(row,column);
+		this.board.changePlayer();
+		this.selected = false;
+		this.remove = false;
+		this.board.checkWinner();
     }
 
     join_player_2(nick){
@@ -298,15 +324,11 @@ class Game_Server  {
 		this.selected = true;
 		this.rselected = r;
 		this.cselected = c;
-		let tile = document.getElementById(r.toString() + "-" + c.toString());
-		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board.board[r][c]+"-selected.png");
 	}
 
 	// unselecting a piece
 	Unselect(r,c){
 		this.selected = false;
-		let tile = document.getElementById(r.toString() + "-" + c.toString());
-		document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+this.board.board[r][c]+".png");
 	}
 
 	// showing different messages depending on game state and eventual invalid moves
@@ -1293,19 +1315,16 @@ const server = http.createServer(function (request, response) {
                                 let password = dados.password;
                                 let game_id = atob(dados.game);
                                 let move = dados.move;
-                                let row = move.row;
-                                let column = move.column;
+                                let row = parseInt(move.row);
+                                let column = parseInt(move.column);
                                 if (logins[nick]!=password){response.writeHead(200,defaultCorsHeaders);response.write(JSON.stringify({"error": "User registered with a different password"}));response.end();return;}
                                 if (!(game_id in games)){response.writeHead(200,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}
-                                //vê se é valido
-                                // joga
-                                //manda update para os 2 players
                                 let game = games[game_id];
                                 let error = game.canDothis(row,column,nick);
                                 if (error!='valid'){
                                     //manda uma mensagem com o erro
                                     response.writeHead(200,defaultCorsHeaders);
-                                    response.write(error);
+                                    response.write(JSON.stringify({'error':error}));
                                     response.end();
                                     return;
                                 }
@@ -1313,7 +1332,7 @@ const server = http.createServer(function (request, response) {
                                 response.writeHead(200,defaultCorsHeaders);
                                 response.write(JSON.stringify({}));
                                 response.end();
-                                send(games[game_id].object_to_update(), game_id);//obviamente mudar isto
+                                send(games[game_id].object_to_update(), game_id);
                                 return;
                             }
                             catch(err){console.log(err);}
