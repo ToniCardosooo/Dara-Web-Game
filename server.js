@@ -1153,14 +1153,21 @@ const server = http.createServer(function (request, response) {
     console.log(pathname);
     switch(request.method){
         case 'GET':
-            response.writeHead(200,sseHeaders);
             switch(pathname){
                 case '/update':
-					if (!('nick' in query && 'game' in query)){console.log("aqui");response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
+					if (!('nick' in query && 'game' in query)){console.log("aqui");response.writeHead(400,sseHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
                     let nick = query.nick;
-                    let game_id = atob(query.game);
-					if (!(game_id in games)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}
-                    remember(response,game_id);
+                    let game_id_encoded = (query.game);
+					let found = false;
+					let game_id;
+					for (var id in games){
+						if (encrypt(id)==game_id_encoded){
+							found = true;
+							game_id = id;
+						}}
+					if (!(found)){response.writeHead(400,sseHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}
+                    response.writeHead(200,sseHeaders);
+					remember(response,game_id);
                     request.on('close', () =>  {console.log("fechei o SSE");forget(response,game_id)} );
                     setImmediate(() =>{
                         send({},game_id);// isto é o q acontece quando o SSE é iniciado
@@ -1212,7 +1219,7 @@ const server = http.createServer(function (request, response) {
 										try {
 											fsp.writeFile('logins.json',JSON.stringify(logins))
 										}
-										catch (err){console.log("ERRO: "+err);}
+										catch (err){console.log("ERRO1: "+err);}
 											
 		                          	}							                           		
                             		if (valido){
@@ -1225,7 +1232,7 @@ const server = http.createServer(function (request, response) {
                             		response.end();
                         			return;
 								})
-								.catch((err) => console.log("ERRO: "+err));								
+								.catch((err) => console.log("ERRO2: "+err));								
                         }
                             catch(err) {  console.log(err); }
                         })
@@ -1258,12 +1265,12 @@ const server = http.createServer(function (request, response) {
 									try {
 										fsp.writeFile('rankings.json',JSON.stringify(rankings))
 									}
-									catch (err){console.log("ERRO: "+err);}
+									catch (err){console.log("ERRO3: "+err);}
 									response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
 									response.write(JSON.stringify({'ranking':list}));
 									response.end();
 								})
-								.catch((err) => console.log("ERRO: "+err));								
+								.catch((err) => console.log("ERRO4: "+err));								
                             }
                             catch(err){console.log(err);}
                         })
@@ -1282,16 +1289,21 @@ const server = http.createServer(function (request, response) {
                                 let rows = size.rows;
                                 let columns = size.columns;
                                 let size_string = JSON.stringify(size);
+								let valid_login=true;
 								fsp.readFile('logins.json','utf8')
-     								.then( (data) => {
+     								.then( async (data) => {
 										logins = data;
 										if (logins[nick]!=password){
-											response.writeHead(401,defaultCorsHeaders);
-											response.write(JSON.stringify({"error": "User registered with a different password"}));
-											response.end();return;}
+											valid_login=false;
+											console.log("HEY HEY HEY");}
 									})
-									.catch((err) => console.log("ERRO: "+err));	
+									.catch((err) => console.log("ERRO5: "+err));	
 								console.log(logins);
+								if (!valid_login){
+									response.writeHead(401,defaultCorsHeaders);
+									response.write(JSON.stringify({"error": "User registered with a different password"}));
+									response.end();
+									return;}
                                 if (!((rows==6 && columns==5)||(rows==5 && columns==6)||(rows==6 && columns==6)||(rows==7 && columns==6))){
 									response.writeHead(400, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
 									response.write(JSON.stringify({'error': 'Invalid size'}));
@@ -1336,10 +1348,10 @@ const server = http.createServer(function (request, response) {
 												try {
 													fsp.writeFile('rankings.json',JSON.stringify(rankings))
 												}
-												catch (err){console.log("ERRO: "+err);}
+												catch (err){console.log("ERRO6: "+err);}
 												return;
 											})
-											.catch((err) => console.log("ERRO: "+err));										
+											.catch((err) => console.log("ERRO7: "+err));										
                                     }
                                     else{
                                         console.log("fila de espera");
@@ -1379,17 +1391,29 @@ const server = http.createServer(function (request, response) {
 								if (!('nick' in dados && 'password' in dados && 'game' in dados)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
                                 let nick = dados.nick;
                                 let password = dados.password;
-                                let game_id = atob(dados.game);
-                                fsp.readFile('logins.json','utf8')
-     								.then( (data) => {
+                                let game_id_encoded = dados.game;
+								let found = false;
+								let game_id;
+								for (var id in games){
+									if (encrypt(id)==game_id_encoded){
+										found=true;
+										game_id = id;
+									}
+								}
+                                let valid_login=true;
+								fsp.readFile('logins.json','utf8')
+     								.then( async (data) => {
 										logins = data;
 										if (logins[nick]!=password){
-											response.writeHead(401,defaultCorsHeaders);
-											response.write(JSON.stringify({"error": "User registered with a different password"}));
-											response.end();return;}
+											valid_login=false;}
 									})
-									.catch((err) => console.log("ERRO: "+err));
-                                if (!(game_id in games)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}                    
+									.catch((err) => console.log("ERRO8: "+err));	
+								if (!valid_login){
+									response.writeHead(401,defaultCorsHeaders);
+									response.write(JSON.stringify({"error": "User registered with a different password"}));
+									response.end();
+									return;}
+                                if (!(found)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}                    
                                 //terminar o jogo, whatever that means
                                 response.writeHead(200,defaultCorsHeaders);
                                 response.write(JSON.stringify({}));
@@ -1420,9 +1444,9 @@ const server = http.createServer(function (request, response) {
 									try {
 										fsp.writeFile('rankings.json',JSON.stringify(rankings))
 									}
-									catch (err){console.log("ERRO: "+err);}
+									catch (err){console.log("ERRO9: "+err);}
 								})
-								.catch((err) => console.log("ERRO: "+err));									
+								.catch((err) => console.log("ERRO10: "+err));									
                                 send(game.object_to_update(), game_id);
 								delete games[game_id];
                                 return;
@@ -1439,21 +1463,34 @@ const server = http.createServer(function (request, response) {
 								if (!('nick' in dados && 'password' in dados && 'game' in dados && 'move' in dados)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
                                 let nick = dados.nick;
                                 let password = dados.password;
-                                let game_id = atob(dados.game);
+                                let game_id_encoded = dados.game;
+								let found = false;
+								let game_id;
+								for (var id in games){
+									if (encrypt(id)==game_id_encoded){
+										found=true;
+										game_id = id;
+									}
+								}
                                 let move = dados.move;
 								if (!('row' in move && 'column' in move)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
                                 let row = parseInt(move.row);
                                 let column = parseInt(move.column);
-                                fsp.readFile('logins.json','utf8')
-     								.then( (data) => {
+                                let valid_login=true;
+								fsp.readFile('logins.json','utf8')
+     								.then( async (data) => {
 										logins = data;
 										if (logins[nick]!=password){
-											response.writeHead(401,defaultCorsHeaders);
-											response.write(JSON.stringify({"error": "User registered with a different password"}));
-											response.end();return;}
+											valid_login=false;}
 									})
-									.catch((err) => console.log("ERRO: "+err));
-                                if (!(game_id in games)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}
+									.catch((err) => console.log("ERRO11: "+err));	
+								console.log(logins);
+								if (!valid_login){
+									response.writeHead(401,defaultCorsHeaders);
+									response.write(JSON.stringify({"error": "User registered with a different password"}));
+									response.end();
+									return;}
+                                if (!(found)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}
                                 let game = games[game_id];
                                 let error = game.canDothis(row,column,nick);
                                 if (error!='valid'){
@@ -1481,9 +1518,9 @@ const server = http.createServer(function (request, response) {
 											try {
 												fsp.writeFile('rankings.json',JSON.stringify(rankings))
 											}
-											catch (err){console.log("ERRO: "+err);}
+											catch (err){console.log("ERRO12: "+err);}
 								})
-								.catch((err) => console.log("ERRO: "+err));									
+								.catch((err) => console.log("ERRO13: "+err));									
 								delete games[game_id];
 								}
                                 return;
