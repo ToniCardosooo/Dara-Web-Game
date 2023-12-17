@@ -33,14 +33,34 @@ class Game  {
 				"game_mode": document.getElementById("game-mode-filter").options[document.getElementById("game-mode-filter").selectedIndex].text
 			}
 	
-			let id = 0;
-			for (let match of this.match_history){
-				let board_size_filter_verified = (filters["board_size"] === "All" || match["board_size"] === filters["board_size"]);
-				let game_mode_filter_verified = (filters["game_mode"] === "All" || match["game_mode"] === filters["game_mode"]);
-				let row = document.getElementById(id.toString() + "-row");
-				// display the row if the conditions imposed by the filters are met, otherwise hide the row
-				row.style.display = (board_size_filter_verified && game_mode_filter_verified)? "" : "none";
-				id++;
+			// generate the table here
+			let table = document.getElementById("classifications-table");
+			let tbody = table.querySelector("tbody");
+			// remove all rows from the tbody except the first header (header)
+			while (tbody.rows.length > 1) {
+				tbody.deleteRow(1);
+			}
+			// generate the new table
+			//let id = 0;
+			console.log("Player name: " +this.stats.player_name.toString() );
+			let match_history = JSON.parse(window.localStorage.getItem("match_history"+this.stats.player_name.toString())); 
+			console.log(match_history);
+			if (match_history != null) {
+				for (let match of match_history){
+					let row = document.createElement("tr");
+					let board_size_filter_verified = (filters["board_size"] === "All" || match["board_size"] === filters["board_size"]);
+					let game_mode_filter_verified = (filters["game_mode"] === "All" || match["game_mode"] === filters["game_mode"]);
+					let player_filter = (match["player_name"] === this.players_stats.player_name);
+					if (!(board_size_filter_verified && game_mode_filter_verified)){
+						continue;
+					}
+					for (let [key, value] of Object.entries(match)) {
+						var cell = document.createElement("td");
+						cell.textContent = value;
+						row.appendChild(cell);
+					}
+					tbody.appendChild(row);
+				}
 			}
 		}
 		// showing PvP table
@@ -48,62 +68,39 @@ class Game  {
 	}
 
 	updateClassificationTable() {
-    this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
-    this.stats.match_result = (this.board.winner === 1) ? "Winner" : "Loser";
-    
-    if (this.secondPlayer === 1) {
-        switch (this.AI_diff) {
-            case 0: this.stats.game_mode += "AI (Easy)"; break;
-            case 1: this.stats.game_mode += "AI (Medium)"; break;
-            case 2: this.stats.game_mode += "AI (Hard)"; break;
-            default: break;
-        }
+		this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
+		this.stats.match_result = (this.board.winner === 1) ? "Winner" : "Loser";
+		
+		if (this.secondPlayer === 1) {
+			switch (this.AI_diff) {
+				case 0: this.stats.game_mode += "AI (Easy)"; break;
+				case 1: this.stats.game_mode += "AI (Medium)"; break;
+				case 2: this.stats.game_mode += "AI (Hard)"; break;
+				default: break;
+			}
 
-        let table = document.getElementById("classifications-table");
+			// Save to localStorage only when playing against AI
+			if (window.localStorage.getItem("match_history"+this.stats.player_name.toString()) !== null){
+				let match_history = JSON.parse(window.localStorage.getItem("match_history"+this.stats.player_name.toString()));
+				match_history.push(this.stats);
+				window.localStorage.setItem("match_history"+this.stats.player_name.toString(), JSON.stringify(match_history));
+			}
+			else{
+				let match_history = [this.stats];
+				window.localStorage.setItem("match_history"+this.stats.player_name.toString(), JSON.stringify(match_history));
+			}
+		}
 
-        // add new row
-        let new_row = table.insertRow(1);
-        new_row.id = this.match_history.length.toString() + "-row";
-        let j = 0;
-        for (let [key, value] of Object.entries(this.stats)) {
-            let cell = new_row.insertCell(j);
-            cell.textContent = value;
-            j++;
-        }
-        this.match_history.push(this.stats);
-
-        // Save to localStorage only when playing against AI
-        window.localStorage.setItem("match_history", JSON.stringify(this.match_history));
-    }
-
-	/* 
-	else {
-        this.stats.game_mode += "Player";
-
-        let table = document.getElementById("classifications-table");
-
-        // add new row for Player X Player
-        let new_row = table.insertRow(1);
-        new_row.id = this.match_history.length.toString() + "-row";
-        let j = 0;
-        for (let [key, value] of Object.entries(this.stats)) {
-            let cell = new_row.insertCell(j);
-            cell.textContent = value;
-            j++;
-        }
-    }
-	*/
-
-    // reset stats
-    this.stats = {
-        player_name: this.stats.player_name,
-        match_result: "",
-        board_size: this.rows.toString() + " X " + this.columns.toString(),
-        game_mode: "Player X ",
-        num_moves: 0,
-        num_pieces_eaten: 0,
-        score: 0,
-    };
+		// reset stats
+		this.stats = {
+			player_name: this.stats.player_name,
+			match_result: "",
+			board_size: this.rows.toString() + " X " + this.columns.toString(),
+			game_mode: "Player X ",
+			num_moves: 0,
+			num_pieces_eaten: 0,
+			score: 0,
+		};
 	}
 
 	updateStats(parameter, increment=1) {
@@ -991,7 +988,7 @@ function onClick() {
 
 // controls the navigation between pages
 function switchPage(from_id, to_id) {
-	if (to_id == "classifications"){ ranking(); }
+	if (to_id == "classifications"){ showClassificationTable("win-rate-table"); }
 
 	let from_doc = document.getElementById(from_id);
 	let to_doc = document.getElementById(to_id);
@@ -1023,6 +1020,11 @@ async function showClassificationTable(show_id){
 		document.getElementById(show_id).style.display = "table";
 		let select = document.getElementById("board-size-filter");
 		if (select.options.length > 4){ select.remove(0); }
+		// remove all rows from the tbody except the first header (header)
+		let tbody = document.getElementById("win-rate-table").querySelector("tbody");
+		while (tbody.rows.length > 1) {
+			tbody.deleteRow(1);
+		}
 		ranking();
 	}
 }

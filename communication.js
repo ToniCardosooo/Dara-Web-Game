@@ -187,7 +187,7 @@ async function ranking(){
 				row.appendChild(cell);
 			}
 			tbody.appendChild(row);
-		  }
+		}
 	}
 	else{
 		console.log("Ranking error. Response:");
