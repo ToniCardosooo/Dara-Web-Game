@@ -1107,6 +1107,7 @@ let games = {};
 let waiting = {};
 let update_responses = {};
 let game_counter = 1;
+let logins;
 
 encrypt = function encrypt(input) {
     const md5Hash = crypto.createHash('md5');
@@ -1142,20 +1143,13 @@ const server = http.createServer(function (request, response) {
     const parsedUrl = url.parse(request.url,true);
     const pathname = parsedUrl.pathname;
     const query = parsedUrl.query; //JSON object
-    //response.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
-    //response.write('Método: '+request.method+'\n');
-    //response.write('URL: '+request.url+'\n');
-    //response.write(String(pathname)+'\n')
-    //response.write(JSON.stringify(query)+'\n')
-    //response.end();
-
     console.log(request.method);
     console.log(pathname);
     switch(request.method){
         case 'GET':
             switch(pathname){
                 case '/update':
-					if (!('nick' in query && 'game' in query)){console.log("aqui");response.writeHead(400,sseHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
+					if (!('nick' in query && 'game' in query)){response.writeHead(400,sseHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
                     let nick = query.nick;
                     let game_id_encoded = (query.game);
 					let found = false;
@@ -1202,8 +1196,6 @@ const server = http.createServer(function (request, response) {
 							fsp.readFile('logins.json','utf8')
      							.then( (data) => {
 									logins = JSON.parse(data.toString());
-									console.log(logins);
-									console.log("HEYHEY");
                             		for (var nicks in logins){
                                 		if (nick === nicks){
                                     		encontrei=true;
@@ -1213,7 +1205,12 @@ const server = http.createServer(function (request, response) {
                                     		break;
                                 		}
                             		}   
-									console.log(valido,encontrei);
+									if (nick in logins){
+										encontrei=true;
+										if (logins[nick]!=password){
+											valido=false;
+										}
+									}
                             		if (!encontrei){
                                 		logins[nick]= password;
 										try {
@@ -1289,17 +1286,13 @@ const server = http.createServer(function (request, response) {
                                 let rows = size.rows;
                                 let columns = size.columns;
                                 let size_string = JSON.stringify(size);
-								let valid_login=true;
-								fsp.readFile('logins.json','utf8')
-     								.then( async (data) => {
-										logins = data;
-										if (logins[nick]!=password){
-											valid_login=false;
-											console.log("HEY HEY HEY");}
-									})
-									.catch((err) => console.log("ERRO5: "+err));	
-								console.log(logins);
-								if (!valid_login){
+								if (!(nick in logins)){
+									response.writeHead(401,defaultCorsHeaders);
+									response.write(JSON.stringify({"error": "User does not exist"}));
+									response.end();
+									return;
+								}
+								if (!(logins[nick]==password)){
 									response.writeHead(401,defaultCorsHeaders);
 									response.write(JSON.stringify({"error": "User registered with a different password"}));
 									response.end();
@@ -1390,21 +1383,18 @@ const server = http.createServer(function (request, response) {
 										game_id = id;
 									}
 								}
-                                let valid_login=true;
-								fsp.readFile('logins.json','utf8')
-     								.then( async (data) => {
-										logins = data;
-										if (logins[nick]!=password){
-											valid_login=false;}
-									})
-									.catch((err) => console.log("ERRO8: "+err));	
-								if (!valid_login){
+								if (!(nick in logins)){
+									response.writeHead(401,defaultCorsHeaders);
+									response.write(JSON.stringify({"error": "User does not exist"}));
+									response.end();
+									return;
+								}
+								if (!(logins[nick]==password)){
 									response.writeHead(401,defaultCorsHeaders);
 									response.write(JSON.stringify({"error": "User registered with a different password"}));
 									response.end();
 									return;}
                                 if (!(found)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}                    
-                                //terminar o jogo, whatever that means
                                 response.writeHead(200,defaultCorsHeaders);
                                 response.write(JSON.stringify({}));
                                 response.end();
@@ -1470,16 +1460,13 @@ const server = http.createServer(function (request, response) {
 								if (!('row' in move && 'column' in move)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
                                 let row = parseInt(move.row);
                                 let column = parseInt(move.column);
-                                let valid_login=true;
-								fsp.readFile('logins.json','utf8')
-     								.then( async (data) => {
-										logins = data;
-										if (logins[nick]!=password){
-											valid_login=false;}
-									})
-									.catch((err) => console.log("ERRO11: "+err));	
-								console.log(logins);
-								if (!valid_login){
+								if (!(nick in logins)){
+									response.writeHead(401,defaultCorsHeaders);
+									response.write(JSON.stringify({"error": "User does not exist"}));
+									response.end();
+									return;
+								}
+								if (!(logins[nick]==password)){
 									response.writeHead(401,defaultCorsHeaders);
 									response.write(JSON.stringify({"error": "User registered with a different password"}));
 									response.end();
