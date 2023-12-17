@@ -1022,7 +1022,8 @@ function changeAIdiff(diff){
 }
 
 function giveUp(){
-	G.giveUp();
+	if (G.secondPlayer == 0) {giveUpRequest();}
+	else {G.giveUp();}
 }
 
 function clearboard() {

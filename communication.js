@@ -113,6 +113,12 @@ async function update(){
 			switchPage("wait-game", "menu");
 		}
 		if ("winner" in json){
+			// in case the game is completely done / no forfeit occurs
+			if ("board" in json){
+				game_board = json.board;
+				updateBoardPvP(game_board);
+			}
+			// update the game message
 			console.log("Successfuly received an update from server");
 			console.log("Game finished - Winner: " + json.winner);
 			eventSource.close();
@@ -121,55 +127,32 @@ async function update(){
 			document.getElementById("give-up-button").style.display = "none";
 			document.getElementById("quit-game-button").style.display = "flex";
 			document.getElementById("quit-game-button").innerHTML = "BACK&nbsp;&nbsp;&nbsp;TO&nbsp;&nbsp;&nbsp;MENU";
-			document.getElementById("give-up-button").style.display = "flex";
 			// update the ranking table
 			// ^^^^^^^^^^^^^^^^^^^^^^^^
 		}
 		else if ("board" in json){
 			game_board = json.board;
-			// change the board in the browser side and message
-			color_value = {"empty":0, "white":1, "black":2};
-			piece_count = [0,0];
-			for (let i = 0; i < game_board.length; i++){
-				for (let j = 0; j < game_board[0].length; j++){
-					game_board[i][j] = color_value[game_board[i][j]];
-					if (game_board[i][j] !== 0){ piece_count[game_board[i][j]-1]++; }
-				}
-			}
 			// go to the game page if still at the waiting page
 			if (document.getElementById("wait-game").style.display=="flex"){
 				console.log("Successfuly received an update from server");
 				// create HTML for the board and side boards
 				createBoardHTML(game_board);
 				createSideBoardsHTML();
+				document.getElementById("give-up-button").style.display = "flex";
 				document.getElementById("quit-game-button").style.display = "none";
 				document.getElementById("winner").innerText = "";
 				document.getElementById("AI").innerText = "";
 				switchPage("wait-game", "game");
 			}
-			updateBoardPvP(game_board);
-			updateSideBoardsPvP(piece_count[0], piece_count[1]);
+			// change the board and game messages in the browser side
 			let phase = json.phase;
 			let step = json.step;
 			let turn = json.turn;
-			let message = document.getElementById("text");
-			if (phase == "drop"){
-				message.innerText = "[Drop Phase] Turn: " + turn;
-			}
-			else if (step == "from"){
-				message.innerText = "[Move Phase - Select Piece] Turn: " + turn;
-			}
-			else if (step == "to"){
-				message.innerText = "[Move Phase - Select Destination] Turn: " + turn;
-			}
-			else if (step == "take"){
-				message.innerText = "[Move Phase - Take Oponent's Piece] Turn: " + turn;
-			}
+			updateBoardPvP(game_board);
+			updateMessage(phase, step, turn);
 		}
 	}
 }
-
-
 
 
 // RANKING REQUEST
@@ -251,14 +234,24 @@ function createSideBoardsHTML() {
 }
 
 function updateBoardPvP(board){
-	let rows = board.length;
-	let columns = board[0].length;
-	for(let r = 0; r < rows; r++){
-		for(let c = 0; c < columns; c++){
+	color_value = {"empty":0, "white":1, "black":2};
+	piece_count = [0,0];
+	// map the values "empty", "white", "black" to 0, 1, 2
+	for (let i = 0; i < game_board.length; i++){
+		for (let j = 0; j < game_board[0].length; j++){
+			game_board[i][j] = color_value[game_board[i][j]];
+			if (game_board[i][j] !== 0){ piece_count[game_board[i][j]-1]++; }
+		}
+	}
+	// update the board
+	for(let r = 0; r < board.length; r++){
+		for(let c = 0; c < board[0].length; c++){
 			let tile = document.getElementById(r.toString() + "-" + c.toString());
 			document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+board[r][c]+".png");
 		}
-	}	
+	}
+	// update the side boards
+	updateSideBoardsPvP(piece_count[0], piece_count[1]);
 }
 
 function updateSideBoardsPvP(p1_count, p2_count) {
@@ -304,5 +297,21 @@ function clearPvP() {
 				tile_d.remove();
 			}
 		}
+	}
+}
+
+function updateMessage(phase, step, turn){
+	let message = document.getElementById("text");
+	if (phase == "drop"){
+		message.innerText = "[Drop Phase] Turn: " + turn;
+	}
+	else if (step == "from"){
+		message.innerText = "[Move Phase - Select Piece] Turn: " + turn;
+	}
+	else if (step == "to"){
+		message.innerText = "[Move Phase - Select Destination] Turn: " + turn;
+	}
+	else if (step == "take"){
+		message.innerText = "[Move Phase - Take Oponent's Piece] Turn: " + turn;
 	}
 }
