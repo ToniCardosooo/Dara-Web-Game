@@ -66,9 +66,6 @@ class Game_Server  {
 	}
 
     Dothis(row,column,nick){
-        let player;
-        if (this.players['player 1'] == nick){player=1;}
-        else{player = 2;}
 		if(this.board.putPhase){this.board.Put(row,column);this.board.changePlayer();return;}
 		if(!this.selected){this.Select(row,column);return;}
 		if(!this.remove){
@@ -258,7 +255,7 @@ class Game_Server  {
 	// when a player give up
 	giveUp(nick){
         let player;
-        if (this.players['player 1'] == nick){player=1;}
+		if (this.players['player 1'] == nick){player=1;}
         else{player = 2;}
 		this.board.winner = 3-player;
 	}
@@ -1108,6 +1105,7 @@ let waiting = {};
 let update_responses = {};
 let game_counter = 1;
 let logins;
+let notify_timeout;
 
 encrypt = function encrypt(input) {
     const md5Hash = crypto.createHash('md5');
@@ -1315,6 +1313,34 @@ const server = http.createServer(function (request, response) {
                                         response.write(JSON.stringify({'game':encoded_game_id}));
                                         response.end();
                                         let game = games[game_id];
+										notify_timeout = setTimeout(()=>{
+										let loser;
+										if (game.board.player==1){loser=game.player_1;}
+										if (game.board.player==2){loser=game.player_2;}
+										game.giveUp(loser);
+										let winner;
+										if(game.board.winner==1){winner = game.player_1;}
+										else{winner = game.player_2;}
+										let player_1 = game.player_1;
+										let player_2 = game.player_2;
+										let size_string = game.size;
+										fsp.readFile('rankings.json','utf8')
+										 .then( (data) => {
+											rankings=JSON.parse(data.toString());
+											for (var player of rankings[size_string]['ranking']){
+												if (player['nick']==winner){player['victories']++;}
+												if (player['nick']==player_1){player['games']++;}
+												if (player['nick']==player_2){player['games']++;}
+											}
+											try {
+												fsp.writeFile('rankings.json',JSON.stringify(rankings))
+											}
+											catch (err){console.log("ERRO: "+err);}
+										})
+										.catch((err) => console.log("ERRO: "+err));									
+										setTimeout(()=>{send(game.object_to_update(), game_id);},500);
+										delete games[game_id];
+										},120000);
                                         game.join_player_2(nick);
                                         setTimeout(() => send(game.object_to_update(),game_id), 1000); // se for tudo seguido, ele n tem tempo de iniciar o sse e receber o 1º update, assim, ele entra, recebe q o jogo começou, epsra 1 segundo(provavelmente pudemos diminuir isso) e só depois é q recebe o 1º update
 										fsp.readFile('rankings.json','utf8')
@@ -1443,6 +1469,7 @@ const server = http.createServer(function (request, response) {
                         .on('data', (chunk) => {body += chunk;  })
                         .on('end', () => {
                             try{
+								if (notify_timeout){clearTimeout(notify_timeout);}
                                 let dados = JSON.parse(body); 
 								if (!('nick' in dados && 'password' in dados && 'game' in dados && 'move' in dados)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}
                                 let nick = dados.nick;
@@ -1473,6 +1500,35 @@ const server = http.createServer(function (request, response) {
 									return;}
                                 if (!(found)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}
                                 let game = games[game_id];
+								notify_timeout = setTimeout(()=>{
+								let loser;
+								if (game.board.player==1){loser=game.player_1;}
+								if (game.board.player==2){loser=game.player_2;}
+								game.giveUp(loser);
+								let winner;
+								if(game.board.winner==1){winner = game.player_1;}
+								else{winner = game.player_2;}
+								let player_1 = game.player_1;
+								let player_2 = game.player_2;
+								let size_string = game.size;
+								fsp.readFile('rankings.json','utf8')
+     							.then( (data) => {
+									rankings=JSON.parse(data.toString());
+									for (var player of rankings[size_string]['ranking']){
+										if (player['nick']==winner){player['victories']++;}
+										if (player['nick']==player_1){player['games']++;}
+										if (player['nick']==player_2){player['games']++;}
+									}
+									try {
+										fsp.writeFile('rankings.json',JSON.stringify(rankings))
+									}
+									catch (err){console.log("ERRO: "+err);}
+								})
+								.catch((err) => console.log("ERRO: "+err));		
+								setTimeout(()=>{send(game.object_to_update(), game_id);},500);							 
+								delete games[game_id];
+								},120000);
+								if(!(game_id in games)){return;}
                                 let error = game.canDothis(row,column,nick);
                                 if (error!='valid'){
                                     //manda uma mensagem com o erro
