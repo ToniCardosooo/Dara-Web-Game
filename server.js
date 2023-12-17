@@ -1085,6 +1085,10 @@ class Board_Server {
 
 const http = require('http');
 const url  = require('url');
+var fs = require('fs');
+var fsp = require('fs').promises;
+//const posts = await fsp.readdir('content')
+
 var defaultCorsHeaders = {
     'access-control-allow-origin': '*',
     'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -1176,26 +1180,40 @@ const server = http.createServer(function (request, response) {
                             /* processar query */ 
                             let encontrei = false;
                             let valido = true;
-                            for (var nicks in logins){
-                                if (nick === nicks){
-                                    encontrei=true;
-                                    if (logins[nicks]===password){
-                                    }
-                                    else{valido=false;}
-                                    break;
-                                }
-                            }   
-                            if (!encontrei){
-                                logins[nick]= password;
-                            }
-                            
-                            response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
-                            if (valido){
-								response.write(JSON.stringify({}));
-							}
-                            else {response.write(JSON.stringify({"error": "User registered with a different password"}));}
-                            response.end();
-                            return;
+							fsp.readFile('logins.json','utf8')
+     							.then( (data) => {
+									logins = JSON.parse(data.toString());
+									console.log(logins);
+									console.log("HEYHEY");
+                            		for (var nicks in logins){
+                                		if (nick === nicks){
+                                    		encontrei=true;
+                                    		if (logins[nicks]===password){
+                                    		}
+                                    		else{valido=false;}
+                                    		break;
+                                		}
+                            		}   
+									console.log(valido,encontrei);
+                            		if (!encontrei){
+                                		logins[nick]= password;
+										try {
+											fsp.writeFile('logins.json',JSON.stringify(logins))
+										}
+										catch (err){console.log("ERRO: "+err);}
+											
+		                          	}
+							
+									console.log("POIS");
+                            		response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
+                            		if (valido){
+										response.write(JSON.stringify({}));
+									}
+                        	    	else {response.write(JSON.stringify({"error": "User registered with a different password"}));}
+                            		response.end();
+                        			return;
+								})
+								.catch((err) => console.log("ERRO: "+err));								
                         }
                             catch(err) {  console.log(err); }
                         })
@@ -1211,12 +1229,22 @@ const server = http.createServer(function (request, response) {
                                 let rows = size.rows;
                                 let columns = size.columns;
                                 let size_string = JSON.stringify(size);
-								rankings[size_string]['ranking'].sort(function(a, b){return b['victories'] - a['victories']});
-								let max = Math.min(10,rankings[size_string]['ranking'].length);
-								let list = rankings[size_string]['ranking'].slice(0,max);
-								response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
-								response.write(JSON.stringify({'ranking':list}));
-								response.end();
+								fsp.readFile('rankings.json','utf8')
+     							.then( (data) => {
+									rankings = JSON.parse(data.toString());
+									rankings[size_string]['ranking'].sort(function(a, b){return b['victories'] - a['victories']});
+									let max = Math.min(10,rankings[size_string]['ranking'].length);
+									let list = rankings[size_string]['ranking'].slice(0,max);
+									try {
+										fsp.writeFile('rankings.json',JSON.stringify(rankings))
+									}
+									catch (err){console.log("ERRO: "+err);}
+									console.log('5');
+									response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
+									response.write(JSON.stringify({'ranking':list}));
+									response.end();
+								})
+								.catch((err) => console.log("ERRO: "+err));								
                             }
                             catch(err){console.log(err);}
                         })
@@ -1254,19 +1282,28 @@ const server = http.createServer(function (request, response) {
 												rankings[size_string]['ranking'].push({'nick':nicks,'victories':0,'games':0});
 											}
 										}*/
-										let found_1 = false;
-										let found_2 = false;
-										for (player of rankings[size_string]['ranking']){
-											if (player['nick'] == player_1){found_1=true;}
-											if (player['nick'] == nick){found_2=true;} 
-										}
-										if (!found_1){rankings[size_string]['ranking'].push({'nick':player_1,'victories':0,'games':0});}
-										if (!found_2){rankings[size_string]['ranking'].push({'nick':nick,'victories':0,'games':0});}
-										for (var player of rankings[size_string]['ranking']){
-											if (player.nick==player_1){player['games']++;}
-											if (player.nick==nick){player['games']++;}
-										}
-										return;
+										fsp.readFile('rankings.json','utf8')
+     										.then( (data) => {
+												rankings = JSON.parse(data.toString());
+												let found_1 = false;
+												let found_2 = false;
+												for (player of rankings[size_string]['ranking']){
+													if (player['nick'] == player_1){found_1=true;}
+													if (player['nick'] == nick){found_2=true;} 
+												}
+												if (!found_1){rankings[size_string]['ranking'].push({'nick':player_1,'victories':0,'games':0});}
+												if (!found_2){rankings[size_string]['ranking'].push({'nick':nick,'victories':0,'games':0});}
+												for (var player of rankings[size_string]['ranking']){
+													if (player.nick==player_1){player['games']++;}
+													if (player.nick==nick){player['games']++;}
+												}
+												try {
+													fsp.writeFile('rankings.json',JSON.stringify(rankings))
+												}
+												catch (err){console.log("ERRO: "+err);}
+												return;
+											})
+											.catch((err) => console.log("ERRO: "+err));										
                                     }
                                     else{
                                         console.log("fila de espera");
@@ -1327,13 +1364,21 @@ const server = http.createServer(function (request, response) {
 								if(nick==game.player_1){winner = game.player_2;}
 								else{winner = game.player_1;}
 								let size_string = game.size;
-								console.log(rankings);
-								console.log(winner);
-								for (var player of rankings[size_string]['ranking']){
-									console.log(player);
-									if (player['nick']==winner){console.log("hey");player['victories']++;}
-								}
-								
+								fsp.readFile('rankings.json','utf8')
+     							.then( (data) => {
+									rankings=JSON.parse(data.toString());
+									console.log(rankings);
+									console.log(winner);
+									for (var player of rankings[size_string]['ranking']){
+										console.log(player);
+										if (player['nick']==winner){console.log("hey");player['victories']++;}
+									}
+									try {
+										fsp.writeFile('rankings.json',JSON.stringify(rankings))
+									}
+									catch (err){console.log("ERRO: "+err);}
+								})
+								.catch((err) => console.log("ERRO: "+err));									
                                 send(game.object_to_update(), game_id);
 								delete games[game_id];
                                 return;
@@ -1373,10 +1418,19 @@ const server = http.createServer(function (request, response) {
 									let winner;
 									if(game.winner==1){winner = game.player_1;}
 									else{winner = game.player_2;}
-									for (var player in rankings[size_string]['ranking']){
-										if (player.nick==winner){player['victories']++;}
-									}
-									delete games[game_id];
+									fsp.readFile('rankings.json','utf8')
+     									.then( (data) => {
+											rankings=JSON.parse(data.toString());											
+											for (var player of rankings[size_string]['ranking']){											
+												if (player['nick']==winner){console.log("hey");player['victories']++;}
+											}
+											try {
+												fsp.writeFile('rankings.json',JSON.stringify(rankings))
+											}
+											catch (err){console.log("ERRO: "+err);}
+								})
+								.catch((err) => console.log("ERRO: "+err));									
+								delete games[game_id];
 								}
                                 return;
                             }
