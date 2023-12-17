@@ -196,8 +196,8 @@ class Game  {
 
 	// changing game mode
 	setGameMode(mode) {
-		if (mode == 0) { this.secondPlayer = 0; document.getElementById("ai-difficulty").style.display = "none"; }
-		else { this.secondPlayer = 1;document.getElementById("ai-difficulty").style.display = "flex"; }
+		if (mode == 0) { this.secondPlayer = 0; document.getElementById("ai-difficulty").style.display = "none"; document.getElementById("starting-player").style.display = "none"; } 
+		else { this.secondPlayer = 1; document.getElementById("ai-difficulty").style.display = "flex"; document.getElementById("starting-player").style.display = "flex"; }
 	}
 	
 	// changing the starting player
@@ -450,8 +450,8 @@ class Game  {
 						this.board.Remove(r,c);
 						this.board.updateBoard();
 						this.board.updateSideBoards();
-						this.updateStats("num_pieces_eaten");
-						this.updateStats("score", -this.board.heuristic());
+						this.updateStats("num_pieces_eaten");                   ///////////////////////////////////////////
+						this.updateStats("score", -this.board.heuristic());     ///////////////////////////////////////////
 						this.board.changePlayer();
 						this.selected = false;
 						this.remove = false;

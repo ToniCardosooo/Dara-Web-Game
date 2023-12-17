@@ -1161,6 +1161,12 @@ select::-ms-expand {
   flex-direction: column;
 }
 
+#starting-player {
+  display: none;
+  flex-direction: column;
+}
+
+
 @media screen and (max-width: 1600px) {
   .menu-page {
     margin-top: 0px;

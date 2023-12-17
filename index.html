@@ -84,7 +84,7 @@
           <button onclick="showClassificationTable('classifications-table')" class="button-matches-list">
             MATCHES&nbsp;&nbsp;LIST
           </button>
-          <button onclick="showClassificationTable('win-rate-table')" class="button-win-rate-list">
+          <button onclick="ranking();showClassificationTable('win-rate-table');" class="button-win-rate-list">
             WIN&nbsp;&nbsp;&nbsp;RATE&nbsp;&nbsp;&nbsp;LIST
           </button>
         </div>
@@ -95,7 +95,7 @@
             <p class="board-size-p">Board Size:</p>
             <div class="select-mirror">
               <select name="board-size-filter" id="board-size-filter" class="select-1"
-                onchange="filterClassificationTable();ranking();">
+                onchange="filterClassificationTable();">
                 <option value="0">All</option>
                 <option value="1">6 X 5</option>
                 <option value="2">5 X 6</option>
@@ -110,10 +110,9 @@
               <select name="game-mode-filter" id="game-mode-filter" class="select-2"
                 onchange="filterClassificationTable();">
                 <option value="0">All</option>
-                <option value="1">Player X Player</option>
-                <option value="2">Player X AI (Easy)</option>
-                <option value="3">Player X AI (Medium)</option>
-                <option value="4">Player X AI (Hard)</option>
+                <option value="1">Player X AI (Easy)</option>
+                <option value="2">Player X AI (Medium)</option>
+                <option value="3">Player X AI (Hard)</option>
               </select>
             </div>
           </div>

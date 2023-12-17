@@ -64,7 +64,6 @@ async function lookForGame() {
 	}
 }
 
-
 // LEAVE REQUEST
 async function giveUpRequest(){
 	let nick = document.getElementById("username-input").value;
