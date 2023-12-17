@@ -126,8 +126,6 @@ async function update(){
 			document.getElementById("give-up-button").style.display = "none";
 			document.getElementById("quit-game-button").style.display = "flex";
 			document.getElementById("quit-game-button").innerHTML = "BACK&nbsp;&nbsp;&nbsp;TO&nbsp;&nbsp;&nbsp;MENU";
-			// update the ranking table
-			// ^^^^^^^^^^^^^^^^^^^^^^^^
 		}
 		else if ("board" in json){
 			game_board = json.board;
@@ -167,14 +165,29 @@ async function ranking(){
 	} else if (size === "7 X 6") {
 		rows = 7; columns = 6;
 	}
-	// DEAL WITH ALL, for now if all then show 6 x 5
-	else {
-		rows = 6; columns = 5;
-	}
 	let response_json = await callServer("ranking", {group, "size": {rows,columns}});
+	console.log(response_json);
 	if (!("error" in response_json)){
 		console.log("Successfuly received the ranking table");
 		console.log(response_json);
+		// generate the table here
+		let table = document.getElementById("win-rate-table");
+		let tbody = table.querySelector("tbody");
+		// remove all rows from the tbody except the first header (header)
+		while (tbody.rows.length > 1) {
+			tbody.deleteRow(1);
+		}
+		// generate the new table
+		let ranking_list = response_json.ranking;
+		for (let player_stats of ranking_list){
+			let row = document.createElement("tr");
+			for (let [key, value] of Object.entries(player_stats)) {
+				var cell = document.createElement("td");
+				cell.textContent = value;
+				row.appendChild(cell);
+			}
+			tbody.appendChild(row);
+		  }
 	}
 	else{
 		console.log("Ranking error. Response:");
@@ -182,6 +195,8 @@ async function ranking(){
 	}
 }
 
+
+// AUXILIAR FUNCTIONS
 
 function createBoardHTML(board){
 	for (let i = 0; i < board.length; i++){
@@ -282,7 +297,6 @@ function clearPvP() {
 				tile.remove();
 			}
 		}
-		console.log(r);
 	}
 	
 	for (let r = 0; r < 6; r++) {
