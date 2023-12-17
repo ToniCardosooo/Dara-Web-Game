@@ -1,6 +1,6 @@
 //const SERVER = "http://34.67.217.93:8008/";
-//const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
-const SERVER = "http://localhost:8008/"
+const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+//const SERVER = "http://localhost:8008/"
 const group = 18;
 var game = 0;
 var game_board = [[]];
@@ -181,11 +181,9 @@ async function ranking(){
 		let ranking_list = response_json.ranking;
 		for (let player_stats of ranking_list){
 			let row = document.createElement("tr");
-			for (let [key, value] of Object.entries(player_stats)) {
-				var cell = document.createElement("td");
-				cell.textContent = value;
-				row.appendChild(cell);
-			}
+			let player_nick = document.createElement("td"); player_nick.textContent = player_stats["nick"]; row.appendChild(player_nick);
+			let player_victories = document.createElement("td"); player_victories.textContent = player_stats["victories"]; row.appendChild(player_victories);
+			let player_games = document.createElement("td"); player_games.textContent = player_stats["games"]; row.appendChild(player_games);
 			tbody.appendChild(row);
 		}
 	}
