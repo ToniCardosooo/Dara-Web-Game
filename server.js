@@ -1295,11 +1295,13 @@ const server = http.createServer(function (request, response) {
                                     if (waiting[game.size][0].nick == nick){
                                         waiting[game.size].pop();
                                         send({'winner':null}, game_id);
+										delete games[game_id];
                                         return;
                                     }
                                 }
                                 game.giveUp(nick);
                                 send(game.object_to_update(), game_id);
+								delete games[game_id];
                                 return;
                             }
                             catch(err){console.log(err);}
@@ -1333,6 +1335,7 @@ const server = http.createServer(function (request, response) {
                                 response.write(JSON.stringify({}));
                                 response.end();
                                 send(games[game_id].object_to_update(), game_id);
+								if (games[game_id].board.winner != 0){delete games[game_id];}
                                 return;
                             }
                             catch(err){console.log(err);}
