@@ -101,41 +101,58 @@ class Game  {
 	}
 
 	updateClassificationTable() {
-		this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
-		this.stats.match_result = (this.board.winner===1)? "Winner" : "Loser";
-		if (this.secondPlayer === 1){
-			switch (this.AI_diff) {
-				case 0: this.stats.game_mode += "AI (Easy)"; break;
-				case 1: this.stats.game_mode += "AI (Medium)"; break;
-				case 2: this.stats.game_mode += "AI (Hard)"; break;
-				default: break;
-			}
-		}
-		else {this.stats.game_mode += "Player";}
-	
-		let table = document.getElementById("classifications-table");
+    this.stats.board_size = this.rows.toString() + " X " + this.columns.toString();
+    this.stats.match_result = (this.board.winner === 1) ? "Winner" : "Loser";
+    
+    if (this.secondPlayer === 1) {
+        switch (this.AI_diff) {
+            case 0: this.stats.game_mode += "AI (Easy)"; break;
+            case 1: this.stats.game_mode += "AI (Medium)"; break;
+            case 2: this.stats.game_mode += "AI (Hard)"; break;
+            default: break;
+        }
 
-		// add new row
-		let new_row = table.insertRow(1);
-		new_row.id = this.match_history.length.toString() + "-row";
-		let j = 0;
-		for (let [key, value] of Object.entries(this.stats)) {
-			let cell = new_row.insertCell(j);
-			cell.textContent = value;
-			j++;
-		}
-		this.match_history.push(this.stats);
+        let table = document.getElementById("classifications-table");
 
-		// reset stats
-		this.stats = {
-			player_name: this.stats.player_name,
-			match_result: "",
-			board_size: this.rows.toString() + " X " + this.columns.toString(),
-			game_mode: "Player X ",
-			num_moves: 0,
-			num_pieces_eaten: 0,
-			score: 0,
-		};
+        // add new row
+        let new_row = table.insertRow(1);
+        new_row.id = this.match_history.length.toString() + "-row";
+        let j = 0;
+        for (let [key, value] of Object.entries(this.stats)) {
+            let cell = new_row.insertCell(j);
+            cell.textContent = value;
+            j++;
+        }
+        this.match_history.push(this.stats);
+
+        // Save to localStorage only when playing against AI
+        window.localStorage.setItem("match_history", JSON.stringify(this.match_history));
+    } else {
+        this.stats.game_mode += "Player";
+
+        let table = document.getElementById("classifications-table");
+
+        // add new row for Player X Player
+        let new_row = table.insertRow(1);
+        new_row.id = this.match_history.length.toString() + "-row";
+        let j = 0;
+        for (let [key, value] of Object.entries(this.stats)) {
+            let cell = new_row.insertCell(j);
+            cell.textContent = value;
+            j++;
+        }
+    }
+
+    // reset stats
+    this.stats = {
+        player_name: this.stats.player_name,
+        match_result: "",
+        board_size: this.rows.toString() + " X " + this.columns.toString(),
+        game_mode: "Player X ",
+        num_moves: 0,
+        num_pieces_eaten: 0,
+        score: 0,
+    };
 	}
 
 	updateStats(parameter, increment=1) {
