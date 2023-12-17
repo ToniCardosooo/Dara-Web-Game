@@ -1087,7 +1087,8 @@ const http = require('http');
 const url  = require('url');
 var fs = require('fs');
 var fsp = require('fs').promises;
-//const posts = await fsp.readdir('content')
+const crypto = require('crypto');
+
 
 var defaultCorsHeaders = {
     'access-control-allow-origin': '*',
@@ -1106,6 +1107,12 @@ let games = {};
 let waiting = {};
 let update_responses = {};
 let game_counter = 1;
+
+encrypt = function encrypt(input) {
+    const md5Hash = crypto.createHash('md5');
+    md5Hash.update(input);
+    return md5Hash.digest('hex');
+}
 
 function remember(response,game){
     if (game in update_responses){
@@ -1296,7 +1303,7 @@ const server = http.createServer(function (request, response) {
                                         let waiter = waiting[size_string].pop();
                                         let game_id = waiter.game;
                                         let player_1 = waiter.nick;
-                                        let encoded_game_id = btoa(game_id);
+                                        let encoded_game_id = encrypt(game_id);
                                         //cria um jogo com player_1 e nick e manda para ambos os players, e começa o, adicionando ao dicionario games um par game_id: game_object
                                         console.log("criei um jogo com os players "+player_1+" e "+nick +"com id: "+game_id + "e hash:" +encoded_game_id);
                                         response.writeHead(200,defaultCorsHeaders);
@@ -1339,7 +1346,7 @@ const server = http.createServer(function (request, response) {
                                         let game_id = 'game_number_'+game_counter;
                                         game_counter++;
                                         waiting[size_string].push({'game':game_id, 'nick':nick});
-                                        let encoded_game_id = btoa(game_id);
+                                        let encoded_game_id = encrypt(game_id);
                                         let new_game = new Game_Server(size_string,rows,columns,game_id,nick);
                                         games[game_id] = new_game;
                                         response.writeHead(200,defaultCorsHeaders);
@@ -1352,7 +1359,7 @@ const server = http.createServer(function (request, response) {
                                     let game_id = 'game_number_'+game_counter;
                                     game_counter++;
                                     waiting[size_string] = [{'game':game_id, 'nick':nick}];
-                                    let encoded_game_id = btoa(game_id);
+                                    let encoded_game_id = encrypt(game_id);
                                     let new_game = new Game_Server(size_string,rows,columns,game_id,nick);
                                     games[game_id] = new_game;
                                     response.writeHead(200,defaultCorsHeaders);
