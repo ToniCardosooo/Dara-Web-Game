@@ -1324,12 +1324,6 @@ const server = http.createServer(function (request, response) {
                                         let game = games[game_id];
                                         game.join_player_2(nick);
                                         setTimeout(() => send(game.object_to_update(),game_id), 1000); // se for tudo seguido, ele n tem tempo de iniciar o sse e receber o 1º update, assim, ele entra, recebe q o jogo começou, epsra 1 segundo(provavelmente pudemos diminuir isso) e só depois é q recebe o 1º update
-										/*if (!(size_string in rankings)){
-											rankings[size_string] = {'ranking':[]};
-											for (var nicks in logins){
-												rankings[size_string]['ranking'].push({'nick':nicks,'victories':0,'games':0});
-											}
-										}*/
 										fsp.readFile('rankings.json','utf8')
      										.then( (data) => {
 												rankings = JSON.parse(data.toString());
@@ -1341,10 +1335,6 @@ const server = http.createServer(function (request, response) {
 												}
 												if (!found_1){rankings[size_string]['ranking'].push({'nick':player_1,'victories':0,'games':0});}
 												if (!found_2){rankings[size_string]['ranking'].push({'nick':nick,'victories':0,'games':0});}
-												for (var player of rankings[size_string]['ranking']){
-													if (player.nick==player_1){player['games']++;}
-													if (player.nick==nick){player['games']++;}
-												}
 												try {
 													fsp.writeFile('rankings.json',JSON.stringify(rankings))
 												}
@@ -1431,6 +1421,8 @@ const server = http.createServer(function (request, response) {
 								let winner;
 								if(nick==game.player_1){winner = game.player_2;}
 								else{winner = game.player_1;}
+								let player_1 = game.player_1;
+								let player_2 = game.player_2;
 								let size_string = game.size;
 								fsp.readFile('rankings.json','utf8')
      							.then( (data) => {
@@ -1440,6 +1432,8 @@ const server = http.createServer(function (request, response) {
 									for (var player of rankings[size_string]['ranking']){
 										console.log(player);
 										if (player['nick']==winner){console.log("hey");player['victories']++;}
+										if (player['nick']==player_1){player['games']++;}
+										if (player['nick']==player_2){player['games']++;}
 									}
 									try {
 										fsp.writeFile('rankings.json',JSON.stringify(rankings))
@@ -1509,11 +1503,16 @@ const server = http.createServer(function (request, response) {
 									let winner;
 									if(game.winner==1){winner = game.player_1;}
 									else{winner = game.player_2;}
+									let player_1 = game.player_1;
+									let player_2 = game.player_2;
+									let size_string = game.size;
 									fsp.readFile('rankings.json','utf8')
      									.then( (data) => {
 											rankings=JSON.parse(data.toString());											
 											for (var player of rankings[size_string]['ranking']){											
 												if (player['nick']==winner){console.log("hey");player['victories']++;}
+												if (player['nick']==player_1){player['games']++;}
+												if (player['nick']==player_2){player['games']++;}
 											}
 											try {
 												fsp.writeFile('rankings.json',JSON.stringify(rankings))
