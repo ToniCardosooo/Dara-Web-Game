@@ -1211,8 +1211,11 @@ const server = http.createServer(function (request, response) {
                                 let rows = size.rows;
                                 let columns = size.columns;
                                 let size_string = JSON.stringify(size);
+								rankings[size_string]['ranking'].sort(function(a, b){return b['victories'] - a['victories']});
+								let max = Math.min(10,rankings[size_string]['ranking'].length);
+								let list = rankings[size_string]['ranking'].slice(0,max);
 								response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
-								response.write(JSON.stringify(rankings[size_string]));
+								response.write(JSON.stringify({'ranking':list}));
 								response.end();
                             }
                             catch(err){console.log(err);}
