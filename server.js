@@ -1098,7 +1098,7 @@ var sseHeaders = {
     'Connection': 'keep-alive'
 };
 let logins = {};
-let rankings = {};
+let rankings = {'{"rows":6,"columns":5}':{'ranking':[]},'{"rows":5,"columns":6}':{'ranking':[]},'{"rows":6,"columns":6}':{'ranking':[]},'{"rows":7,"columns":6}':{'ranking':[]}};
 let games = {};
 let waiting = {};
 let update_responses = {};
@@ -1151,7 +1151,7 @@ const server = http.createServer(function (request, response) {
                     remember(response,game);
                     request.on('close', () =>  {console.log("fechei o SSE");forget(response,game)} );
                     setImmediate(() =>{
-                        send({},game);//obviamente mudar isto, isto é o q acontece quando o SSE é iniciado, eventualmente não é preciso ter código aqui
+                        send({},game);// isto é o q acontece quando o SSE é iniciado
                     }); 
                 break;
             }
@@ -1190,7 +1190,9 @@ const server = http.createServer(function (request, response) {
                             }
                             
                             response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
-                            if (valido)response.write(JSON.stringify({}));
+                            if (valido){
+								response.write(JSON.stringify({}));
+							}
                             else {response.write(JSON.stringify({"error": "User registered with a different password"}));}
                             response.end();
                             return;
@@ -1208,9 +1210,10 @@ const server = http.createServer(function (request, response) {
                                 let size = dados.size;
                                 let rows = size.rows;
                                 let columns = size.columns;
-                                console.log(rows);
-                                console.log(columns);
-                                console.log(size);
+                                let size_string = JSON.stringify(size);
+								response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
+								response.write(JSON.stringify(rankings[size_string]));
+								response.end();
                             }
                             catch(err){console.log(err);}
                         })
@@ -1242,8 +1245,25 @@ const server = http.createServer(function (request, response) {
                                         let game = games[game_id];
                                         game.join_player_2(nick);
                                         setTimeout(() => send(game.object_to_update(),game_id), 1000); // se for tudo seguido, ele n tem tempo de iniciar o sse e receber o 1º update, assim, ele entra, recebe q o jogo começou, epsra 1 segundo(provavelmente pudemos diminuir isso) e só depois é q recebe o 1º update
-                                        // obviamente mudar isto em cima com o game[game_id].object_to_update
-                                        return;
+										/*if (!(size_string in rankings)){
+											rankings[size_string] = {'ranking':[]};
+											for (var nicks in logins){
+												rankings[size_string]['ranking'].push({'nick':nicks,'victories':0,'games':0});
+											}
+										}*/
+										let found_1 = false;
+										let found_2 = false;
+										for (player of rankings[size_string]['ranking']){
+											if (player['nick'] == player_1){found_1=true;}
+											if (player['nick'] == nick){found_2=true;} 
+										}
+										if (!found_1){rankings[size_string]['ranking'].push({'nick':player_1,'victories':0,'games':0});}
+										if (!found_2){rankings[size_string]['ranking'].push({'nick':nick,'victories':0,'games':0});}
+										for (var player of rankings[size_string]['ranking']){
+											if (player.nick==player_1){player['games']++;}
+											if (player.nick==nick){player['games']++;}
+										}
+										return;
                                     }
                                     else{
                                         console.log("fila de espera");
@@ -1300,6 +1320,17 @@ const server = http.createServer(function (request, response) {
                                     }
                                 }
                                 game.giveUp(nick);
+								let winner;
+								if(nick==game.player_1){winner = game.player_2;}
+								else{winner = game.player_1;}
+								let size_string = game.size;
+								console.log(rankings);
+								console.log(winner);
+								for (var player of rankings[size_string]['ranking']){
+									console.log(player);
+									if (player['nick']==winner){console.log("hey");player['victories']++;}
+								}
+								
                                 send(game.object_to_update(), game_id);
 								delete games[game_id];
                                 return;
@@ -1335,7 +1366,15 @@ const server = http.createServer(function (request, response) {
                                 response.write(JSON.stringify({}));
                                 response.end();
                                 send(games[game_id].object_to_update(), game_id);
-								if (games[game_id].board.winner != 0){delete games[game_id];}
+								if (games[game_id].board.winner != 0){
+									let winner;
+									if(game.winner==1){winner = game.player_1;}
+									else{winner = game.player_2;}
+									for (var player in rankings[size_string]['ranking']){
+										if (player.nick==winner){player['victories']++;}
+									}
+									delete games[game_id];
+								}
                                 return;
                             }
                             catch(err){console.log(err);}
