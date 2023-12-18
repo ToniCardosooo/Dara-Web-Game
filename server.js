@@ -105,7 +105,7 @@ const server = http.createServer(function (request, response) {
                             /* processar query */ 
                             let encontrei = false;
                             let valido = true;
-							fsp.readFile('server/logins.json','utf8')
+							fsp.readFile('logins.json','utf8')
      							.then( (data) => {
 									logins = JSON.parse(data.toString());
                             		for (var nicks in logins){
@@ -126,7 +126,7 @@ const server = http.createServer(function (request, response) {
                             		if (!encontrei){
                                 		logins[nick]= password;
 										try {
-											fsp.writeFile('server/logins.json',JSON.stringify(logins))
+											fsp.writeFile('logins.json',JSON.stringify(logins))
 										}
 										catch (err){console.log("ERRO: "+err);}
 											
@@ -165,14 +165,14 @@ const server = http.createServer(function (request, response) {
 									response.end();
 									return;
 								}					
-								fsp.readFile('server/rankings.json','utf8')
+								fsp.readFile('rankings.json','utf8')
      							.then( (data) => {
 									rankings = JSON.parse(data.toString());
 									rankings[size_string]['ranking'].sort(function(a, b){return b['victories'] - a['victories']});
 									let max = Math.min(10,rankings[size_string]['ranking'].length);
 									let list = rankings[size_string]['ranking'].slice(0,max);
 									try {
-										fsp.writeFile('server/rankings.json',JSON.stringify(rankings))
+										fsp.writeFile('rankings.json',JSON.stringify(rankings))
 									}
 									catch (err){console.log("ERRO: "+err);}
 									response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin': '*'});
@@ -237,7 +237,7 @@ const server = http.createServer(function (request, response) {
 										let player_1 = game.player_1;
 										let player_2 = game.player_2;
 										let size_string = game.size;
-										fsp.readFile('server/rankings.json','utf8')
+										fsp.readFile('rankings.json','utf8')
 										 .then( (data) => {
 											rankings=JSON.parse(data.toString());
 											for (var player of rankings[size_string]['ranking']){
@@ -246,7 +246,7 @@ const server = http.createServer(function (request, response) {
 												if (player['nick']==player_2){player['games']++;}
 											}
 											try {
-												fsp.writeFile('server/rankings.json',JSON.stringify(rankings))
+												fsp.writeFile('rankings.json',JSON.stringify(rankings))
 											}
 											catch (err){console.log("ERRO: "+err);}
 										})
@@ -256,7 +256,7 @@ const server = http.createServer(function (request, response) {
 										},120000);
                                         game.join_player_2(nick);
                                         setTimeout(() => send(game.object_to_update(),game_id), 1000); // se for tudo seguido, ele n tem tempo de iniciar o sse e receber o 1º update, assim, ele entra, recebe q o jogo começou, epsra 1 segundo(provavelmente pudemos diminuir isso) e só depois é q recebe o 1º update
-										fsp.readFile('server/rankings.json','utf8')
+										fsp.readFile('rankings.json','utf8')
      										.then( (data) => {
 												rankings = JSON.parse(data.toString());
 												let found_1 = false;
@@ -268,7 +268,7 @@ const server = http.createServer(function (request, response) {
 												if (!found_1){rankings[size_string]['ranking'].push({'nick':player_1,'victories':0,'games':0});}
 												if (!found_2){rankings[size_string]['ranking'].push({'nick':nick,'victories':0,'games':0});}
 												try {
-													fsp.writeFile('server/rankings.json',JSON.stringify(rankings))
+													fsp.writeFile('rankings.json',JSON.stringify(rankings))
 												}
 												catch (err){console.log("ERRO: "+err);}
 												return;
@@ -352,7 +352,7 @@ const server = http.createServer(function (request, response) {
 								let player_1 = game.player_1;
 								let player_2 = game.player_2;
 								let size_string = game.size;
-								fsp.readFile('server/rankings.json','utf8')
+								fsp.readFile('rankings.json','utf8')
      							.then( (data) => {
 									rankings=JSON.parse(data.toString());
 									for (var player of rankings[size_string]['ranking']){
@@ -361,7 +361,7 @@ const server = http.createServer(function (request, response) {
 										if (player['nick']==player_2){player['games']++;}
 									}
 									try {
-										fsp.writeFile('server/rankings.json',JSON.stringify(rankings))
+										fsp.writeFile('rankings.json',JSON.stringify(rankings))
 									}
 									catch (err){console.log("ERRO: "+err);}
 								})
@@ -420,7 +420,7 @@ const server = http.createServer(function (request, response) {
 								let player_1 = game.player_1;
 								let player_2 = game.player_2;
 								let size_string = game.size;
-								fsp.readFile('server/rankings.json','utf8')
+								fsp.readFile('rankings.json','utf8')
      							.then( (data) => {
 									rankings=JSON.parse(data.toString());
 									for (var player of rankings[size_string]['ranking']){
@@ -429,7 +429,7 @@ const server = http.createServer(function (request, response) {
 										if (player['nick']==player_2){player['games']++;}
 									}
 									try {
-										fsp.writeFile('server/rankings.json',JSON.stringify(rankings))
+										fsp.writeFile('rankings.json',JSON.stringify(rankings))
 									}
 									catch (err){console.log("ERRO: "+err);}
 								})
@@ -460,7 +460,7 @@ const server = http.createServer(function (request, response) {
 									let player_1 = game.player_1;
 									let player_2 = game.player_2;
 									let size_string = game.size;
-									fsp.readFile('server/rankings.json','utf8')
+									fsp.readFile('rankings.json','utf8')
      									.then( (data) => {
 											rankings=JSON.parse(data.toString());											
 											for (var player of rankings[size_string]['ranking']){											
@@ -469,7 +469,7 @@ const server = http.createServer(function (request, response) {
 												if (player['nick']==player_2){player['games']++;}
 											}
 											try {
-												fsp.writeFile('server/rankings.json',JSON.stringify(rankings))
+												fsp.writeFile('rankings.json',JSON.stringify(rankings))
 											}
 											catch (err){console.log("ERRO: "+err);}
 								})
