@@ -460,7 +460,9 @@ const server = http.createServer(function (request, response) {
                                 response.writeHead(200,defaultCorsHeaders);
                                 response.write(JSON.stringify({}));
                                 response.end();
-                                send(games[game_id].object_to_update(), game_id);
+								let to_send = games[game_id].object_to_update();
+								to_send['move']={'row':row,'column':column};
+                                send(to_send, game_id);
 								if (games[game_id].board.winner != 0){
 									let winner;
 									if(game.winner==1){winner = game.player_1;}
