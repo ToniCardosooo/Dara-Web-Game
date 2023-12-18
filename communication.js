@@ -1,4 +1,3 @@
-//const SERVER = "http://34.67.217.93:8008/";
 //const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 const SERVER = "http://localhost:8008/"
 const group = 18;
@@ -9,8 +8,6 @@ var last_player = "";
 var last_step = "";
 
 async function callServer(request_name, info) {
-	console.log(request_name);
-	console.log(info);
 	return	fetch(SERVER + request_name, {
 		method: "POST",
 		headers: {
@@ -20,8 +17,6 @@ async function callServer(request_name, info) {
 		body: JSON.stringify(info)
 	})
 	.then(response => response.json());
-
-	
 }
 
 // DEFINITION FOR THE REGISTER REQUEST METHOD
@@ -75,9 +70,6 @@ async function giveUpRequest(){
 	let response_json = await callServer("leave", {nick, password, game});
 	if (!("error" in response_json)){
 		console.log("Successfuly left the game");
-		//if (document.getElementById("wait-game").style.display === "flex"){switchPage("wait-game", "menu"); game = null;}
-		//else if (document.getElementById("game").style.display === "flex"){switchPage("game", "menu");}
-		
 	}
 	else{
 		console.log("Leave failed. Response:");
@@ -110,7 +102,6 @@ async function update(){
 	const eventSource = new EventSource(url);
 	eventSource.onmessage = function(message){
 		let json = JSON.parse(message.data);
-		console.log(json);
 		if ("error" in json){
 			console.log("Update error. Response:");
 			console.log(json);
@@ -181,14 +172,11 @@ async function ranking(){
 		rows = 7; columns = 6;
 	}
 	let response_json = await callServer("ranking", {group, "size": {rows,columns}});
-	console.log(response_json);
 	if (!("error" in response_json)){
 		console.log("Successfuly received the ranking table");
 		console.log(response_json);
-		// generate the table here
 		let table = document.getElementById("win-rate-table");
 		let tbody = table.querySelector("tbody");
-		// remove all rows from the tbody except the first header (header)
 		while (tbody.rows.length > 1) {
 			tbody.deleteRow(1);
 		}
@@ -220,17 +208,6 @@ function createBoardHTML(board){
 			tile.addEventListener("click", onClick);
 			document.getElementById("board").append(tile);
 			createCanvasWithImage(tile.id, "images/player0.png");
-			/* 
-			let canvas = document.createElement('canvas');
-			canvas.id = "img-"+tile.id;
-			canvas.width = 70;
-			canvas.height = 70;
-			tile.appendChild(canvas);
-			let piece_img = document.createElement("img");
-			piece_img.setAttribute("src", "images/player0.png");
-			let ctx = canvas.getContext('2d');
-			ctx.drawImage(piece_img, canvas.width / 2, canvas.height / 2, canvas.width, canvas.height);
-			*/
 		}
 	}
 }
@@ -350,164 +327,84 @@ function updateMessage(phase, step, turn){
 
 
 function createCanvasWithImage(divId, imageName) {
-	// Get the div element by its id
-	const divElement = document.getElementById(divId);
-  
-	// Create a canvas element
-	const canvasElement = document.createElement('canvas');
-	
-	// Set the canvas id to "img-" concatenated with the div id
+	let divElement = document.getElementById(divId);
+  	let canvasElement = document.createElement('canvas');
 	canvasElement.id = 'img-' + divId;
-  
-	// Append the canvas to the div
-	divElement.appendChild(canvasElement);
-  
-	// Get the 2D rendering context of the canvas
-	const ctx = canvasElement.getContext('2d');
-  
-	// Create an image element
-	const imageElement = new Image();
-  
-	// Set the image source to the provided image name
-	imageElement.src = imageName;
-  
-	// When the image is loaded, draw it on the canvas
-	imageElement.onload = function() {
-	  canvasElement.width = imageElement.width;
-	  canvasElement.height = imageElement.height;
-	  ctx.drawImage(imageElement, 0, 0);
+  	divElement.appendChild(canvasElement);
+  	let ctx = canvasElement.getContext('2d');
+  	let imageElement = new Image();
+  	imageElement.src = imageName;
+  	imageElement.onload = function() {
+		canvasElement.width = imageElement.width;
+		canvasElement.height = imageElement.height;
+		ctx.drawImage(imageElement, 0, 0);
 	};
 }
 
 function changeImage(canvasId, newImagePath) {
-	// Get the canvas element by its id
-	const canvasElement = document.getElementById(canvasId);
-  
-	// Get the 2D rendering context of the canvas
-	const ctx = canvasElement.getContext('2d');
-  
-	// Create a new image element
-	const newImageElement = new Image();
-  
-	// Set the new image source
+	let canvasElement = document.getElementById(canvasId);
+	let ctx = canvasElement.getContext('2d');
+	let newImageElement = new Image();
 	newImageElement.src = newImagePath;
-  
-	// When the new image is loaded, draw it on the canvas
 	newImageElement.onload = function() {
-	  // Clear the canvas
-	  ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  
-	  // Update the canvas size to match the new image size
-	  canvasElement.width = newImageElement.width;
-	  canvasElement.height = newImageElement.height;
-  
-	  // Draw the new image on the canvas
-	  ctx.drawImage(newImageElement, 0, 0);
+		ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+		canvasElement.width = newImageElement.width;
+		canvasElement.height = newImageElement.height;
+		ctx.drawImage(newImageElement, 0, 0);
 	};
 }
   
 function spinImage(canvasId) {
-	// Get the canvas element by its id
-	const canvasElement = document.getElementById(canvasId);
-  
-	// Get the 2D rendering context of the canvas
-	const ctx = canvasElement.getContext('2d');
-  
-	// Get the current rotation angle
+	let canvasElement = document.getElementById(canvasId);
+    let ctx = canvasElement.getContext('2d');
 	let angle = 0;
-  
-	// Create an image element from the canvas data
-	const imageElement = new Image();
-  
-	// Function to rotate the image
+	let imageElement = new Image();
 	function rotate() {
-	  // Clear the canvas
-	  ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  
-	  // Save the current state of the context
-	  ctx.save();
-  
-	  // Translate to the center of the canvas
-	  ctx.translate(canvasElement.width / 2, canvasElement.height / 2);
-  
-	  // Rotate the canvas by the current angle
-	  ctx.rotate(angle);
-  
-	  // Draw the image at its original position (rotated)
-	  ctx.drawImage(imageElement, -imageElement.width / 2, -imageElement.height / 2);
-  
-	  // Restore the previous state of the context
-	  ctx.restore();
-  
-	  // Increment the angle for the next frame
-	  angle += 0.1;
-  
-	  // Request the next animation frame
-	  canvasElement.animationFrameId = requestAnimationFrame(rotate);
+		ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+		ctx.save();
+		ctx.translate(canvasElement.width / 2, canvasElement.height / 2);
+		ctx.rotate(angle);
+		ctx.drawImage(imageElement, -imageElement.width / 2, -imageElement.height / 2);
+		ctx.restore();
+		angle += 0.1;
+		canvasElement.animationFrameId = requestAnimationFrame(rotate);
 	}
-  
-	// Set the image source to the canvas data
-	imageElement.src = canvasElement.toDataURL();
-  
-	// When the image is loaded, start the rotation animation
-	imageElement.onload = function() {
+  	imageElement.src = canvasElement.toDataURL();
+  	imageElement.onload = function() {
 		rotate();
 	};
 }
 
 function stopSpinImage(canvasId) {
-	// Get the canvas element by its id
-	const canvasElement = document.getElementById(canvasId);
-  
-	// Clear the animation frame request by passing its ID
-	cancelAnimationFrame(canvasElement.animationFrameId);
+	let canvasElement = document.getElementById(canvasId);
+  	cancelAnimationFrame(canvasElement.animationFrameId);
 }
 
 function fallImage(canvasId, imagePath, fallSpeed) {
-	const canvasElement = document.getElementById(canvasId);
-	const ctx = canvasElement.getContext('2d');
-	const imageElement = new Image();
-  
-	// Set the source for the falling image
-	imageElement.src = imagePath;
-  
-	// When the falling image is loaded, start the fall animation
-	imageElement.onload = function () {
-	  let posY = -imageElement.height; // Start above the canvas
-	  const targetY = 0; // The target position
-  
-	  function fall() {
-		ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  
-		// Draw the falling image at the current position
-		ctx.drawImage(imageElement, 0, posY);
-  
-		// Increment the y-position for the next frame
-		posY += fallSpeed;
-  
-		// Request the next animation frame if the image is still falling
-		if (posY < targetY) {
-		  requestAnimationFrame(fall);
+	let canvasElement = document.getElementById(canvasId);
+	let ctx = canvasElement.getContext('2d');
+	let imageElement = new Image();
+  	imageElement.src = imagePath;
+  	imageElement.onload = function () {
+		let posY = -imageElement.height;
+		let targetY = 0;
+		function fall() {
+			ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+			ctx.drawImage(imageElement, 0, posY);
+			posY += fallSpeed;
+			if (posY < targetY) {
+			requestAnimationFrame(fall);
+			}
 		}
-	  }
-  
-	  // Start the fall animation
-	  fall();
+		fall();
 	};
 }
 
 function load_spinner(div){
-
     var canvas = div;
     canvas.width = 200;
     canvas.height = 200;
-    //canvas.position='fixed';
-    //canvas.left= '50%';
-    //canvas.top= '50%';
-    //canvas.style.backgroundColor = "black";
-
     var ctx = canvas.getContext("2d");
-
     var bigCircle = {
         center: {
             x: 100,
@@ -516,7 +413,6 @@ function load_spinner(div){
         radius: 50,
         speed: 4
     }
-
     var smallCirlce = {
         center: {
             x: 100,
@@ -525,7 +421,6 @@ function load_spinner(div){
         radius: 33,
         speed: 2
     }
-
     var progress = 0;
 
     function loading() {
@@ -550,7 +445,6 @@ function load_spinner(div){
         ctx.arc(circle.center.x, circle.center.y, circle.radius, (start - 0.5) * Math.PI, (end - 0.5) * Math.PI);
         ctx.lineWidth = 3;
         ctx.strokeStyle = "green";
-        //ctx.fill();
         ctx.stroke();
     }
 
