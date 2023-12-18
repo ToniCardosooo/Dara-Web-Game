@@ -397,8 +397,8 @@ class Game  {
 						this.board.Remove(r,c);
 						this.board.updateBoard();
 						this.board.updateSideBoards();
-						this.updateStats("num_pieces_eaten");                   ///////////////////////////////////////////
-						this.updateStats("score", -this.board.heuristic());     ///////////////////////////////////////////
+						this.updateStats("num_pieces_eaten");
+						this.updateStats("score", -this.board.heuristic());
 						this.board.changePlayer();
 						this.selected = false;
 						this.remove = false;
