@@ -47,7 +47,6 @@ function forget(response, game){
 }
 
 function send(body, game){
-    console.log(body);
     for (let response of update_responses[game]){
         response.write('data: '+ JSON.stringify(body) +'\n\n');
     }
@@ -60,8 +59,6 @@ const server = http.createServer(function (request, response) {
     const parsedUrl = url.parse(request.url,true);
     const pathname = parsedUrl.pathname;
     const query = parsedUrl.query; //JSON object
-    console.log(request.method);
-    console.log(pathname);
     switch(request.method){
         case 'GET':
             switch(pathname){
@@ -79,7 +76,7 @@ const server = http.createServer(function (request, response) {
 					if (!(found)){response.writeHead(400,sseHeaders);response.write(JSON.stringify({"error": "This game is invalid"}));response.end();return;}
                     response.writeHead(200,sseHeaders);
 					remember(response,game_id);
-                    request.on('close', () =>  {console.log("fechei o SSE");forget(response,game_id)} );
+                    request.on('close', () =>  {forget(response,game_id)} );
                     setImmediate(() =>{
                         send({},game_id);// isto é o q acontece quando o SSE é iniciado
                     }); 
@@ -105,8 +102,6 @@ const server = http.createServer(function (request, response) {
 							if (!('nick' in dados && 'password' in dados)){response.writeHead(400,defaultCorsHeaders);response.write(JSON.stringify({"error": "Missing arguments"}));response.end();return;}   
                             let nick = dados.nick;   
                             let password = dados.password
-                            console.log(nick);
-                            console.log(password);
                             /* processar query */ 
                             let encontrei = false;
                             let valido = true;
@@ -227,7 +222,6 @@ const server = http.createServer(function (request, response) {
                                         let player_1 = waiter.nick;
                                         let encoded_game_id = encrypt(game_id);
                                         //cria um jogo com player_1 e nick e manda para ambos os players, e começa o, adicionando ao dicionario games um par game_id: game_object
-                                        console.log("criei um jogo com os players "+player_1+" e "+nick +"com id: "+game_id + "e hash:" +encoded_game_id);
                                         response.writeHead(200,defaultCorsHeaders);
                                         response.write(JSON.stringify({'game':encoded_game_id}));
                                         response.end();
@@ -282,7 +276,6 @@ const server = http.createServer(function (request, response) {
 											.catch((err) => console.log("ERRO: "+err));										
                                     }
                                     else{
-                                        console.log("fila de espera");
                                         let game_id = 'game_number_'+game_counter;
                                         game_counter++;
                                         waiting[size_string].push({'game':game_id, 'nick':nick});
@@ -295,7 +288,7 @@ const server = http.createServer(function (request, response) {
                                         return;
                                         }
                                 }
-                                else{console.log("fila de espera");
+                                else{
                                     let game_id = 'game_number_'+game_counter;
                                     game_counter++;
                                     waiting[size_string] = [{'game':game_id, 'nick':nick}];
@@ -362,11 +355,8 @@ const server = http.createServer(function (request, response) {
 								fsp.readFile('server/rankings.json','utf8')
      							.then( (data) => {
 									rankings=JSON.parse(data.toString());
-									console.log(rankings);
-									console.log(winner);
 									for (var player of rankings[size_string]['ranking']){
-										console.log(player);
-										if (player['nick']==winner){console.log("hey");player['victories']++;}
+										if (player['nick']==winner){player['victories']++;}
 										if (player['nick']==player_1){player['games']++;}
 										if (player['nick']==player_2){player['games']++;}
 									}
@@ -474,7 +464,7 @@ const server = http.createServer(function (request, response) {
      									.then( (data) => {
 											rankings=JSON.parse(data.toString());											
 											for (var player of rankings[size_string]['ranking']){											
-												if (player['nick']==winner){console.log("hey");player['victories']++;}
+												if (player['nick']==winner){player['victories']++;}
 												if (player['nick']==player_1){player['games']++;}
 												if (player['nick']==player_2){player['games']++;}
 											}
