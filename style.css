@@ -1359,7 +1359,8 @@ select::-ms-expand {
   height: 70px;
   width: 70px;
   margin: 5px;
-
+  position: relative;
+  overflow: visible;
   /* Circle */
   border-radius: 50%;
   border: 5px solid #468962;
@@ -1517,6 +1518,7 @@ select::-ms-expand {
 canvas {
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 

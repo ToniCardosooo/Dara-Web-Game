@@ -1,10 +1,12 @@
 //const SERVER = "http://34.67.217.93:8008/";
-const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
-//const SERVER = "http://localhost:8008/"
+//const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+const SERVER = "http://localhost:8008/"
 const group = 18;
 var game = 0;
 var game_board = [[]];
 var piece_selected = "";
+var last_player = "";
+var last_step = "";
 
 async function callServer(request_name, info) {
 	console.log(request_name);
@@ -95,7 +97,7 @@ async function notify(row, column){
 	}
 	else{
 		console.log("Successfuly notified the server");
-		let message = document.getElementById("text");
+		last_player = nick;
 	}
 }
 
@@ -149,9 +151,16 @@ async function update(){
 			let step = json.step;
 			let turn = json.turn;
 			if (step == "to"){ piece_selected = "img-"+move.row+"-"+move.column; spinImage(piece_selected); }
-			else if (piece_selected != "") { console.log("SYOPPPPP"); stopSpinImage(piece_selected); piece_selected = ""; }
+			else if (piece_selected != "") {
+				stopSpinImage(piece_selected); piece_selected = "";
+			}
+			if ("move" in json && (phase == "drop" || last_step == "to" && step != "from")){
+				color_value = {"empty":0, "white":1, "black":2};
+				fallImage("img-"+move.row+"-"+move.column, "images/player"+color_value[game_board[move.row][move.column]]+".png", 20);
+			}
 			updateBoardPvP(game_board);
 			updateMessage(phase, step, turn);
+			last_step = step;
 		}
 	}
 }
@@ -451,4 +460,37 @@ function stopSpinImage(canvasId) {
   
 	// Clear the animation frame request by passing its ID
 	cancelAnimationFrame(canvasElement.animationFrameId);
-  }
+}
+
+function fallImage(canvasId, imagePath, fallSpeed) {
+	const canvasElement = document.getElementById(canvasId);
+	const ctx = canvasElement.getContext('2d');
+	const imageElement = new Image();
+  
+	// Set the source for the falling image
+	imageElement.src = imagePath;
+  
+	// When the falling image is loaded, start the fall animation
+	imageElement.onload = function () {
+	  let posY = -imageElement.height; // Start above the canvas
+	  const targetY = 0; // The target position
+  
+	  function fall() {
+		ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  
+		// Draw the falling image at the current position
+		ctx.drawImage(imageElement, 0, posY);
+  
+		// Increment the y-position for the next frame
+		posY += fallSpeed;
+  
+		// Request the next animation frame if the image is still falling
+		if (posY < targetY) {
+		  requestAnimationFrame(fall);
+		}
+	  }
+  
+	  // Start the fall animation
+	  fall();
+	};
+}
