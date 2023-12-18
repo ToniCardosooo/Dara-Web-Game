@@ -149,7 +149,7 @@ async function update(){
 			let step = json.step;
 			let turn = json.turn;
 			if (step == "to"){ piece_selected = "img-"+move.row+"-"+move.column; spinImage(piece_selected); }
-			else if (piece_selected != "") { stopSpinImage(piece_selected); piece_selected = ""; }
+			else if (piece_selected != "") { console.log("SYOPPPPP"); stopSpinImage(piece_selected); piece_selected = ""; }
 			updateBoardPvP(game_board);
 			updateMessage(phase, step, turn);
 		}
@@ -433,7 +433,7 @@ function spinImage(canvasId) {
 	  angle += 0.1;
   
 	  // Request the next animation frame
-	  requestAnimationFrame(rotate);
+	  canvasElement.animationFrameId = requestAnimationFrame(rotate);
 	}
   
 	// Set the image source to the canvas data
@@ -441,7 +441,7 @@ function spinImage(canvasId) {
   
 	// When the image is loaded, start the rotation animation
 	imageElement.onload = function() {
-		canvasElement.animationFrameId = requestAnimationFrame(rotate);
+		rotate();
 	};
 }
 
