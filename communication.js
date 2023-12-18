@@ -4,6 +4,7 @@ const SERVER = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 const group = 18;
 var game = 0;
 var game_board = [[]];
+var piece_selected = "";
 
 async function callServer(request_name, info) {
 	console.log(request_name);
@@ -94,6 +95,7 @@ async function notify(row, column){
 	}
 	else{
 		console.log("Successfuly notified the server");
+		let message = document.getElementById("text");
 	}
 }
 
@@ -142,9 +144,12 @@ async function update(){
 				switchPage("wait-game", "game");
 			}
 			// change the board and game messages in the browser side
+			let move = json.move;
 			let phase = json.phase;
 			let step = json.step;
 			let turn = json.turn;
+			if (step == "to"){ piece_selected = "img-"+move.row+"-"+move.column; spinImage(piece_selected); }
+			else if (piece_selected != "") { stopSpinImage(piece_selected); piece_selected = ""; }
 			updateBoardPvP(game_board);
 			updateMessage(phase, step, turn);
 		}
@@ -203,13 +208,19 @@ function createBoardHTML(board){
 			tile.id = i.toString() + "-" + j.toString();
 			tile.classList.add("tile");
 			tile.addEventListener("click", onClick);
+			document.getElementById("board").append(tile);
+			createCanvasWithImage(tile.id, "images/player0.png");
+			/* 
+			let canvas = document.createElement('canvas');
+			canvas.id = "img-"+tile.id;
+			canvas.width = 70;
+			canvas.height = 70;
+			tile.appendChild(canvas);
 			let piece_img = document.createElement("img");
 			piece_img.setAttribute("src", "images/player0.png");
-			piece_img.setAttribute("id", "img-"+tile.id);
-			piece_img.style.width = "100%";
-			piece_img.style.height = "100%";
-			tile.append(piece_img);
-			document.getElementById("board").append(tile);
+			let ctx = canvas.getContext('2d');
+			ctx.drawImage(piece_img, canvas.width / 2, canvas.height / 2, canvas.width, canvas.height);
+			*/
 		}
 	}
 }
@@ -259,7 +270,7 @@ function updateBoardPvP(board){
 	for(let r = 0; r < board.length; r++){
 		for(let c = 0; c < board[0].length; c++){
 			let tile = document.getElementById(r.toString() + "-" + c.toString());
-			document.getElementById("img-"+tile.id).setAttribute("src", "images/player"+board[r][c]+".png");
+			changeImage("img-"+tile.id, "images/player"+board[r][c]+".png")
 		}
 	}
 	// update the side boards
@@ -326,3 +337,118 @@ function updateMessage(phase, step, turn){
 		message.innerText = "[Move Phase - Take Oponent's Piece] Turn: " + turn;
 	}
 }
+
+
+function createCanvasWithImage(divId, imageName) {
+	// Get the div element by its id
+	const divElement = document.getElementById(divId);
+  
+	// Create a canvas element
+	const canvasElement = document.createElement('canvas');
+	
+	// Set the canvas id to "img-" concatenated with the div id
+	canvasElement.id = 'img-' + divId;
+  
+	// Append the canvas to the div
+	divElement.appendChild(canvasElement);
+  
+	// Get the 2D rendering context of the canvas
+	const ctx = canvasElement.getContext('2d');
+  
+	// Create an image element
+	const imageElement = new Image();
+  
+	// Set the image source to the provided image name
+	imageElement.src = imageName;
+  
+	// When the image is loaded, draw it on the canvas
+	imageElement.onload = function() {
+	  canvasElement.width = imageElement.width;
+	  canvasElement.height = imageElement.height;
+	  ctx.drawImage(imageElement, 0, 0);
+	};
+}
+
+function changeImage(canvasId, newImagePath) {
+	// Get the canvas element by its id
+	const canvasElement = document.getElementById(canvasId);
+  
+	// Get the 2D rendering context of the canvas
+	const ctx = canvasElement.getContext('2d');
+  
+	// Create a new image element
+	const newImageElement = new Image();
+  
+	// Set the new image source
+	newImageElement.src = newImagePath;
+  
+	// When the new image is loaded, draw it on the canvas
+	newImageElement.onload = function() {
+	  // Clear the canvas
+	  ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  
+	  // Update the canvas size to match the new image size
+	  canvasElement.width = newImageElement.width;
+	  canvasElement.height = newImageElement.height;
+  
+	  // Draw the new image on the canvas
+	  ctx.drawImage(newImageElement, 0, 0);
+	};
+}
+  
+function spinImage(canvasId) {
+	// Get the canvas element by its id
+	const canvasElement = document.getElementById(canvasId);
+  
+	// Get the 2D rendering context of the canvas
+	const ctx = canvasElement.getContext('2d');
+  
+	// Get the current rotation angle
+	let angle = 0;
+  
+	// Create an image element from the canvas data
+	const imageElement = new Image();
+  
+	// Function to rotate the image
+	function rotate() {
+	  // Clear the canvas
+	  ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  
+	  // Save the current state of the context
+	  ctx.save();
+  
+	  // Translate to the center of the canvas
+	  ctx.translate(canvasElement.width / 2, canvasElement.height / 2);
+  
+	  // Rotate the canvas by the current angle
+	  ctx.rotate(angle);
+  
+	  // Draw the image at its original position (rotated)
+	  ctx.drawImage(imageElement, -imageElement.width / 2, -imageElement.height / 2);
+  
+	  // Restore the previous state of the context
+	  ctx.restore();
+  
+	  // Increment the angle for the next frame
+	  angle += 0.1;
+  
+	  // Request the next animation frame
+	  requestAnimationFrame(rotate);
+	}
+  
+	// Set the image source to the canvas data
+	imageElement.src = canvasElement.toDataURL();
+  
+	// When the image is loaded, start the rotation animation
+	imageElement.onload = function() {
+		canvasElement.animationFrameId = requestAnimationFrame(rotate);
+	};
+}
+
+function stopSpinImage(canvasId) {
+	// Get the canvas element by its id
+	const canvasElement = document.getElementById(canvasId);
+  
+	// Clear the animation frame request by passing its ID
+	cancelAnimationFrame(canvasElement.animationFrameId);
+  }
