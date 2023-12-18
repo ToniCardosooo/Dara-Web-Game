@@ -18,17 +18,6 @@ module.exports = class Game_Server{
 		this.remove = false; // can remove a opponent piece
 		this.rselected;
 		this.cselected;
-		this.match_history = [];
-		this.players_stats = {};
-		this.stats = {
-			player_name: "",
-			match_result: "",
-			board_size: this.rows.toString() + " X " + this.columns.toString(),
-			game_mode: "Player X ",
-			num_moves: 0,
-			num_pieces_eaten: 0,
-			score: 0,
-		};
         this.board = new imports.Board_Server(this.rows,this.columns,this.startingPlayer);
 	}
 
